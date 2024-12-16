@@ -1,5 +1,5 @@
+import { useNavigate } from "react-router-dom";
 import BackgroundImages from "./BackgroundImages";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 const Authentication = () => {
   const [formInput, setFormInput] = useState({
@@ -9,12 +9,15 @@ const Authentication = () => {
 
   const [showPw, setShowPw] = useState(false);
 
+  const Navigate = useNavigate();
+
   const handleFormInput = (e) => {
     e.preventDefault();
     setFormInput({ ...formInput, [e.target.name]: e.target.value });
   };
   const handleLogin = (e) => {
     e.preventDefault();
+    Navigate("/feed");
   };
 
   const handleShowPw = (e) => {
@@ -95,7 +98,7 @@ const Authentication = () => {
             <span className="mt-4 w-[90%] md:w-[70%]">Forgot Password?</span>
             <button
               type="submit"
-              className="bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4"
+              className="bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
               onClick={handleLogin}
             >
               Log In
@@ -108,7 +111,7 @@ const Authentication = () => {
           </div>
           <button
             type="button"
-            className="flex justify-self-center items-center justify-center bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4"
+            className="flex justify-self-center items-center justify-center bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
           >
             Continue with Google
           </button>
