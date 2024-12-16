@@ -1,106 +1,55 @@
-import { use } from "react";
-import { useState, useEffect } from "react";
 const Authentication = () => {
-  const [formInput, setFormInput] = useState({
-    emailId: "",
-    password: "",
-  });
-  const [ErrorMsg, setErrorMsg] = useState("");
-  const [btnMsg, setBtnMsg] = useState("Login");
-
-  const showPw = false;
-  const handleInput = () => {};
-  const handleShowPW = () => {};
-  const handleSubmit = () => {};
-
   return (
-    <>
-      <form className="flex flex-col items-start w-full gap-3 mt-4">
-        <div className="w-full">
-          <label htmlFor="emailId" className="block mb-2 text-lg font-medium">
-            Your Email
-          </label>
-          <input
-            onChange={handleInput}
-            id="uName"
-            type="text"
-            name="emailId"
-            className="rounded-lg block w-full p-2"
-            placeholder="focusing@pomodoro.study"
-            value={formInput.emailId}
-            required
-          />
-        </div>
-        <div className="w-full">
-          <label htmlFor="password" className="block mb-2 text-lg font-medium">
-            Password
-          </label>
-
-          <span className="flex flex-row items-center gap-3">
-            <input
-              onChange={handleInput}
-              id="pw"
-              type={showPw ? "text" : "password"}
-              name="password"
-              className="rounded-lg p-2 w-11/12"
-              placeholder="shh.. secret"
-              value={formInput.password}
-              required
-            />
-
-            <button type="button" onClick={handleShowPW} className="ms-1">
-              {showPw ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  className="bi bi-eye-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  fill="currentColor"
-                  className="bi bi-eye-slash-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z" />
-                  <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z" />
-                </svg>
-              )}
-            </button>
-          </span>
-        </div>
-        {location === "/LogIn" ? (
-          <Link to="/ForgotPassword">Forgot password?</Link>
-        ) : (
-          <div className="my-3"></div>
-        )}
-        <span
-          className={`${
-            ErrorMsg === "" ? "my-2.5" : "my-0"
-          } text-sm text-red-400`}
-        >
-          {ErrorMsg}
+    <div className="flex justify-center">
+      <div className="fixed bottom-0 bg-white border-black md:w-[40%] w-[90%] md:h-[80%] h-[65%] rounded-t-3xl md:rounded-t-[50px]">
+        <span className="flex flex-col items-center w-full font-semibold text-2xl mt-9 md:mt-12">
+          Heading Text Here
         </span>
-        <div className="flex self-center w-full">
+        <form className="flex flex-col w-full gap-3 mt-14 md:mt-20 items-center">
+          <div className="flex flex-col w-[90%] md:w-[70%]">
+            <label htmlFor="email" className="block mb-2 text-lg font-medium">
+              Your Email
+            </label>
+            <input
+              type="email"
+              placeholder="vibetribe@social.com"
+              className="rounded-lg block w-full p-2 bg-slate-100"
+            />
+          </div>
+          <div className="flex flex-col w-[90%] md:w-[70%]">
+            <label
+              htmlFor="password"
+              className="block mb-2 text-lg font-medium"
+            >
+              Your Password
+            </label>
+            <input
+              type="password"
+              placeholder="password"
+              className="rounded-lg block w-full p-2 bg-slate-100"
+            />
+          </div>
+          <span className="mt-4 w-[90%] md:w-[70%]">Forgot Password?</span>
           <button
             type="submit"
-            className="w-full bg-buttonColor text-white rounded-lg p-2 font-semibold"
-            onClick={handleSubmit}
+            className="bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4"
           >
-            {/* {location === "/LogIn" ? "Log In" : "Sign Up"} */}
-            {btnMsg}
+            Log In
           </button>
+        </form>
+        <div className="flex flex-row items-center font-semibold mt-4">
+          <div className="w-[30%] h-px mx-auto mt-1 me-3 bg-black border-0 rounded"></div>{" "}
+          or{" "}
+          <div className="w-[30%] h-px mx-auto mt-1 ms-3 bg-black border-0 rounded"></div>
         </div>
-      </form>
-    </>
+        <button
+          type="button"
+          className="flex justify-self-center items-center justify-center bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4"
+        >
+          Continue with Google
+        </button>
+      </div>
+    </div>
   );
 };
 
