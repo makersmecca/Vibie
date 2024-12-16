@@ -28,7 +28,7 @@ const Authentication = () => {
     <>
       <BackgroundImages />
       <div className="flex justify-center">
-        <div className="fixed bottom-0 bg-white border-black md:w-[40%] w-full md:h-[80%] h-[60%] rounded-t-[60px] md:rounded-t-[50px]">
+        <div className="fixed bottom-0 bg-white border-black md:w-[40%] w-full md:h-[80%] h-[60%] rounded-t-[50px]">
           <span className="flex flex-col items-center w-full font-semibold text-2xl mt-8 md:mt-12">
             Heading Text Here
           </span>
