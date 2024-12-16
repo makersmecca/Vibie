@@ -28,11 +28,14 @@ const Authentication = () => {
     <>
       <BackgroundImages />
       <div className="flex justify-center">
-        <div className="fixed bottom-0 bg-white border-black md:w-[40%] w-full md:h-[80%] h-[60%] rounded-t-[50px]">
-          <span className="flex flex-col items-center w-full font-semibold text-2xl mt-8 md:mt-12">
-            Heading Text Here
+        <div className="fixed bottom-0 bg-white border-black md:w-[40%] w-full md:h-[80%] h-[70%] rounded-t-[50px]">
+          <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-5 md:mt-12">
+            Vibesnap
           </span>
-          <form className="flex flex-col w-full gap-3 mt-7 md:mt-20 items-center">
+          <span className="flex flex-col items-center w-full mt-3 font-Hurricane text-[32px]">
+            Join the #vibetribe
+          </span>
+          <form className="flex flex-col w-full gap-3 mt-5 md:mt-20 items-center">
             <div className="flex flex-col w-[90%] md:w-[70%]">
               <label htmlFor="email" className="block mb-2 text-lg font-medium">
                 Your Email
