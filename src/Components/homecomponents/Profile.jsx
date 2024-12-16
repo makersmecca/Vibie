@@ -15,11 +15,11 @@ const Profile = () => {
             fill="white"
             className="bi bi-arrow-left"
             stroke="white"
-            stroke-width="1"
+            strokeWidth="1"
             viewBox="0 0 16 16"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
             />
           </svg>
@@ -63,7 +63,7 @@ const Profile = () => {
             width="50"
             height="50"
             fill="currentColor"
-            class="bi bi-plus-circle-fill"
+            className="bi bi-plus-circle-fill"
             viewBox="0 0 16 16"
           >
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
