@@ -101,7 +101,9 @@ const Authentication = () => {
                 </button>
               </div>
             </div>
-            <span className="mt-4 w-[90%] md:w-[70%]">Forgot Password?</span>
+            <span className="mt-4 w-[90%] md:w-[70%] underline">
+              Forgot Password?
+            </span>
             <button
               type="submit"
               className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
