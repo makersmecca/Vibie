@@ -115,12 +115,14 @@ const Authentication = () => {
             or{" "}
             <div className="w-[30%] h-px mx-auto mt-1 ms-3 bg-black border-0 rounded"></div>
           </div>
-          <button
-            type="button"
-            className="flex justify-self-center items-center justify-center bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
-          >
-            Continue with Google
-          </button>
+          <div className="flex flex-col items-center">
+            <button
+              type="button"
+              className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
+            >
+              Continue with Google
+            </button>
+          </div>
         </div>
       </div>
     </>
