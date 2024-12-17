@@ -3,3 +3,7 @@ body {
   color: black;
   will-change: background-color;
 }
+
+.check {
+  color: #a7b4c6;
+}
