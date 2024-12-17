@@ -26,16 +26,19 @@ const Authentication = () => {
   };
   return (
     <>
-      <BackgroundImages />
-      <div className="flex justify-center">
-        <div className="fixed bottom-0 bg-white border-black md:w-[40%] w-full md:h-[80%] h-[70%] rounded-t-[50px]">
-          <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-5 md:mt-12">
+      <div className="fixed inset-0">
+        <BackgroundImages />
+      </div>
+      {/* Authentication ui */}
+      <div className="absolute inset-x-0 top-[30%] md:top-[15%] md:h-screen flex justify-center">
+        <div className="bg-white border-black md:w-[40%] w-[90%] rounded-t-[50px] shadow-lg py-8 px-4">
+          <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-12">
             Vibesnap
           </span>
           <span className="flex flex-col items-center w-full mt-3 font-Hurricane text-[32px]">
             Join the #vibetribe
           </span>
-          <form className="flex flex-col w-full gap-3 mt-5 md:mt-20 items-center">
+          <form className="flex flex-col w-full gap-3 mt-2 md:mt-20 items-center">
             <div className="flex flex-col w-[90%] md:w-[70%]">
               <label htmlFor="email" className="block mb-2 text-lg font-medium">
                 Your Email
