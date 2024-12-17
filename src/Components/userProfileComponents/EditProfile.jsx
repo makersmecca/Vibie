@@ -34,7 +34,7 @@ const EditProfile = () => {
   return (
     <div className="flex flex-col">
       <Link to="/feed">
-        <div className="absolute left-5 top-6">
+        <div className="absolute left-5 top-6 z-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="30"
