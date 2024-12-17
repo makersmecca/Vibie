@@ -44,7 +44,7 @@ const Profile = () => {
         {username}
       </div>
       {/* bio */}
-      <div className="self-center w-full px-7 mt-3">{bio}</div>
+      <div className="self-center w-full md:w-[50%] px-7 mt-3">{bio}</div>
       {/* user's posts */}
       <div className="self-center w-full md:w-[50%] mt-6 px-7 text-xl font-normal">
         My Posts
