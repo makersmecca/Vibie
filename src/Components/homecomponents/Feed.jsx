@@ -7,17 +7,21 @@ const Feed = () => {
   const username = "John Doe";
   return (
     <div className="relative h-screen">
-      <div className="fixed top-12 bg-white w-full z-10">
-        <Link to="/profile">
-          <div className="w-full h-16 items-center flex px-5 gap-7">
-            <img src={bg9} className="w-20 h-20 rounded-full" />
-            <div className="mt-5">
-              <div className="opacity-65 font-medium">Welcome Back</div>
-              <div className="font-Lexend font-medium text-xl">{username}</div>
+      <div className="fixed top-0 pt-10 bg-white w-full z-10 flex flex-col md:items-center">
+        <div className="md:flex md:justify-start w-full md:w-[30%]">
+          <Link to="/profile">
+            <div className="h-16 items-center flex px-5 gap-7">
+              <img src={bg9} className="w-20 h-20 rounded-full" />
+              <div className="mt-5">
+                <div className="opacity-65 font-medium">Welcome Back</div>
+                <div className="font-Lexend font-medium text-xl">
+                  {username}
+                </div>
+              </div>
             </div>
-          </div>
-        </Link>
-        <div className="w-full px-7 mt-[50px] mb-[10px] text-2xl font-semibold font-Lexend">
+          </Link>
+        </div>
+        <div className="md:flex md:justify-start w-full md:w-[30%] px-7 mt-[40px] mb-[10px] text-2xl font-semibold font-Lexend">
           Feeds
         </div>
       </div>
