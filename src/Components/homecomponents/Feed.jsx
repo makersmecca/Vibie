@@ -1,7 +1,7 @@
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import bg9 from "/bgImg/bg9.jpeg";
-import Posts from "./Posts";
+import Posts from "../postsComponents/Posts";
 
 const Feed = () => {
   const username = "John Doe";
@@ -32,7 +32,7 @@ const Feed = () => {
       </div>
 
       <Link to="/newpost">
-        <div className="rounded-full h-[60px] w-[60px] fixed z-10 bottom-6 right-6">
+        <div className="rounded-full h-[60px] w-[60px] fixed z-10 bottom-6 right-6 hover:scale-[90%]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="50"
