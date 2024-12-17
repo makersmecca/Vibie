@@ -16,7 +16,10 @@ const Posts = () => {
   return (
     <div className="flex flex-col gap-6">
       {arr.map((x) => (
-        <div class="w-[350px] rounded-2xl shadow bg-gray-200 flex flex-col py-5">
+        <div
+          key={x}
+          className="w-[350px] rounded-2xl shadow bg-gray-200 flex flex-col py-5"
+        >
           <Link to="/profile">
             <div className="w-full h-16 items-center flex px-5 gap-7">
               <img src={bg9} className="w-14 h-14 rounded-full" />
@@ -46,7 +49,7 @@ const Posts = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
                   height="20"
-                  fill="#a7b4c6"
+                  fill="#ff708f"
                   className="bi bi-heart-fill ms-1"
                   viewBox="0 0 16 16"
                   onClick={handleLikes}

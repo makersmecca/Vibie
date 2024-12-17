@@ -1,7 +1,7 @@
 import Authentication from "./Components/Authentication";
 import Feed from "./Components/homecomponents/feed";
 import NewPost from "./Components/homecomponents/NewPost";
-import Profile from "./Components/homecomponents/Profile";
+import Profile from "./Components/userProfileComponents/Profile";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 function App() {
