@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         Hurricane: ["Hurricane", "sans-serif"],
         Pacifico: ["Pacifico", "sans-serif"],
+        Lexend: ["Lexend", "sans-serif"],
       },
     },
   },

@@ -67,7 +67,7 @@ const Authentication = () => {
                 />
                 <button
                   type="button"
-                  className="inline-flex items-center px-3 text-sm border rounded-e-lg bg-red-300"
+                  className="inline-flex items-center px-3 text-sm border rounded-e-lg bg-slate-600"
                   onClick={handleShowPw}
                 >
                   {showPw ? (
@@ -75,7 +75,7 @@ const Authentication = () => {
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
                       height="16"
-                      fill="currentColor"
+                      fill="white"
                       className="bi bi-eye-fill"
                       viewBox="0 0 16 16"
                     >
@@ -87,7 +87,7 @@ const Authentication = () => {
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
                       height="16"
-                      fill="currentColor"
+                      fill="white"
                       className="bi bi-eye-slash-fill"
                       viewBox="0 0 16 16"
                     >
@@ -101,7 +101,7 @@ const Authentication = () => {
             <span className="mt-4 w-[90%] md:w-[70%]">Forgot Password?</span>
             <button
               type="submit"
-              className="bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
+              className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
               onClick={handleLogin}
             >
               Log In
@@ -114,7 +114,7 @@ const Authentication = () => {
           </div>
           <button
             type="button"
-            className="flex justify-self-center items-center justify-center bg-red-300 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
+            className="flex justify-self-center items-center justify-center bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
           >
             Continue with Google
           </button>

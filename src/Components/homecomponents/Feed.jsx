@@ -1,26 +1,34 @@
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import bg9 from "/bgImg/bg9.jpeg";
+import Posts from "./Posts";
 
 const Feed = () => {
-  const username = "new user 1";
+  const username = "John Doe";
   return (
-    <div className="">
-      <Link to="/profile">
-        <div className=" w-full h-16 items-center flex px-5 gap-7 border-b-2 border-black">
-          <img src={bg9} className="w-14 h-14 rounded-full" />
-          <div>
-            <div>Welcome Back</div>
-            <div>{username}</div>
+    <div className="relative h-screen">
+      <div className="fixed top-12 bg-white w-full z-10">
+        <Link to="/profile">
+          <div className="w-full h-16 items-center flex px-5 gap-7">
+            <img src={bg9} className="w-20 h-20 rounded-full" />
+            <div className="mt-5">
+              <div className="opacity-65 font-medium">Welcome Back</div>
+              <div className="font-Lexend font-medium text-xl">{username}</div>
+            </div>
           </div>
+        </Link>
+        <div className="w-full px-7 mt-[50px] mb-[10px] text-2xl font-semibold font-Lexend">
+          Feeds
         </div>
-      </Link>
+      </div>
 
-      {/* feed content of photos and videos to be shown here and must be scrollable */}
-      <div className="flex-1 overflow-y-auto h-full"></div>
+      {/* Add padding-top to create space for fixed header */}
+      <div className="mt-[50px] pt-[180px] overflow-y-auto flex justify-center">
+        <Posts />
+      </div>
 
       <Link to="/newpost">
-        <div className="rounded-full h-[60px] w-[60px] absolute z-10 bottom-6 right-6">
+        <div className="rounded-full h-[60px] w-[60px] fixed z-10 bottom-6 right-6">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="50"

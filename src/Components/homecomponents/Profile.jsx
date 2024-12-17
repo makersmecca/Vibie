@@ -15,7 +15,7 @@ const Profile = () => {
             fill="white"
             className="bi bi-arrow-left"
             stroke="white"
-            strokeWidth="1"
+            strokeWidth="1.5"
             viewBox="0 0 16 16"
           >
             <path
@@ -25,7 +25,6 @@ const Profile = () => {
           </svg>
         </div>
       </Link>
-
       {/* profile banner */}
       <div className="flex justify-center">
         <img src={bg9} className="w-full md:w-[50%] h-[150px] rounded-b-2xl" />
@@ -34,22 +33,18 @@ const Profile = () => {
       <div className="absolute top-[13%] md:top-[15%] left-[5%] md:left-[30%]">
         <img src={bg9} className="md:relative w-24 h-24 rounded-full " />
       </div>
-
       {/* edit profile button */}
       <div className="flex justify-end px-2 w-full md:w-[50%] mt-5 self-center">
         <button className="border-[1px] border-black rounded-2xl w-[60%] md:w-[35%] py-1 text-black">
           Edit Profile
         </button>
       </div>
-
       {/* username */}
       <div className="self-center w-full md:w-[50%] mt-10 text-3xl font-semibold px-7">
         {username}
       </div>
-
       {/* bio */}
       <div className="self-center w-full px-7 mt-3">{bio}</div>
-
       {/* user's posts */}
       <div className="self-center w-full md:w-[50%] mt-6 px-7 text-xl font-normal">
         My Posts
