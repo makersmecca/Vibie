@@ -1,6 +1,7 @@
 // import Navbar from "../Navbar";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import DeviceCamera from "./DeviceCamera";
 const NewPost = () => {
   const [postCaption, setPostCaption] = useState("");
   const [files, setFiles] = useState([]);
@@ -96,7 +97,7 @@ const NewPost = () => {
 
       {/* use the device's camera to click a picture and upload that photo */}
       <div className="w-full py-5 px-7">
-        <label className="flex gap-3 items-center">
+        {/* <div className="flex gap-3 items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -111,7 +112,9 @@ const NewPost = () => {
             <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5m0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
           </svg>
           <span className="font-Lexend">Camera</span>
-        </label>
+        </div> */}
+
+        <DeviceCamera />
       </div>
 
       <div className="w-full flex justify-center">
