@@ -25,7 +25,7 @@ const Authentication = () => {
 
   // effect hook to redirect user to feed page if already logged in
   useEffect(() => {
-    console.log(auth.currentUser);
+    // console.log(auth.currentUser);
     if (auth.currentUser !== null) {
       Navigate("/feed");
     }
@@ -264,6 +264,7 @@ const Authentication = () => {
                 placeholder="vibetribe@social.com"
                 className="rounded-lg block w-full p-2 bg-slate-100"
                 name="username"
+                id="email"
                 onChange={handleFormInput}
                 value={formInput.username}
               />
@@ -320,7 +321,7 @@ const Authentication = () => {
             <span>{errorMsg}</span>
             {location === "/" ? (
               <span className="mt-4 w-[90%] md:w-[70%] underline">
-                Forgot Password?
+                <Link to="/forgotpassword">Forgot Password? </Link>
               </span>
             ) : (
               <div className="my-5"></div>
