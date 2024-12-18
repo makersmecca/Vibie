@@ -9,7 +9,6 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../auth/firebaseAuth";
-
 const provider = new GoogleAuthProvider();
 
 const Authentication = () => {
@@ -22,8 +21,15 @@ const Authentication = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [btnMsg, setBtnMsg] = useState("");
   const [googleBtnMsg, setGoogleBtnMsg] = useState("Continue With Google");
-
   const Navigate = useNavigate();
+
+  // effect hook to redirect user to feed page if already logged in
+  useEffect(() => {
+    console.log(auth.currentUser);
+    if (auth.currentUser !== null) {
+      Navigate("/feed");
+    }
+  }, [auth.currentUser]);
 
   useEffect(() => {
     if (location === "/") {
