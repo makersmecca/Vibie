@@ -2,9 +2,12 @@ import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import bg9 from "/bgImg/bg9.jpeg";
 import Posts from "../postsComponents/Posts";
+import { useState, useContext } from "react";
+import { UserContext } from "../UserContext";
 
 const Feed = () => {
-  const username = "John Doe";
+  const { currentUser } = useContext(UserContext);
+  const username = currentUser.displayName;
   return (
     <div className="relative h-screen">
       <div className="fixed top-0 pt-10 bg-white w-full z-10 flex flex-col md:items-center">
