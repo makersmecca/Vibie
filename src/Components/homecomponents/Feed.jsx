@@ -9,8 +9,8 @@ const Feed = () => {
   const { currentUser } = useContext(UserContext);
   const username = currentUser.displayName;
   return (
-    <div className="relative h-screen">
-      <div className="fixed top-0 pt-10 bg-white w-full z-10 flex flex-col md:items-center">
+    <div className="flex flex-col items-center">
+      <div className="pt-10 bg-white w-full z-10 flex flex-col md:items-center">
         <div className="md:flex md:justify-start w-full md:w-[30%]">
           <Link to="/profile">
             <div className="h-16 items-center flex px-5 gap-7">
@@ -24,13 +24,13 @@ const Feed = () => {
             </div>
           </Link>
         </div>
-        <div className="md:flex md:justify-start w-full md:w-[30%] px-7 mt-[40px] mb-[10px] text-2xl font-semibold font-Lexend">
-          Feeds
-        </div>
+      </div>
+      <div className="md:flex md:justify-start w-full md:w-[30%] px-7 py-5 mt-[40px] mb-[10px] text-2xl font-semibold font-Lexend sticky top-0 bg-white">
+        Feeds
       </div>
 
       {/* Add padding-top to create space for fixed header */}
-      <div className="mt-[50px] pt-[180px] overflow-y-auto flex justify-center">
+      <div className="mt-[20px] overflow-y-auto flex justify-center">
         <Posts />
       </div>
 
