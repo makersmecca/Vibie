@@ -1,9 +1,37 @@
-import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import { auth } from "../../auth/firebaseAuth";
+import { UserContext } from "../UserContext";
+
 // import Navbar from "../Navbar";
 import bg9 from "/bgImg/bg9.jpeg";
 const Profile = () => {
-  const username = "New User 1";
+  getAuth();
+  const { currentUser } = useContext(UserContext);
+
+  const Navigate = useNavigate();
+  const [popUp, setPopUp] = useState(false);
+  const username = currentUser?.displayName;
   const bio = "Lorem ipsum dolor sit amet consectetur, adipisicing elit";
+
+  const handlePopup = () => {
+    setPopUp((prev) => !prev);
+  };
+
+  const handleLogOut = () => {
+    console.log("Logging out");
+    auth
+      .signOut()
+      .then(() => {
+        console.log("User signed out successfully");
+        Navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
+  };
+
   return (
     <div className="flex flex-col">
       <Link to="/feed">
@@ -35,7 +63,13 @@ const Profile = () => {
       </div>
       {/* edit profile button */}
       <div className="flex items-center justify-end px-2 w-full md:w-[50%] mt-5 self-center gap-4">
-        <button>
+        {/* logout button */}
+        <button
+          className={`${
+            popUp ? "rotate-45" : "rotate-0"
+          } transition-all ease-in-out`}
+          onClick={handlePopup}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -48,6 +82,30 @@ const Profile = () => {
             <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
           </svg>
         </button>
+        {/* Popup Menu */}
+        {popUp && (
+          <div className="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+            <div className="py-1" role="menu" aria-orientation="vertical">
+              <button
+                onClick={handleLogOut}
+                className="w-full text-left text-lg px-4 py-2 font-medium text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+              >
+                Logout
+              </button>
+              {/* Add more menu items as needed */}
+              <button
+                onClick={() => {
+                  /* Add handler */
+                }}
+                className="w-full text-left px-4 py-2 text-lg font-medium text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+              >
+                Settings
+              </button>
+            </div>
+          </div>
+        )}
         <Link to="/editprofile">
           <button className="border-[2px] border-black rounded-2xl w-[200px] md:w-[300px] py-1 text-black font-semibold font-Lexend text-lg">
             Edit Profile
