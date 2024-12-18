@@ -10,7 +10,7 @@ import bg9 from "/bgImg/bg9.jpeg";
 import bg10 from "/bgImg/bg10.jpeg";
 const BackgroundImages = () => {
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen overflow-hidden scroll-m-0">
       <div className="flex flex-row gap-2 md:justify-center h-full">
         {/* widescreen images */}
         <div className="hidden md:block relative -top-10">
