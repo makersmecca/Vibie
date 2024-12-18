@@ -1,0 +1,27 @@
+Structure of Firestore DB:
+userContent[Collection] -> CurrentUser's EmailID [Document] -> 
+posts [Field Array] ->
+
+[0] - String - Image's Appwrite storage bucket URL 
+[1] - timestamp - Timestamp of image upload
+[2] - number - Number of likes
+[3] - String - Caption of the post
+
+globalPosts (Collection)
+  └── postID (Document)
+       ├── mediaURL: String
+       ├── timestamp: Timestamp
+       ├── likesCount: Number
+       ├── caption: String
+       ├── userEmail: String
+	   
+	   
+	   
+userContent (Collection)
+  └── userEmail (Document)
+       └── posts (Subcollection)
+            └── postID (Document)
+                 ├── mediaURL: String
+                 ├── timestamp: Timestamp
+                 ├── likesCount: Number
+                 ├── caption: String
