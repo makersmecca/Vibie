@@ -1,36 +1,140 @@
 import BackgroundImages from "./BackgroundImages";
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../auth/firebaseAuth";
+
+const provider = new GoogleAuthProvider();
+
 const Authentication = () => {
   const location = useLocation().pathname;
-
   const [formInput, setFormInput] = useState({
     username: "",
     password: "",
   });
-
   const [showPw, setShowPw] = useState(false);
-
+  const [errorMsg, setErrorMsg] = useState("");
   const Navigate = useNavigate();
 
   const handleFormInput = (e) => {
     e.preventDefault();
     setFormInput({ ...formInput, [e.target.name]: e.target.value });
   };
-  const handleLogin = (e) => {
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    Navigate("/feed");
+    console.log("sign up");
+    await createUserWithEmailAndPassword(
+      auth,
+      formInput.emailId,
+      formInput.password
+    )
+      .then((usercredential) => {
+        // const user = usercredential.user;
+        // console.log(user);
+        emailverifcationsent();
+        setErrorMsg("Verification Email sent!");
+        Navigate("/LogIn");
+      })
+      .catch((error) => {
+        console.log(err.message);
+        // setBtnMsg("Sign Up");
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+        if (errorCode == "auth/email-already-in-use") {
+          setErrorMsg("Email is already in use. Sign in to continue");
+          // setBtnMsg("Sign Up");
+        } else if (errorCode == "auth/invalid-email") {
+          // setBtnMsg("Sign Up");
+          setErrorMsg("Invalid Email Address!");
+        }
+      });
   };
 
-  const handleSignUp = (e) => {
-    e.preventDefault();
-    Navigate("/feed");
+  const emailverifcationsent = async () => {
+    await sendEmailVerification(auth.currentUser).then(() => {
+      // setErrorMsg("Verification Email sent!");
+    });
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (formInput.emailId === "" || formInput.password === "") {
+      setErrorMsg("Please Enter Credentials");
+      return;
+    } else {
+      await signInWithEmailAndPassword(
+        auth,
+        formInput.emailId,
+        formInput.password
+      )
+        .then((userCredential) => {
+          // const user = userCredential.user;
+          // console.log(user);
+          auth.currentUser.reload(); //refresh the current user details
+          //console.log(auth.currentUser.emailVerified);
+          if (auth.currentUser.emailVerified) {
+            setErrorMsg("Logging you in..");
+            Navigate("/feed");
+          } else {
+            setErrorMsg("Please Verify Your Email ID");
+            emailverifcationsent();
+          }
+        })
+        .catch((err) => {
+          // setBtnMsg("Log In");
+          console.log(err.message);
+          switch (err.message) {
+            case "Firebase: Error (auth/invalid-email).":
+              setErrorMsg("Invalid Email");
+              // setBtnMsg("Log In");
+              break;
+            case "Firebase: Error (auth/missing-password).":
+              setErrorMsg("Invalid Password");
+              // setBtnMsg("Log In");
+              break;
+            case "Firebase: Error (auth/invalid-credential).":
+              setErrorMsg("Wrong Password");
+              // setBtnMsg("Log In");
+              break;
+            case "Firebase: Error (auth/user-not-found).":
+              setErrorMsg("User not found");
+              // setBtnMsg("Log In");
+              break;
+            default:
+              setErrorMsg("Something went wrong");
+              // setBtnMsg("Log In");
+              break;
+          }
+        });
+    }
+  };
+
+  const handleGoogleSignin = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // const user = result.user;
+        Navigate("/feed");
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
   const handleShowPw = (e) => {
     e.preventDefault();
     setShowPw((prevState) => !prevState);
   };
+
   return (
     <>
       <div className="fixed inset-0">
@@ -108,6 +212,7 @@ const Authentication = () => {
                 </button>
               </div>
             </div>
+            <span>{errorMsg}</span>
             <span className="mt-4 w-[90%] md:w-[70%] underline">
               Forgot Password?
             </span>
@@ -128,6 +233,7 @@ const Authentication = () => {
             <button
               type="button"
               className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
+              onClick={handleGoogleSignin}
             >
               Continue with Google
             </button>
