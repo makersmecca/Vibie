@@ -1,7 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import BackgroundImages from "./BackgroundImages";
 import { useState } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 const Authentication = () => {
+  const location = useLocation().pathname;
+
   const [formInput, setFormInput] = useState({
     username: "",
     password: "",
@@ -20,6 +22,11 @@ const Authentication = () => {
     Navigate("/feed");
   };
 
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    Navigate("/feed");
+  };
+
   const handleShowPw = (e) => {
     e.preventDefault();
     setShowPw((prevState) => !prevState);
@@ -30,7 +37,7 @@ const Authentication = () => {
         <BackgroundImages />
       </div>
       {/* Authentication ui */}
-      <div className="absolute inset-x-0 top-[30%] md:top-[15%] md:h-screen flex justify-center">
+      <div className="absolute inset-x-0 top-[26%] md:top-[15%] md:h-screen flex justify-center">
         <div className="bg-white border-black md:w-[40%] w-[90%] rounded-t-[50px] shadow-lg py-8 px-4">
           <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-12">
             Vibesnap
@@ -107,9 +114,9 @@ const Authentication = () => {
             <button
               type="submit"
               className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
-              onClick={handleLogin}
+              onClick={location === "/signup" ? handleSignUp : handleLogin}
             >
-              Log In
+              {location === "/signup" ? "Sign Up" : "Login"}
             </button>
           </form>
           <div className="flex flex-row items-center font-semibold mt-4">
@@ -125,6 +132,14 @@ const Authentication = () => {
               Continue with Google
             </button>
           </div>
+
+          <span className="mt-2 flex flex-col items-center underline">
+            {location === "/" ? (
+              <Link to="/signup">Don't have an account? Sign up.</Link>
+            ) : (
+              <Link to="/">Already have an account? Login.</Link>
+            )}
+          </span>
         </div>
       </div>
     </>

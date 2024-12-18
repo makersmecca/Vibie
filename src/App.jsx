@@ -9,6 +9,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Authentication />} />
+      <Route path="/signup" element={<Authentication />} />
       <Route path="/feed" element={<Feed />} />
       <Route path="/newpost" element={<NewPost />} />
       <Route path="/profile" element={<Profile />} />
