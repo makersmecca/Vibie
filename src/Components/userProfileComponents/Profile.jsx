@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../../auth/firebaseAuth";
 import { UserContext } from "../UserContext";
+import MyPosts from "./MyPosts";
 
 // import Navbar from "../Navbar";
 import bg9 from "/bgImg/bg9.jpeg";
@@ -34,28 +35,33 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col">
-      <Link to="/feed">
-        <div className="absolute left-5 top-6">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="white"
-            className="bi bi-arrow-left"
-            stroke="white"
-            strokeWidth="1.5"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
-            />
-          </svg>
-        </div>
-      </Link>
       {/* profile banner */}
       <div className="flex justify-center">
-        <img src={bg9} className="w-full md:w-[50%] h-[150px] rounded-b-2xl" />
+        <div className="relative w-full md:w-[800px]">
+          <Link to="/feed">
+            <div className="absolute left-5 top-6 z-10">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                fill="white"
+                className="bi bi-arrow-left"
+                stroke="white"
+                strokeWidth="1"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                />
+              </svg>
+            </div>
+          </Link>
+          <img
+            src={bg9}
+            className="w-full md:w-[800px] h-[150px] rounded-b-2xl"
+          />
+        </div>
       </div>
       {/* profile picture */}
       <div className="absolute top-[13%] md:top-[15%] left-[5%] md:left-[30%]">
@@ -119,13 +125,17 @@ const Profile = () => {
       {/* bio */}
       <div className="self-center w-full md:w-[50%] px-7 mt-3">{bio}</div>
       {/* user's posts */}
-      <div className="self-center w-full md:w-[50%] mt-6 px-7 text-xl font-normal">
+      <div className="self-center w-full md:w-[50%] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
         My Posts
+      </div>
+      {/* div showing the user's posts */}
+      <div className="overflow-y-auto flex justify-center">
+        <MyPosts />
       </div>
 
       {/* create new post button */}
       <Link to="/newpost">
-        <div className="rounded-full h-[60px] w-[60px] absolute z-10 bottom-6 right-6">
+        <div className="rounded-full h-[60px] w-[60px] fixed z-10 bottom-6 right-6">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="50"
