@@ -25,12 +25,12 @@ const Feed = () => {
           </Link>
         </div>
       </div>
-      <div className="md:flex md:justify-start w-full md:w-[30%] px-7 py-5 mt-[40px] mb-[10px] text-2xl font-semibold font-Lexend sticky top-0 bg-white">
+      <div className="md:flex md:justify-start w-full md:w-[30%] px-7 py-5 mt-[15px] text-2xl font-semibold font-Lexend sticky top-0 bg-white">
         Feeds
       </div>
 
       {/* Add padding-top to create space for fixed header */}
-      <div className="mt-[20px] overflow-y-auto flex justify-center">
+      <div className="mt-[10px] overflow-y-auto flex justify-center">
         <Posts />
       </div>
 
