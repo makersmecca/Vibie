@@ -20,9 +20,17 @@ const Authentication = () => {
   });
   const [showPw, setShowPw] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [btnMsg, setBtnMsg] = useState("");
+  const [googleBtnMsg, setGoogleBtnMsg] = useState("Continue With Google");
+
   const Navigate = useNavigate();
 
   useEffect(() => {
+    if (location === "/") {
+      setBtnMsg("Log In");
+    } else {
+      setBtnMsg("Sign Up");
+    }
     setErrorMsg("");
   }, [location]);
 
@@ -31,9 +39,42 @@ const Authentication = () => {
     setFormInput({ ...formInput, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrorMsg("");
+    location === "/" ? handleLogin(e) : handleSignUp(e);
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     console.log("sign up");
+    setBtnMsg(
+      <>
+        <div className="flex justify-center items-center">
+          <span className="me-5 animate-pulse">Signing Up</span>
+          <svg
+            className="animate-spin h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+        </div>
+      </>
+    );
     await createUserWithEmailAndPassword(
       auth,
       formInput.username,
@@ -49,16 +90,16 @@ const Authentication = () => {
       })
       .catch((error) => {
         console.log(error.message);
-        // setBtnMsg("Sign Up");
+        setBtnMsg("Sign Up");
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
         if (errorCode == "auth/email-already-in-use") {
           setErrorMsg("Email is already in use. Sign in to continue");
-          // setBtnMsg("Sign Up");
+          setBtnMsg("Sign Up");
         } else if (errorCode == "auth/invalid-email") {
-          // setBtnMsg("Sign Up");
+          setBtnMsg("Sign Up");
           setErrorMsg("Invalid Email Address!");
         }
       });
@@ -76,6 +117,33 @@ const Authentication = () => {
       setErrorMsg("Please Enter Credentials");
       return;
     } else {
+      setBtnMsg(
+        <>
+          <div className="flex justify-center items-center">
+            <span className="me-5 animate-pulse">Logging In</span>
+            <svg
+              className="animate-spin h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          </div>
+        </>
+      );
       await signInWithEmailAndPassword(
         auth,
         formInput.username,
@@ -96,28 +164,28 @@ const Authentication = () => {
           }
         })
         .catch((err) => {
-          // setBtnMsg("Log In");
+          setBtnMsg("Log In");
           console.log(err.message);
           switch (err.message) {
             case "Firebase: Error (auth/invalid-email).":
               setErrorMsg("Invalid Email");
-              // setBtnMsg("Log In");
+              setBtnMsg("Log In");
               break;
             case "Firebase: Error (auth/missing-password).":
               setErrorMsg("Invalid Password");
-              // setBtnMsg("Log In");
+              setBtnMsg("Log In");
               break;
             case "Firebase: Error (auth/invalid-credential).":
               setErrorMsg("Wrong Password");
-              // setBtnMsg("Log In");
+              setBtnMsg("Log In");
               break;
             case "Firebase: Error (auth/user-not-found).":
               setErrorMsg("User not found");
-              // setBtnMsg("Log In");
+              setBtnMsg("Log In");
               break;
             default:
               setErrorMsg("Something went wrong");
-              // setBtnMsg("Log In");
+              setBtnMsg("Log In");
               break;
           }
         });
@@ -125,6 +193,31 @@ const Authentication = () => {
   };
 
   const handleGoogleSignin = () => {
+    setGoogleBtnMsg(
+      <div className="flex justify-center items-center">
+        <span className="me-5 animate-pulse">Working Google Magic</span>
+        <svg
+          className="animate-spin h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+      </div>
+    );
     signInWithPopup(auth, provider)
       .then((result) => {
         // const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -147,7 +240,7 @@ const Authentication = () => {
         <BackgroundImages />
       </div>
       {/* Authentication ui */}
-      <div className="absolute inset-x-0 top-[26%] md:top-[15%] md:h-screen flex justify-center">
+      <div className="absolute inset-x-0 top-[26%] md:top-[5%] md:h-screen flex justify-center">
         <div className="bg-white border-black md:w-[40%] w-[90%] rounded-t-[50px] shadow-lg py-8 px-4">
           <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-12">
             Vibesnap
@@ -219,15 +312,20 @@ const Authentication = () => {
               </div>
             </div>
             <span>{errorMsg}</span>
-            <span className="mt-4 w-[90%] md:w-[70%] underline">
-              Forgot Password?
-            </span>
+            {location === "/" ? (
+              <span className="mt-4 w-[90%] md:w-[70%] underline">
+                Forgot Password?
+              </span>
+            ) : (
+              <div className="my-5"></div>
+            )}
             <button
               type="submit"
               className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
-              onClick={location === "/signup" ? handleSignUp : handleLogin}
+              onClick={handleSubmit}
             >
-              {location === "/signup" ? "Sign Up" : "Login"}
+              {/* {location === "/signup" ? "Sign Up" : "Login"} */}
+              {btnMsg}
             </button>
           </form>
           <div className="flex flex-row items-center font-semibold mt-4">
@@ -241,7 +339,7 @@ const Authentication = () => {
               className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
               onClick={handleGoogleSignin}
             >
-              Continue with Google
+              {googleBtnMsg}
             </button>
           </div>
 
