@@ -22,6 +22,10 @@ const Authentication = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const Navigate = useNavigate();
 
+  useEffect(() => {
+    setErrorMsg("");
+  }, [location]);
+
   const handleFormInput = (e) => {
     e.preventDefault();
     setFormInput({ ...formInput, [e.target.name]: e.target.value });
@@ -32,7 +36,7 @@ const Authentication = () => {
     console.log("sign up");
     await createUserWithEmailAndPassword(
       auth,
-      formInput.emailId,
+      formInput.username,
       formInput.password
     )
       .then((usercredential) => {
@@ -40,10 +44,11 @@ const Authentication = () => {
         // console.log(user);
         emailverifcationsent();
         setErrorMsg("Verification Email sent!");
-        Navigate("/LogIn");
+        setFormInput({ username: "", password: "" });
+        Navigate("/");
       })
       .catch((error) => {
-        console.log(err.message);
+        console.log(error.message);
         // setBtnMsg("Sign Up");
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -67,13 +72,13 @@ const Authentication = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (formInput.emailId === "" || formInput.password === "") {
+    if (formInput.username === "" || formInput.password === "") {
       setErrorMsg("Please Enter Credentials");
       return;
     } else {
       await signInWithEmailAndPassword(
         auth,
-        formInput.emailId,
+        formInput.username,
         formInput.password
       )
         .then((userCredential) => {
@@ -82,6 +87,7 @@ const Authentication = () => {
           auth.currentUser.reload(); //refresh the current user details
           //console.log(auth.currentUser.emailVerified);
           if (auth.currentUser.emailVerified) {
+            setFormInput({ username: "", password: "" });
             setErrorMsg("Logging you in..");
             Navigate("/feed");
           } else {
