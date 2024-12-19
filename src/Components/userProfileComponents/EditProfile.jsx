@@ -36,6 +36,10 @@ const EditProfile = () => {
             setBannerImgUrl(userData.bannerImgUrl);
           } else {
             console.log("No such document!");
+            setUsername(currentUser.displayName);
+            setBio("");
+            setProfileImgUrl(person);
+            setBannerImgUrl("");
           }
         }
       } catch (error) {
