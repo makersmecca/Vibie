@@ -139,15 +139,30 @@ const NewPost = () => {
 
   const updateFireStore = async () => {
     console.log("UPDATEFIRESTORE");
-    if (apwrtResponse.url !== "") {
-      await setDoc(doc(db, "globalPosts", apwrtResponse.id), {
-        mediaUrl: apwrtResponse.url,
-        caption: apwrtResponse.caption,
-        createdAt: apwrtResponse.createdAt,
-        userId: currentUser.email,
-      })
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
+    if (apwrtResponse.id !== "") {
+      try {
+        // Update global posts
+        await setDoc(doc(db, "globalPosts", apwrtResponse.id), {
+          mediaUrl: apwrtResponse.url,
+          caption: apwrtResponse.caption,
+          createdAt: apwrtResponse.createdAt,
+          userId: currentUser.email,
+        });
+
+        // Update user posts
+        await setDoc(
+          doc(db, "userPosts", currentUser.email, "posts", apwrtResponse.id),
+          {
+            mediaUrl: apwrtResponse.url,
+            caption: apwrtResponse.caption,
+            createdAt: apwrtResponse.createdAt,
+            userId: currentUser.email,
+          }
+        );
+      } catch (error) {
+        console.error("Error updating Firestore:", error);
+        // Handle the error appropriately - maybe show a user notification
+      }
     }
   };
 
@@ -156,18 +171,6 @@ const NewPost = () => {
       console.log(apwrtResponse);
       try {
         if (apwrtResponse.id !== "") {
-          setPreviewUrl(null);
-          setFiles([]);
-          // setPostCaption("");
-          setApwrtResponse((prevState) => ({
-            ...prevState,
-            caption: "",
-          }));
-          // const res = await storage.getFileDownload(
-          //   `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
-          //   apwrtResponse.id
-          // );
-          // console.log(res);
           const url = await storage.getFilePreview(
             `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
             apwrtResponse.id
