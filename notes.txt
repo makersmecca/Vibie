@@ -7,7 +7,7 @@ posts [Field Array] ->
 [2] - number - Number of likes
 [3] - String - Caption of the post
 
-globalPosts (Collection)
+globalContent (Collection)
   └── postID (Document)
        ├── mediaURL: String
        ├── timestamp: Timestamp
