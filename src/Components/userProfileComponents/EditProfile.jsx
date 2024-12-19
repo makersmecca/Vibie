@@ -1,12 +1,50 @@
-import { useState } from "react";
-import bg9 from "/bgImg/bg9.jpeg";
+import { useState, useContext, useEffect } from "react";
+// import bg9 from "/bgImg/bg9.jpeg";
 import { Link, useNavigate } from "react-router-dom";
+import { auth, db } from "../../auth/firebaseAuth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { UserContext } from "../UserContext";
+import person from "/profile.png";
+import { getAuth } from "firebase/auth";
 const EditProfile = () => {
+  getAuth();
+  const { currentUser } = useContext(UserContext);
   const Navigate = useNavigate();
-  const [username, setUserName] = useState("New User 1");
-  const [bio, setBio] = useState(
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit"
-  );
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [profileImgUrl, setProfileImgUrl] = useState("");
+  const [bannerImgUrl, setBannerImgUrl] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (currentUser?.email) {
+          const userDocRef = doc(db, "users", currentUser.email);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUsername(
+              userData.username === ""
+                ? currentUser.displayName
+                : userData.username
+            );
+            setBio(userData.bio);
+            setProfileImgUrl(
+              userData.profileImgUrl === "" ? person : userData.profileImgUrl
+            );
+            setBannerImgUrl(userData.bannerImgUrl);
+          } else {
+            console.log("No such document!");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [currentUser]);
 
   const handleEditBanner = () => {
     console.log("editing banner");
@@ -18,7 +56,7 @@ const EditProfile = () => {
 
   const handleUsernameInput = (e) => {
     e.preventDefault();
-    setUserName(e.target.value);
+    setUsername(e.target.value);
   };
 
   const handleBioInput = (e) => {
@@ -26,8 +64,14 @@ const EditProfile = () => {
     setBio(e.target.value);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     //apply update logic
+    await setDoc(doc(db, "users", currentUser.email), {
+      username: username,
+      bio: bio,
+      profileImgUrl: "",
+      bannerImgUrl: "",
+    });
     console.log("Changes Saved!");
     Navigate("/profile");
   };
@@ -55,10 +99,18 @@ const EditProfile = () => {
               </svg>
             </div>
           </Link>
-          <img
-            src={bg9}
-            className="w-full md:w-[800px] h-[150px] rounded-b-2xl"
-          />
+          <div
+            className={`bg-gray-400 rounded-b-2xl ${
+              bannerImgUrl === "" ? "w-full md:w-[800px] h-[150px]" : ""
+            }`}
+          >
+            {bannerImgUrl !== "" && (
+              <img
+                src={bannerImgUrl}
+                className="w-full md:w-[800px] h-[150px] rounded-b-2xl"
+              />
+            )}
+          </div>
           <div
             onClick={handleEditBanner}
             className="absolute bottom-2 right-2 rounded-full w-[30px] h-[30px] bg-gray-300 flex justify-center items-center"
@@ -81,7 +133,10 @@ const EditProfile = () => {
       {/* profile picture */}
       <div className="absolute top-[13%] md:top-[15%] left-[5%] md:left-[30%]">
         <div className="relative">
-          <img src={bg9} className="md:relative w-24 h-24 rounded-full " />
+          <img
+            src={profileImgUrl}
+            className="md:relative w-24 h-24 rounded-full bg-white"
+          />
           <div
             onClick={handleEditDP}
             className="absolute bottom-2 right-2 rounded-full w-[30px] h-[30px] bg-gray-300 flex justify-center items-center"

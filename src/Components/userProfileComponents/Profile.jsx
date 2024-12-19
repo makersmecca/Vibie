@@ -1,20 +1,53 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-import { auth } from "../../auth/firebaseAuth";
+import { auth, db } from "../../auth/firebaseAuth";
+import { doc, getDoc } from "firebase/firestore";
 import { UserContext } from "../UserContext";
 import MyPosts from "./MyPosts";
-
+import person from "/profile.png";
 // import Navbar from "../Navbar";
-import bg9 from "/bgImg/bg9.jpeg";
+// import bg9 from "/bgImg/bg9.jpeg";
 const Profile = () => {
   getAuth();
   const { currentUser } = useContext(UserContext);
-
   const Navigate = useNavigate();
   const [popUp, setPopUp] = useState(false);
-  const username = currentUser?.displayName;
-  const bio = "Lorem ipsum dolor sit amet consectetur, adipisicing elit";
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [profileImgUrl, setProfileImgUrl] = useState("");
+  const [bannerImgUrl, setBannerImgUrl] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (currentUser?.email) {
+          const userDocRef = doc(db, "users", currentUser.email);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUsername(
+              userData.username === ""
+                ? currentUser.displayName
+                : userData.username
+            );
+            setBio(userData.bio);
+            setProfileImgUrl(
+              userData.profileImgUrl === "" ? person : userData.profileImgUrl
+            );
+            setBannerImgUrl(userData.bannerImgUrl);
+          } else {
+            console.log("No such document!");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [currentUser]);
 
   const handlePopup = () => {
     setPopUp((prev) => !prev);
@@ -57,18 +90,29 @@ const Profile = () => {
               </svg>
             </div>
           </Link>
-          <img
-            src={bg9}
-            className="w-full md:w-[800px] h-[150px] rounded-b-2xl"
-          />
+          <div
+            className={`bg-gray-400 rounded-b-2xl ${
+              bannerImgUrl === "" ? "w-full md:w-[800px] h-[150px]" : ""
+            }`}
+          >
+            {bannerImgUrl !== "" && (
+              <img
+                src={bannerImgUrl}
+                className="w-full md:w-[800px] h-[150px] rounded-b-2xl"
+              />
+            )}
+          </div>
         </div>
       </div>
       {/* profile picture */}
-      <div className="absolute top-[13%] md:top-[15%] left-[5%] md:left-[30%]">
-        <img src={bg9} className="md:relative w-24 h-24 rounded-full " />
+      <div className="absolute top-[13%] md:top-[15%] left-[5%] sm:left-[10%] lg:left-[30%]">
+        <img
+          src={profileImgUrl}
+          className="md:relative w-[96px] h-[96px] rounded-full bg-white"
+        />
       </div>
       {/* edit profile button */}
-      <div className="flex items-center justify-end px-2 w-full md:w-[50%] mt-5 self-center gap-4">
+      <div className="flex items-center justify-end px-2 w-full sm:w-[80%] lg:w-[50%] mt-5 self-center gap-4">
         {/* logout button */}
         <button
           className={`${
@@ -119,13 +163,15 @@ const Profile = () => {
         </Link>
       </div>
       {/* username */}
-      <div className="self-center w-full md:w-[50%] mt-10 text-3xl font-semibold font-Lexend px-7">
+      <div className="self-center w-full sm:w-[80%] lg:w-[50%] mt-10 text-3xl font-semibold font-Lexend px-7">
         {username}
       </div>
       {/* bio */}
-      <div className="self-center w-full md:w-[50%] px-7 mt-3">{bio}</div>
+      <div className="self-center w-full sm:w-[80%] lg:w-[50%] px-7 mt-3">
+        {bio}
+      </div>
       {/* user's posts */}
-      <div className="self-center w-full md:w-[50%] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
+      <div className="self-center w-full sm:w-[80%] lg:w-[50%] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
         My Posts
       </div>
       {/* div showing the user's posts */}
