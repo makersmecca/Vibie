@@ -263,7 +263,6 @@ const NewPost = () => {
           </span> */}
           <input
             type="file"
-            multiple
             onChange={handleFileChange}
             className=" hidden"
             accept=".jpg, .jpeg, .png, .mp4, .mov"
