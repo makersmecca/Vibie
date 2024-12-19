@@ -25,3 +25,11 @@ userContent (Collection)
                  ├── timestamp: Timestamp
                  ├── likesCount: Number
                  ├── caption: String
+
+
+users (Collection)
+            └── emailId (Document)
+                 ├── username: String
+                 ├── bio: String
+                 ├── profileImgUrl: String
+                 ├── bannerImgUrl: String
