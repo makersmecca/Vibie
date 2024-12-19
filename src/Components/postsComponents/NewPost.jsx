@@ -5,9 +5,9 @@ import DeviceCamera from "./DeviceCamera";
 import { Client, Storage } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 import { UserContext } from "../UserContext";
-import { auth, db } from "../../auth/firebaseAuth";
-import { getAuth } from "firebase/auth";
+import { db } from "../../auth/firebaseAuth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const NewPost = () => {
   const Navigate = useNavigate();
@@ -18,6 +18,7 @@ const NewPost = () => {
     id: "",
     createdAt: null,
     fileName: "",
+    url: "",
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   //states to check file uploading and successful post creation
@@ -145,16 +146,20 @@ const NewPost = () => {
           setPreviewUrl(null);
           setFiles([]);
           setPostCaption("");
-          const res = await storage.getFileDownload(
-            `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
-            apwrtResponse.id
-          );
-          console.log(res);
+          // const res = await storage.getFileDownload(
+          //   `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+          //   apwrtResponse.id
+          // );
+          // console.log(res);
           const url = await storage.getFilePreview(
             `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
             apwrtResponse.id
           );
-          console.log(url);
+          setApwrtResponse((prevState) => ({
+            ...prevState,
+            url: url.href,
+          }));
+          console.log(url.href);
         } else {
           throw new Error("file not found");
         }
@@ -164,7 +169,11 @@ const NewPost = () => {
     };
 
     fileUrl();
-  }, [apwrtResponse]);
+  }, [apwrtResponse.id]);
+
+  // useEffect(() => {
+  //   console.log(apwrtResponse);
+  // }, [apwrtResponse]);
 
   return (
     <div className="flex flex-col min-h-screen">
