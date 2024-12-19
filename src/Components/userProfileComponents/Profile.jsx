@@ -6,6 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { UserContext } from "../UserContext";
 import MyPosts from "./MyPosts";
 import person from "/profile.png";
+import { Client, Storage } from "appwrite";
 // import Navbar from "../Navbar";
 // import bg9 from "/bgImg/bg9.jpeg";
 const Profile = () => {
@@ -17,6 +18,12 @@ const Profile = () => {
   const [bio, setBio] = useState("");
   const [profileImgUrl, setProfileImgUrl] = useState("");
   const [bannerImgUrl, setBannerImgUrl] = useState("");
+
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const storage = new Storage(client);
 
   useEffect(() => {
     const fetchUserData = async () => {

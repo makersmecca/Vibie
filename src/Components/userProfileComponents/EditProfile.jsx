@@ -6,6 +6,9 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { UserContext } from "../UserContext";
 import person from "/profile.png";
 import { getAuth } from "firebase/auth";
+import { Client, Storage } from "appwrite";
+import { v4 as uuidv4 } from "uuid";
+
 const EditProfile = () => {
   getAuth();
   const { currentUser } = useContext(UserContext);
@@ -14,6 +17,16 @@ const EditProfile = () => {
   const [bio, setBio] = useState("");
   const [profileImgUrl, setProfileImgUrl] = useState("");
   const [bannerImgUrl, setBannerImgUrl] = useState("");
+  const [bannerFile, setBannerFile] = useState([]);
+  const [profileFile, setProfileFile] = useState([]);
+  const [profilePreview, setProfilePreview] = useState(null);
+  const [bannerPreview, setBannerPreview] = useState(null);
+
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const storage = new Storage(client);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,12 +63,147 @@ const EditProfile = () => {
     fetchUserData();
   }, [currentUser]);
 
-  const handleEditBanner = () => {
-    console.log("editing banner");
+  const handleEditDP = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+    const maxFileSize = 10 * 1024 * 1024;
+
+    // Validate file sizes
+    const validFiles = selectedFiles.filter(
+      (file) => file.size <= maxFileSize && file.size > 0
+    );
+    const invalidFiles = selectedFiles.filter(
+      (file) => file.size > maxFileSize
+    );
+
+    if (invalidFiles.length > 0) {
+      alert(
+        `Some files exceeded the ${
+          maxFileSize / (1024 * 1024)
+        }MB limit and were excluded.`
+      );
+    }
+
+    // Create preview for valid file
+    if (validFiles.length > 0) {
+      const file = validFiles[0];
+      const previewUrl = URL.createObjectURL(file);
+      setProfilePreview(previewUrl);
+    }
+
+    setProfileFile(validFiles);
   };
 
-  const handleEditDP = () => {
-    console.log("Editing DP");
+  const handleEditBanner = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+    const maxFileSize = 15 * 1024 * 1024;
+
+    // Validate file sizes
+    const validFiles = selectedFiles.filter(
+      (file) => file.size <= maxFileSize && file.size > 0
+    );
+    const invalidFiles = selectedFiles.filter(
+      (file) => file.size > maxFileSize
+    );
+
+    if (invalidFiles.length > 0) {
+      alert(
+        `Some files exceeded the ${
+          maxFileSize / (1024 * 1024)
+        }MB limit and were excluded.`
+      );
+    }
+
+    // Create preview for valid file
+    if (validFiles.length > 0) {
+      const file = validFiles[0];
+      const previewUrl = URL.createObjectURL(file);
+      setBannerPreview(previewUrl);
+    }
+
+    setBannerFile(validFiles);
+  };
+
+  const handlePhotoStorage = async () => {
+    try {
+      let newProfileUrl = profileImgUrl; // Keep existing URL if no new file
+      let newBannerUrl = bannerImgUrl; // Keep existing URL if no new file
+
+      // Upload profile photo if selected
+      if (profileFile.length > 0) {
+        const profileFileId = uuidv4();
+        await storage.createFile(
+          `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+          profileFileId,
+          profileFile[0]
+        );
+
+        // Get the URL for the uploaded profile photo
+        const profileUrl = storage.getFileView(
+          `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+          profileFileId
+        );
+        newProfileUrl = profileUrl.href;
+      }
+
+      // Upload banner photo if selected
+      if (bannerFile.length > 0) {
+        const bannerFileId = uuidv4();
+        await storage.createFile(
+          `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+          bannerFileId,
+          bannerFile[0]
+        );
+
+        // Get the URL for the uploaded banner photo
+        const bannerUrl = storage.getFileView(
+          `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+          bannerFileId
+        );
+        newBannerUrl = bannerUrl.href;
+      }
+
+      // Update Firestore with new URLs
+      await setDoc(
+        doc(db, "users", currentUser.email),
+        {
+          username: username,
+          bio: bio,
+          profileImgUrl: newProfileUrl,
+          bannerImgUrl: newBannerUrl,
+        },
+        { merge: true }
+      ); // Add merge: true to preserve other fields
+
+      // Update state after successful upload and database update
+      setProfileImgUrl(newProfileUrl);
+      setBannerImgUrl(newBannerUrl);
+
+      console.log("Photos uploaded and database updated successfully!");
+      //cleanup
+      if (profilePreview) {
+        URL.revokeObjectURL(profilePreview);
+        setProfilePreview(null);
+      }
+      if (bannerPreview) {
+        URL.revokeObjectURL(bannerPreview);
+        setBannerPreview(null);
+      }
+
+      return { profileImgUrl: newProfileUrl, bannerImgUrl: newBannerUrl };
+    } catch (error) {
+      console.error("Error uploading photos:", error);
+      throw error;
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      await handlePhotoStorage();
+      console.log("Changes Saved!");
+      Navigate("/profile");
+    } catch (error) {
+      console.error("Error saving changes:", error);
+    }
   };
 
   const handleUsernameInput = (e) => {
@@ -68,17 +216,18 @@ const EditProfile = () => {
     setBio(e.target.value);
   };
 
-  const handleSave = async () => {
-    //apply update logic
-    await setDoc(doc(db, "users", currentUser.email), {
-      username: username,
-      bio: bio,
-      profileImgUrl: "",
-      bannerImgUrl: "",
-    });
-    console.log("Changes Saved!");
-    Navigate("/profile");
-  };
+  // Cleanup function to revoke object URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      if (profilePreview) {
+        URL.revokeObjectURL(profilePreview);
+      }
+      if (bannerPreview) {
+        URL.revokeObjectURL(bannerPreview);
+      }
+    };
+  }, []);
+
   return (
     <div className="flex flex-col">
       {/* profile banner */}
@@ -108,15 +257,13 @@ const EditProfile = () => {
               bannerImgUrl === "" ? "w-full md:w-[800px] h-[150px]" : ""
             }`}
           >
-            {bannerImgUrl !== "" && (
-              <img
-                src={bannerImgUrl}
-                className="w-full md:w-[800px] h-[150px] rounded-b-2xl"
-              />
-            )}
+            <img
+              src={bannerPreview || bannerImgUrl}
+              className="w-full md:w-[800px] h-[150px] rounded-b-2xl object-cover"
+            />
           </div>
-          <div
-            onClick={handleEditBanner}
+          <label
+            // onClick={handleEditBanner}
             className="absolute bottom-2 right-2 rounded-full w-[30px] h-[30px] bg-gray-300 flex justify-center items-center"
           >
             <svg
@@ -131,20 +278,23 @@ const EditProfile = () => {
             >
               <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
             </svg>
-          </div>
+            <input
+              type="file"
+              onChange={handleEditBanner}
+              className=" hidden"
+              accept=".jpg, .jpeg, .png"
+            />
+          </label>
         </div>
       </div>
       {/* profile picture */}
       <div className="absolute top-[13%] md:top-[15%] left-[5%] md:left-[30%]">
         <div className="relative">
           <img
-            src={profileImgUrl}
-            className="md:relative w-24 h-24 rounded-full bg-white"
+            src={profilePreview || profileImgUrl}
+            className="md:relative w-24 h-24 rounded-full bg-white object-cover"
           />
-          <div
-            onClick={handleEditDP}
-            className="absolute bottom-2 right-2 rounded-full w-[30px] h-[30px] bg-gray-300 flex justify-center items-center"
-          >
+          <label className="absolute bottom-2 right-2 rounded-full w-[30px] h-[30px] bg-gray-300 flex justify-center items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="14"
@@ -157,7 +307,13 @@ const EditProfile = () => {
             >
               <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
             </svg>
-          </div>
+            <input
+              type="file"
+              onChange={handleEditDP}
+              className=" hidden"
+              accept=".jpg, .jpeg, .png"
+            />
+          </label>
         </div>
       </div>
       {/* user's details */}
