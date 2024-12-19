@@ -12,13 +12,14 @@ import { getAuth } from "firebase/auth";
 const NewPost = () => {
   const Navigate = useNavigate();
   getAuth();
-  const [postCaption, setPostCaption] = useState("");
+  // const [postCaption, setPostCaption] = useState("");
   const [files, setFiles] = useState([]);
   const [apwrtResponse, setApwrtResponse] = useState({
     id: "",
     createdAt: null,
     fileName: "",
     url: "",
+    caption: "",
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   //states to check file uploading and successful post creation
@@ -37,7 +38,11 @@ const NewPost = () => {
 
   const handlePostCaptionInput = (e) => {
     e.preventDefault();
-    setPostCaption(e.target.value);
+    // setPostCaption(e.target.value);
+    setApwrtResponse((prev) => ({
+      ...prev,
+      caption: e.target.value,
+    }));
   };
 
   const handleFileChange = (event) => {
@@ -78,7 +83,7 @@ const NewPost = () => {
 
   const handleCreatePost = (e) => {
     e.preventDefault();
-    if (postCaption !== "" && files[0] !== null) {
+    if (apwrtResponse.caption !== "" && files[0] !== null) {
       setIsLoading(true);
       setDisplayPopup(true);
       setUploadStatus("Uploading");
@@ -134,18 +139,30 @@ const NewPost = () => {
 
   const updateFireStore = async () => {
     console.log("UPDATEFIRESTORE");
-    // console.log(apwrtResponse);
+    if (apwrtResponse.url !== "") {
+      await setDoc(doc(db, "globalPosts", apwrtResponse.id), {
+        mediaUrl: apwrtResponse.url,
+        caption: apwrtResponse.caption,
+        createdAt: apwrtResponse.createdAt,
+        userId: currentUser.email,
+      })
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));
+    }
   };
 
   useEffect(() => {
-    updateFireStore();
     const fileUrl = async () => {
       console.log(apwrtResponse);
       try {
         if (apwrtResponse.id !== "") {
           setPreviewUrl(null);
           setFiles([]);
-          setPostCaption("");
+          // setPostCaption("");
+          setApwrtResponse((prevState) => ({
+            ...prevState,
+            caption: "",
+          }));
           // const res = await storage.getFileDownload(
           //   `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
           //   apwrtResponse.id
@@ -171,9 +188,10 @@ const NewPost = () => {
     fileUrl();
   }, [apwrtResponse.id]);
 
-  // useEffect(() => {
-  //   console.log(apwrtResponse);
-  // }, [apwrtResponse]);
+  useEffect(() => {
+    console.log(apwrtResponse);
+    updateFireStore();
+  }, [apwrtResponse]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -212,7 +230,7 @@ const NewPost = () => {
         <textarea
           className="flex justify-center items-start w-full rounded-2xl bg-gray-200 ring-none border-none px-5 py-2"
           placeholder="What's on your mind today?"
-          value={postCaption}
+          value={apwrtResponse.caption}
           onChange={handlePostCaptionInput}
         />
       </div>
