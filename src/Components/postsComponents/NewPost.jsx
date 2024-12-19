@@ -143,20 +143,22 @@ const NewPost = () => {
       try {
         // Update global posts
         await setDoc(doc(db, "globalPosts", apwrtResponse.id), {
-          mediaUrl: apwrtResponse.url,
-          caption: apwrtResponse.caption,
-          createdAt: apwrtResponse.createdAt,
-          userId: currentUser.email,
+          mediaUrl: String(apwrtResponse.url),
+          caption: String(apwrtResponse.caption),
+          createdAt: new Date(apwrtResponse.createdAt),
+          userId: String(currentUser.email),
+          likeCount: Number(0),
         });
 
         // Update user posts
         await setDoc(
           doc(db, "userPosts", currentUser.email, "posts", apwrtResponse.id),
           {
-            mediaUrl: apwrtResponse.url,
-            caption: apwrtResponse.caption,
-            createdAt: apwrtResponse.createdAt,
-            userId: currentUser.email,
+            mediaUrl: String(apwrtResponse.url),
+            caption: String(apwrtResponse.caption),
+            createdAt: new Date(apwrtResponse.createdAt),
+            userId: String(currentUser.email),
+            likeCount: Number(0),
           }
         );
       } catch (error) {
@@ -192,7 +194,7 @@ const NewPost = () => {
   }, [apwrtResponse.id]);
 
   useEffect(() => {
-    console.log(apwrtResponse);
+    // console.log(apwrtResponse);
     updateFireStore();
   }, [apwrtResponse]);
 
