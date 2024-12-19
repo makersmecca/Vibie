@@ -113,13 +113,13 @@ const Profile = () => {
           </div>
         )}
         <Link to="/editprofile">
-          <button className="border-[2px] border-black rounded-2xl w-[200px] md:w-[300px] py-1 text-black font-semibold font-Lexend text-lg">
+          <button className="border-[1px] border-black rounded-2xl w-[200px] md:w-[300px] py-1 text-black font-semibold font-Lexend text-lg">
             Edit Profile
           </button>
         </Link>
       </div>
       {/* username */}
-      <div className="self-center w-full md:w-[50%] mt-10 text-3xl font-semibold px-7">
+      <div className="self-center w-full md:w-[50%] mt-10 text-3xl font-semibold font-Lexend px-7">
         {username}
       </div>
       {/* bio */}

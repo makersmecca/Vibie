@@ -13,6 +13,8 @@ const MyPosts = () => {
     else setLikeCount((prev) => prev + 1);
     setLiked((prev) => !prev);
   };
+
+  const postCaption = "Nature is the best artform. #nature";
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
     <div className="flex flex-col gap-6">
@@ -33,9 +35,7 @@ const MyPosts = () => {
           </Link>
 
           <div className="p-5">
-            <p className="mb-3 font-normal text-black">
-              Nature is the best artform. #nature
-            </p>
+            <p className="mb-3 font-normal text-black">{postCaption}</p>
           </div>
           <img
             className="rounded-xl w-[90%] h-[300px] self-center"
