@@ -6,7 +6,7 @@ import { Client, Storage } from "appwrite";
 import { v4 as uuidv4 } from "uuid";
 import { UserContext } from "../UserContext";
 import { db } from "../../auth/firebaseAuth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const NewPost = () => {
