@@ -1,11 +1,23 @@
 // import Navbar from "../Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DeviceCamera from "./DeviceCamera";
+import { Client, Storage } from "appwrite";
+import { v4 as uuidv4 } from "uuid";
 
 const NewPost = () => {
   const [postCaption, setPostCaption] = useState("");
   const [files, setFiles] = useState([]);
+  const [apwrtResponse, setApwrtResponse] = useState({
+    id: "",
+    createdAt: "",
+    fileName: "",
+  });
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const storage = new Storage(client);
 
   const handlePostCaptionInput = (e) => {
     e.preventDefault();
@@ -15,7 +27,7 @@ const NewPost = () => {
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
 
-    nitro ? setMaxFileSize(50 * 1024 * 1024) : setMaxFileSize(25 * 1024 * 1024);
+    const maxFileSize = 25 * 1024 * 1024;
 
     // Validate file sizes
     const validFiles = selectedFiles.filter((file) => file.size <= maxFileSize);
@@ -32,8 +44,61 @@ const NewPost = () => {
     }
 
     setFiles(validFiles);
-    setStatusMessages([]); // Clear status messages for new file selection
+    // setStatusMessages([]); // Clear status messages for new file selection
   };
+
+  const handleCreatePost = (e) => {
+    e.preventDefault();
+    const promise = storage.createFile(
+      `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+      uuidv4(),
+      files[0]
+    );
+    promise.then(
+      function (response) {
+        console.log(response); // Success
+        console.log(response.$id);
+        console.log(response.name);
+        console.log(response.$createdAt);
+        setApwrtResponse((prevState) => ({
+          ...prevState,
+          id: response.$id,
+          createdAt: response.$createdAt,
+          fileName: response.name,
+        }));
+      },
+      function (error) {
+        console.log(error); // Failure
+      }
+    );
+  };
+
+  useEffect(() => {
+    const fileUrl = async () => {
+      console.log(apwrtResponse);
+      try {
+        if (apwrtResponse.id !== "") {
+          const res = await storage.getFileDownload(
+            `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+            apwrtResponse.id
+          );
+          console.log(res);
+          const url = await storage.getFilePreview(
+            `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+            apwrtResponse.id
+          );
+          console.log(url);
+        } else {
+          throw new Error("file not found");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fileUrl();
+  }, [apwrtResponse]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="p-5 left-5 top-6 flex items-center gap-5">
@@ -102,7 +167,10 @@ const NewPost = () => {
       </div>
 
       <div className="w-full flex justify-center">
-        <button className="bg-gray-900 w-[350px] md:w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend">
+        <button
+          onClick={handleCreatePost}
+          className="bg-gray-900 w-[350px] md:w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend"
+        >
           Create Post
         </button>
       </div>
