@@ -117,10 +117,12 @@ const Profile = () => {
       </div>
       {/* profile picture */}
       <div className="absolute top-[13%] md:top-[15%] left-[5%] sm:left-[10%] lg:left-[30%]">
-        <img
-          src={profileImgUrl}
-          className="md:relative w-[96px] h-[96px] rounded-full bg-white"
-        />
+        <div className="w-[100px] h-[100px] bg-white rounded-full flex items-center justify-center">
+          <img
+            src={profileImgUrl}
+            className="md:relative w-[94px] h-[94px] rounded-full bg-white"
+          />
+        </div>
       </div>
       {/* edit profile button */}
       <div className="flex items-center justify-end px-2 w-full sm:w-[80%] lg:w-[50%] mt-5 self-center gap-4">
