@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../auth/firebaseAuth";
 const provider = new GoogleAuthProvider();
@@ -92,7 +93,7 @@ const Authentication = () => {
         emailverifcationsent();
         setErrorMsg("Verification Email sent!");
         setFormInput({ username: "", password: "" });
-        Navigate("/");
+        signOut(auth).then(() => Navigate("/"));
       })
       .catch((error) => {
         console.log(error.message);
@@ -156,16 +157,20 @@ const Authentication = () => {
         formInput.password
       )
         .then((userCredential) => {
+          return auth.currentUser.reload();
+        })
+        .then(() => {
           // const user = userCredential.user;
           // console.log(user);
-          auth.currentUser.reload(); //refresh the current user details
-          //console.log(auth.currentUser.emailVerified);
+          // console.log(auth.currentUser.emailVerified);
           if (auth.currentUser.emailVerified) {
             setFormInput({ username: "", password: "" });
             setErrorMsg("Logging you in..");
             Navigate("/feed");
           } else {
             setErrorMsg("Please Verify Your Email ID");
+            signOut(auth).then(() => Navigate("/"));
+            setBtnMsg("Log In");
             emailverifcationsent();
           }
         })
