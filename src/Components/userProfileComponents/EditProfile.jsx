@@ -22,6 +22,8 @@ const EditProfile = () => {
   const [profilePreview, setProfilePreview] = useState(null);
   const [bannerPreview, setBannerPreview] = useState(null);
 
+  const [btnMsg, setBtnMsg] = useState("Update");
+
   const client = new Client()
     .setEndpoint("https://cloud.appwrite.io/v1")
     .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
@@ -197,12 +199,14 @@ const EditProfile = () => {
   };
 
   const handleSave = async () => {
+    setBtnMsg("Updating");
     try {
       await handlePhotoStorage();
       console.log("Changes Saved!");
       Navigate("/profile");
     } catch (error) {
       console.error("Error saving changes:", error);
+      setBtnMsg("Update");
     }
   };
 
@@ -348,7 +352,7 @@ const EditProfile = () => {
           className="bg-gray-900 w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend"
           onClick={handleSave}
         >
-          Update
+          {btnMsg}
         </button>
       </div>
     </div>
