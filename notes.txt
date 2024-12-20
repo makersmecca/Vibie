@@ -7,7 +7,7 @@ posts [Field Array] ->
 [2] - number - Number of likes
 [3] - String - Caption of the post
 
-globalContent (Collection)
+globalPosts (Collection)
   └── postID (Document)
        ├── mediaURL: String
        ├── timestamp: Timestamp
@@ -17,7 +17,7 @@ globalContent (Collection)
 	   
 	   
 	   
-userContent (Collection)
+userPosts (Collection)
   └── userEmail (Document)
        └── posts (Subcollection)
             └── postID (Document)
