@@ -9,36 +9,19 @@ posts [Field Array] ->
 
 globalPosts (Collection)
   └── postID (Document)
-<<<<<<< HEAD
-       ├── mediaURL: String
-       ├── timestamp: Timestamp
-       ├── likesCount: Number
-       ├── caption: String
-       ├── userEmail: String
-	   
-	   
-	   
-userContent (Collection)
-=======
        ├── mediaUrl: String
        ├── createdAt: Timestamp
-       ├── likesCount: Number
+       ├── likeCount: Number
        ├── caption: String
        ├── userId: String
 	   
 	   
 	   
 userPosts (Collection)
->>>>>>> createpost
   └── userEmail (Document)
        └── posts (Subcollection)
             └── postID (Document)
                  ├── mediaURL: String
-<<<<<<< HEAD
-                 ├── timestamp: Timestamp
-                 ├── likesCount: Number
-                 ├── caption: String
-=======
                  ├── createdAt: Timestamp
                  ├── likeCount: Number
                  ├── caption: String
@@ -51,4 +34,17 @@ users (Collection)
                  ├── bio: String
                  ├── profileImgUrl: String
                  ├── bannerImgUrl: String
->>>>>>> createpost
+
+likes (Collection)
+            └── post1 id (Document)
+                 ├── username1: String
+                 ├── username2: String
+                 ├── username3: String
+            └── post2 id (Document)
+                 ├── username1: String
+                 ├── username2: String
+                 ├── username3: String
+            └── post3 id (Document)
+                 ├── username1: String
+                 ├── username2: String
+                 ├── username3: String
