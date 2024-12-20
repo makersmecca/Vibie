@@ -69,7 +69,7 @@ const Posts = () => {
                 bio: "",
                 bannerImgUrl: null,
               },
-              isLiked: false, // You can implement like status logic here
+              liked: false, // You can implement like status logic here
             };
           });
 
@@ -202,7 +202,7 @@ const Posts = () => {
           <div className="flex justify-between px-5 mt-5 items-center">
             <div className="flex items-center justify-between w-[60px]">
               <button onClick={() => handleLikes(post.id, post.userId)}>
-                {post.isLiked ? (
+                {post.liked ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
