@@ -72,7 +72,7 @@ const PostDetails = () => {
   return (
     <div className="flex w-full justify-center h-screen items-center">
       <div className="fixed top-0 w-full font-Pacifico px-10 py-5 text-3xl bg-gray-200 flex justify-between items-center">
-        <Link to="/">InstaVibe</Link>
+        <Link to="/">Vibie</Link>
         <div className="text-xl">#join the vibetribe</div>
       </div>
       <div
