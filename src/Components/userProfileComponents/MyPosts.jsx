@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { db } from "../../auth/firebaseAuth";
 import { useLocation } from "react-router-dom";
 import person from "/profile.png";
+import { Client, Storage } from "appwrite";
 import {
   collection,
   query,
@@ -14,6 +15,7 @@ import {
   updateDoc,
   increment,
   deleteDoc,
+  writeBatch,
 } from "firebase/firestore";
 import ShareButton from "../ShareButton";
 
@@ -21,6 +23,13 @@ import ShareButton from "../ShareButton";
 const MyPosts = () => {
   const { currentUser } = useContext(UserContext);
   const currentLocation = useLocation();
+
+  //Appwrite Consts
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const storage = new Storage(client);
 
   //states to store post related details
   const [posts, setPosts] = useState([]);
@@ -236,10 +245,31 @@ const MyPosts = () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      const postRef = doc(db, "userPosts", currentUser.email, "posts", postId);
-      await deleteDoc(postRef);
+      try {
+        await storage.deleteFile(
+          `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
+          String(postId)
+        );
+      } catch (storageError) {
+        console.error("Error deleting file from storage:", storageError);
+      }
+      const batch = writeBatch(db);
+      // Delete from userPosts
+      const userPostRef = doc(
+        db,
+        "userPosts",
+        currentUser.email,
+        "posts",
+        postId
+      );
+      batch.delete(userPostRef);
 
-      // Update local state
+      // Delete from globalPosts
+      const globalPostRef = doc(db, "globalPosts", postId);
+      batch.delete(globalPostRef);
+
+      await batch.commit();
+
       setPosts((currentPosts) =>
         currentPosts.filter((post) => post.id !== postId)
       );
@@ -269,7 +299,10 @@ const MyPosts = () => {
                 </div>
               </div>
             </Link>
-            <div onClick={() => handleEditPost(post.id)} className="w-[50px]">
+            <div
+              onClick={() => handleEditPost(post.id)}
+              className="w-[50px] cursor-pointer"
+            >
               {activeMenu === post.id ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
