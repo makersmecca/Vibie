@@ -2,19 +2,54 @@ import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import bg9 from "/bgImg/bg9.jpeg";
 import Posts from "../postsComponents/Posts";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
+import { auth, db } from "../../auth/firebaseAuth";
+import { doc, getDoc } from "firebase/firestore";
+import person from "/profile.png";
 
 const Feed = () => {
   const { currentUser } = useContext(UserContext);
-  const username = currentUser.displayName;
+  const [profileImgUrl, setProfileImgUrl] = useState("");
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (currentUser?.email) {
+          const userDocRef = doc(db, "users", currentUser.email);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUsername(
+              userData.username === ""
+                ? currentUser.displayName
+                : userData.username
+            );
+            setProfileImgUrl(
+              userData.profileImgUrl === "" ? person : userData.profileImgUrl
+            );
+          } else {
+            console.log("No such document!");
+            setUsername(currentUser.displayName);
+            setProfileImgUrl(person);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [currentUser]);
   return (
     <div className="flex flex-col items-center">
       <div className="pt-10 bg-white w-full z-10 flex flex-col md:items-center">
-        <div className="md:flex md:justify-start w-full md:w-[30%]">
+        <div className="md:flex md:justify-start w-full sm:w-[60%] lg:w-[30%]">
           <Link to="/profile">
             <div className="h-16 items-center flex px-5 gap-7">
-              <img src={bg9} className="w-20 h-20 rounded-full" />
+              <img src={profileImgUrl} className="w-20 h-20 rounded-full" />
               <div className="mt-5">
                 <div className="opacity-65 font-medium">Welcome Back</div>
                 <div className="font-Lexend font-medium text-xl">
