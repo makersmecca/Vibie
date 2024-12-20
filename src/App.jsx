@@ -1,5 +1,5 @@
 import Authentication from "./Components/Authentication";
-import Feed from "./Components/homecomponents/feed";
+import Feed from "./Components/homecomponents/Feed";
 import NewPost from "./Components/postsComponents/NewPost";
 import Profile from "./Components/userProfileComponents/Profile";
 import EditProfile from "./Components/userProfileComponents/EditProfile";
