@@ -247,7 +247,7 @@ const Authentication = () => {
       </div>
       {/* Authentication ui */}
       <div className="absolute inset-x-0 top-[26%] md:top-[5%] h-[100%] flex justify-center">
-        <div className="bg-white border-black md:w-[40%] w-[90%] rounded-t-[50px] shadow-lg py-8 px-4">
+        <div className="bg-white border-black md:w-[40%] w-[90%] sm:h-[800px] sm:bottom-0 rounded-t-[50px] shadow-lg py-8 px-4">
           <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-12">
             Vibie
           </span>
