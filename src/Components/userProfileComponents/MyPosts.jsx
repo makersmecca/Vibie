@@ -22,7 +22,7 @@ const MyPosts = () => {
 
   //states to store post related details
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   //states for storing user details
   const [profileImgUrl, setProfileImgUrl] = useState("");
@@ -34,6 +34,7 @@ const MyPosts = () => {
   const [editedCaption, setEditedCaption] = useState("");
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchUserData = async () => {
       try {
         if (currentUser?.email) {
@@ -58,6 +59,8 @@ const MyPosts = () => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -66,6 +69,7 @@ const MyPosts = () => {
 
   //load posts created by the current user
   useEffect(() => {
+    setIsLoading(true);
     const fetchUserPosts = async () => {
       try {
         // console.log(currentUser.email);
@@ -111,7 +115,7 @@ const MyPosts = () => {
   }
 
   // No posts state
-  if (posts.length === 0) {
+  if (!isLoading && posts.length === 0) {
     return (
       <div className="flex justify-center items-center h-40">
         <p className="text-gray-500">No posts yet</p>
