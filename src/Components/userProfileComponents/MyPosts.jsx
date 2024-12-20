@@ -9,24 +9,19 @@ import {
   getDoc,
   getDocs,
   orderBy,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 
 import bg9 from "/bgImg/bg9.jpeg";
 const MyPosts = () => {
   const { currentUser } = useContext(UserContext);
-  const [likeCount, setLikeCount] = useState(0);
-  const [liked, setLiked] = useState(false);
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [profileImgUrl, setProfileImgUrl] = useState("");
   const [username, setUsername] = useState("");
 
-  const handleLikes = () => {
-    if (liked) setLikeCount((prev) => prev - 1);
-    else setLikeCount((prev) => prev + 1);
-    setLiked((prev) => !prev);
-  };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -74,16 +69,13 @@ const MyPosts = () => {
 
         // Create query to order posts by timestamp
         const q = query(postsRef, orderBy("createdAt", "desc"));
-
         const querySnapshot = await getDocs(q);
 
-        const userPosts = [];
-        querySnapshot.forEach((doc) => {
-          userPosts.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-        });
+        const userPosts = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          liked: false, // Add initial liked state for each post
+        }));
 
         setPosts(userPosts);
         console.log(userPosts);
@@ -114,6 +106,50 @@ const MyPosts = () => {
       </div>
     );
   }
+
+  const handleLikes = async (postId) => {
+    try {
+      // Find the current post first
+      const currentPost = posts.find((p) => p.id === postId);
+      if (!currentPost) return;
+
+      // Update posts state with optimistic update
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post.id === postId) {
+            const newLikeCount = (post.likeCount || 0) + (post.liked ? -1 : 1);
+            return {
+              ...post,
+              liked: !post.liked,
+              likeCount: newLikeCount,
+            };
+          }
+          return post;
+        })
+      );
+
+      //update firestore
+      const postRef = doc(db, "userPosts", currentUser.email, "posts", postId);
+      await updateDoc(postRef, {
+        likeCount: increment(currentPost.liked ? -1 : 1),
+      });
+    } catch (error) {
+      console.error("Error updating likes:", error);
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post.id === postId) {
+            const newLikeCount = (post.likeCount || 0) + (post.liked ? 1 : -1);
+            return {
+              ...post,
+              liked: !post.liked,
+              likeCount: newLikeCount,
+            };
+          }
+          return post;
+        })
+      );
+    }
+  };
 
   const handleEditPost = () => {
     // Handle edit post logic here
@@ -164,7 +200,7 @@ const MyPosts = () => {
 
           <div className="flex justify-between px-5 mt-5 items-center">
             <div className="flex items-center justify-between w-[60px]">
-              {liked ? (
+              {post.liked ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -172,7 +208,7 @@ const MyPosts = () => {
                   fill="#ff708f"
                   className="bi bi-heart-fill ms-1"
                   viewBox="0 0 16 16"
-                  onClick={handleLikes}
+                  onClick={() => handleLikes(post.id)}
                 >
                   <path
                     fillRule="evenodd"
@@ -187,7 +223,7 @@ const MyPosts = () => {
                   fill="#4b5563"
                   className="bi bi-heart ms-1"
                   viewBox="0 0 16 16"
-                  onClick={handleLikes}
+                  onClick={() => handleLikes(post.id)}
                 >
                   <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
                 </svg>
