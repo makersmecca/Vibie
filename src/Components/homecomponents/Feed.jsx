@@ -1,10 +1,8 @@
-import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
-import bg9 from "/bgImg/bg9.jpeg";
 import Posts from "../postsComponents/Posts";
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
-import { auth, db } from "../../auth/firebaseAuth";
+import { db } from "../../auth/firebaseAuth";
 import { doc, getDoc } from "firebase/firestore";
 import person from "/profile.png";
 
