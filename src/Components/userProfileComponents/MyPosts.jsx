@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
 import { db } from "../../auth/firebaseAuth";
+import { useLocation } from "react-router-dom";
 import {
   collection,
   query,
@@ -11,16 +12,26 @@ import {
   orderBy,
   updateDoc,
   increment,
+  deleteDoc,
 } from "firebase/firestore";
 
-import bg9 from "/bgImg/bg9.jpeg";
+// import bg9 from "/bgImg/bg9.jpeg";
 const MyPosts = () => {
   const { currentUser } = useContext(UserContext);
+  const currentLocation = useLocation();
+
+  //states to store post related details
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  //states for storing user details
   const [profileImgUrl, setProfileImgUrl] = useState("");
   const [username, setUsername] = useState("");
+
+  //states to handle post editing
+  const [activeMenu, setActiveMenu] = useState(null);
+  const [editingPost, setEditingPost] = useState(null);
+  const [editedCaption, setEditedCaption] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -53,6 +64,7 @@ const MyPosts = () => {
     fetchUserData();
   }, [currentUser]);
 
+  //load posts created by the current user
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
@@ -87,7 +99,7 @@ const MyPosts = () => {
     };
 
     fetchUserPosts();
-  }, [currentUser]);
+  }, [currentUser, currentLocation]);
 
   // Loading state
   if (isLoading) {
@@ -151,8 +163,66 @@ const MyPosts = () => {
     }
   };
 
-  const handleEditPost = () => {
-    // Handle edit post logic here
+  const handleEditPost = (postId) => {
+    setActiveMenu(activeMenu === postId ? null : postId);
+  };
+  const startEditing = (post) => {
+    setEditingPost(post);
+    setEditedCaption(post.caption);
+    setActiveMenu(null);
+  };
+
+  const cancelEditing = () => {
+    setEditingPost(null);
+    setEditedCaption("");
+  };
+
+  const saveEdit = async () => {
+    if (!editingPost) return;
+
+    try {
+      const postRef = doc(
+        db,
+        "userPosts",
+        currentUser.email,
+        "posts",
+        editingPost.id
+      );
+      await updateDoc(postRef, {
+        caption: editedCaption,
+      });
+
+      // Update local state
+      setPosts((currentPosts) =>
+        currentPosts.map((post) =>
+          post.id === editingPost.id
+            ? { ...post, caption: editedCaption }
+            : post
+        )
+      );
+
+      setEditingPost(null);
+      setEditedCaption("");
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  };
+
+  const deletePost = async (postId) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+    try {
+      const postRef = doc(db, "userPosts", currentUser.email, "posts", postId);
+      await deleteDoc(postRef);
+
+      // Update local state
+      setPosts((currentPosts) =>
+        currentPosts.filter((post) => post.id !== postId)
+      );
+      setActiveMenu(null);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
 
   return (
@@ -175,23 +245,85 @@ const MyPosts = () => {
                 </div>
               </div>
             </Link>
-            <div onClick={handleEditPost} className="w-[50px]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                className="bi bi-three-dots"
-                viewBox="0 0 16 16"
-              >
-                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-              </svg>
+            <div onClick={() => handleEditPost(post.id)} className="w-[50px]">
+              {activeMenu === post.id ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  stroke="black"
+                  strokeWidth="0.5px"
+                  className="bi bi-x"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  fill="currentColor"
+                  className="bi bi-three-dots"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+                </svg>
+              )}
             </div>
+            {activeMenu === post.id && (
+              <div className="absolute mt-32 ms-48 flex w-[120px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                <div className="py-1">
+                  <button
+                    onClick={() => startEditing(post)}
+                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deletePost(post.id)}
+                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                  >
+                    Delete Post
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-
+          {/* Edit Form */}
+          {editingPost?.id === post.id ? (
+            <div className="p-5">
+              <textarea
+                value={editedCaption}
+                onChange={(e) => setEditedCaption(e.target.value)}
+                className="w-full p-2 border rounded-md mb-2"
+                rows="3"
+              />
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={cancelEditing}
+                  className="px-3 py-1 bg-gray-300 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={saveEdit}
+                  className="px-3 py-1 bg-blue-500 text-white rounded-md"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="p-5">
+              <p className="mb-2 font-Lexend text-md">{post.caption}</p>
+            </div>
+          )}
+          {/* 
           <div className="p-5">
             <p className="mb-2 font-Lexend text-md ">{post.caption}</p>
-          </div>
+          </div> */}
           <img
             className="rounded-xl w-[90%] max-h-[300px] self-center"
             src={post.mediaUrl}
