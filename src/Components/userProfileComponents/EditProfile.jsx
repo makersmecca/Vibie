@@ -199,7 +199,7 @@ const EditProfile = () => {
   };
 
   const handleSave = async () => {
-    setBtnMsg("Updating");
+    setBtnMsg("Updating...");
     try {
       await handlePhotoStorage();
       console.log("Changes Saved!");
@@ -321,10 +321,10 @@ const EditProfile = () => {
         </div>
       </div>
       {/* user's details */}
-      <div className="w-full flex flex-col">
-        <div className="flex flex-col mt-[100px] self-center w-full md:w-[50%] font-Lexend font-light px-7">
+      <div className="w-full md:w-[800px] flex flex-col self-center">
+        <div className="flex flex-col mt-[100px] md:mt-[150px] self-center w-full md:w-[600px] font-Lexend font-light px-7">
           <label htmlFor="username" className="text-xl">
-            Name
+            Username
           </label>
           <input
             id="username"
@@ -334,7 +334,7 @@ const EditProfile = () => {
             onChange={handleUsernameInput}
           />
         </div>
-        <div className="flex flex-col mt-[100px] self-center w-full md:w-[50%] font-Lexend font-light px-7">
+        <div className="flex flex-col mt-[100px] self-center w-full md:w-[600px] font-Lexend font-light px-7">
           <label htmlFor="username" className="text-xl">
             Bio
           </label>
@@ -344,12 +344,15 @@ const EditProfile = () => {
             className="border-b-[1px] border-black focus:outline-none"
             value={bio}
             onChange={handleBioInput}
+            rows="2"
           />
         </div>
       </div>
       <div className="w-full flex justify-center">
         <button
-          className="bg-gray-900 w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend"
+          className={`bg-gray-900 w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend ${
+            btnMsg === "Updating..." && "animate-pulse"
+          }`}
           onClick={handleSave}
         >
           {btnMsg}

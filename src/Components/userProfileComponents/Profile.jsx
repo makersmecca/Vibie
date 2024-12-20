@@ -125,7 +125,7 @@ const Profile = () => {
         </div>
       </div>
       {/* edit profile button */}
-      <div className="flex items-center justify-end px-2 w-full sm:w-[80%] lg:w-[50%] mt-5 self-center gap-4">
+      <div className="flex items-center justify-end px-2 w-full md:w-[800px] mt-5 self-center gap-4">
         {/* logout button */}
         <button
           className={`${
@@ -170,21 +170,19 @@ const Profile = () => {
           </div>
         )}
         <Link to="/editprofile">
-          <button className="border-[1px] border-black rounded-2xl w-[200px] md:w-[300px] py-1 text-black font-semibold font-Lexend text-lg">
+          <button className="border-[1px] border-black rounded-2xl w-[200px] md:w-[300px] py-1 text-black font-semibold font-Lexend text-lg hover:bg-gray-100 transition-all ease-in-out">
             Edit Profile
           </button>
         </Link>
       </div>
       {/* username */}
-      <div className="self-center w-full sm:w-[80%] lg:w-[50%] mt-10 text-3xl font-semibold font-Lexend px-7">
+      <div className="self-center w-full md:w-[800px] mt-10 text-3xl font-semibold font-Lexend px-7">
         {username}
       </div>
       {/* bio */}
-      <div className="self-center w-full sm:w-[80%] lg:w-[50%] px-7 mt-3">
-        {bio}
-      </div>
+      <div className="self-center w-full md:w-[800px] px-7 mt-3">{bio}</div>
       {/* user's posts */}
-      <div className="self-center w-full sm:w-[80%] lg:w-[50%] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
+      <div className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
         My Posts
       </div>
       {/* div showing the user's posts */}

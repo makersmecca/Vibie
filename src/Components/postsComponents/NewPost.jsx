@@ -202,7 +202,7 @@ const NewPost = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="p-5 left-5 top-6 flex items-center gap-5">
+      <div className="py-5 px-5 left-5 top-6 flex items-center gap-5">
         <Link to="/feed">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -224,7 +224,7 @@ const NewPost = () => {
           New Post
         </div>
       </div>
-      <div className="bg-gray-200 mt-10 h-[30%] w-[90%] rounded-2xl p-4 self-center">
+      <div className="bg-gray-200 mt-10 h-auto w-[90%] md:w-[800px] rounded-2xl p-4 self-center">
         {previewUrl && (
           <div className="w-full flex justify-center self-center mb-10 mt-5">
             <img
@@ -235,14 +235,15 @@ const NewPost = () => {
           </div>
         )}
         <textarea
-          className="flex justify-center items-start w-full rounded-2xl bg-gray-200 ring-none border-none px-5 py-2"
+          className="flex justify-center items-start h-full w-full rounded-2xl bg-gray-200 ring-none border-none px-5 py-2"
           placeholder="What's on your mind today?"
           value={apwrtResponse.caption}
           onChange={handlePostCaptionInput}
+          rows="4"
         />
       </div>
       {/* upload image/video from device */}
-      <div className="w-full py-5 px-7 mt-9">
+      <div className="w-full py-5 px-7 mt-9 md:w-[800px] self-center">
         <label className="flex gap-3 items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -273,7 +274,7 @@ const NewPost = () => {
       </div>
 
       {/* use the device's camera to click a picture and upload that photo */}
-      <div className="w-full py-5 px-7">
+      <div className="w-full py-5 px-7 md:w-[800px] self-center">
         <DeviceCamera />
       </div>
 

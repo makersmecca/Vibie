@@ -82,7 +82,7 @@ const PostDetails = () => {
         <div className="w-full h-16 items-center flex px-5 gap-7">
           {postUser.profileImgUrl ? (
             <img
-              src={userProfile.profileImgUrl}
+              src={postUser.profileImgUrl}
               className="w-14 h-14 rounded-full object-cover"
               alt={`${postUser.username}'s profile`}
             />
