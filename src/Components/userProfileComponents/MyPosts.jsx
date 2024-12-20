@@ -130,11 +130,14 @@ const MyPosts = () => {
       const currentPost = posts.find((p) => p.id === postId);
       if (!currentPost) return;
 
+      // Calculate the new like count
+      const newLikeCount =
+        (currentPost.likeCount || 0) + (currentPost.liked ? -1 : 1);
+
       // Update posts state with optimistic update
       setPosts((currentPosts) =>
         currentPosts.map((post) => {
           if (post.id === postId) {
-            const newLikeCount = (post.likeCount || 0) + (post.liked ? -1 : 1);
             return {
               ...post,
               liked: !post.liked,
@@ -145,13 +148,28 @@ const MyPosts = () => {
         })
       );
 
-      //update firestore
-      const postRef = doc(db, "userPosts", currentUser.email, "posts", postId);
-      await updateDoc(postRef, {
-        likeCount: increment(currentPost.liked ? -1 : 1),
-      });
+      // Create references to both documents that need to be updated
+      const userPostRef = doc(
+        db,
+        "userPosts",
+        currentUser.email,
+        "posts",
+        postId
+      );
+      const globalPostRef = doc(db, "globalPosts", postId);
+
+      // Update both documents in parallel using Promise.all
+      await Promise.all([
+        updateDoc(userPostRef, {
+          likeCount: increment(currentPost.liked ? -1 : 1),
+        }),
+        updateDoc(globalPostRef, {
+          likeCount: newLikeCount, // Set the exact new count
+        }),
+      ]);
     } catch (error) {
       console.error("Error updating likes:", error);
+      // Revert the optimistic update if either update fails
       setPosts((currentPosts) =>
         currentPosts.map((post) => {
           if (post.id === postId) {

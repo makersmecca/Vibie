@@ -92,36 +92,59 @@ const Posts = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleLikes = async (postId, userEmail, isLiked) => {
+  const handleLikes = async (postId, userId) => {
     try {
-      // Get references to both documents that need to be updated
+      // Find the current post first
+      const currentPost = posts.find((p) => p.id === postId);
+      if (!currentPost) return;
+
+      // Calculate the new like count
+      const newLikeCount =
+        (currentPost.likeCount || 0) + (currentPost.liked ? -1 : 1);
+
+      // Update posts state with optimistic update
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post.id === postId) {
+            return {
+              ...post,
+              liked: !post.liked,
+              likeCount: newLikeCount,
+            };
+          }
+          return post;
+        })
+      );
+
+      // Create references to both documents that need to be updated
+      const userPostRef = doc(db, "userPosts", userId, "posts", postId);
       const globalPostRef = doc(db, "globalPosts", postId);
-      const userPostRef = doc(db, "userPosts", userEmail, "posts", postId);
 
-      // Start a batch write to ensure atomic updates
-      const batch = writeBatch(db);
-
-      // Calculate the new like count (increment or decrement)
-      const likeIncrement = isLiked ? -1 : 1;
-
-      // Update global posts collection
-      batch.update(globalPostRef, {
-        likesCount: increment(likeIncrement),
-      });
-
-      // Update user posts collection
-      batch.update(userPostRef, {
-        likeCount: increment(likeIncrement),
-      });
-
-      // Commit the batch
-      await batch.commit();
-
-      // Update local state if needed
-      // setIsLiked(!isLiked);
+      // Update both documents in parallel using Promise.all
+      await Promise.all([
+        updateDoc(userPostRef, {
+          likeCount: newLikeCount,
+        }),
+        updateDoc(globalPostRef, {
+          likeCount: increment(currentPost.liked ? -1 : 1), // Set the exact new count
+        }),
+      ]);
     } catch (error) {
       console.error("Error updating likes:", error);
-      // Handle error appropriately (show notification, etc.)
+      // Revert the optimistic update if either update fails
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post.id === postId) {
+            const newLikeCount = (post.likeCount || 0) + (post.liked ? 1 : -1);
+            return {
+              ...post,
+              liked: !post.liked,
+              likeCount: newLikeCount,
+            };
+          }
+          return post;
+        })
+      );
     }
   };
 
@@ -178,9 +201,7 @@ const Posts = () => {
 
           <div className="flex justify-between px-5 mt-5 items-center">
             <div className="flex items-center justify-between w-[60px]">
-              <button
-                onClick={() => handleLikes(post.id, post.userId, post.isLiked)}
-              >
+              <button onClick={() => handleLikes(post.id, post.userId)}>
                 {post.isLiked ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
