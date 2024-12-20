@@ -9,7 +9,7 @@ const ShareButton = ({ postId }) => {
   };
 
   const shareUrl = `${window.location.origin}/post/${postId}`;
-  const shareText = "Check out this post from InstaVibe!";
+  const shareText = "Check out this awesome post on Vibie!";
 
   const handleCopyLink = () => {
     navigator.clipboard
