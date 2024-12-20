@@ -3,6 +3,7 @@ import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
 import { db } from "../../auth/firebaseAuth";
 import { useLocation } from "react-router-dom";
+import person from "/profile.png";
 import {
   collection,
   query,
