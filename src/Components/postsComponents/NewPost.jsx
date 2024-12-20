@@ -116,10 +116,10 @@ const NewPost = () => {
           setDisplayPopup(false);
           Navigate("/profile");
         }, [1000]);
-        console.log(response); // Success
-        console.log(response.$id);
-        console.log(response.name);
-        console.log(response.$createdAt);
+        // console.log(response); // Success
+        // console.log(response.$id);
+        // console.log(response.name);
+        // console.log(response.$createdAt);
         setApwrtResponse((prevState) => ({
           ...prevState,
           id: response.$id,
@@ -138,7 +138,7 @@ const NewPost = () => {
   };
 
   const updateFireStore = async () => {
-    console.log("UPDATEFIRESTORE");
+    // console.log("UPDATEFIRESTORE");
     if (apwrtResponse.id !== "") {
       try {
         // Update global posts
@@ -170,7 +170,7 @@ const NewPost = () => {
 
   useEffect(() => {
     const fileUrl = async () => {
-      console.log(apwrtResponse);
+      // console.log(apwrtResponse);
       try {
         if (apwrtResponse.id !== "") {
           const url = await storage.getFilePreview(
@@ -181,7 +181,7 @@ const NewPost = () => {
             ...prevState,
             url: url.href,
           }));
-          console.log(url.href);
+          // console.log(url.href);
         } else {
           throw new Error("file not found");
         }
