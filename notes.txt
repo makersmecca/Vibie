@@ -9,11 +9,11 @@ posts [Field Array] ->
 
 globalPosts (Collection)
   └── postID (Document)
-       ├── mediaURL: String
-       ├── timestamp: Timestamp
+       ├── mediaUrl: String
+       ├── createdAt: Timestamp
        ├── likesCount: Number
        ├── caption: String
-       ├── userEmail: String
+       ├── userId: String
 	   
 	   
 	   
@@ -22,13 +22,14 @@ userPosts (Collection)
        └── posts (Subcollection)
             └── postID (Document)
                  ├── mediaURL: String
-                 ├── timestamp: Timestamp
-                 ├── likesCount: Number
+                 ├── createdAt: Timestamp
+                 ├── likeCount: Number
                  ├── caption: String
+                 ├── userId: String 
 
 
 users (Collection)
-            └── emailId (Document)
+            └── userId (Document)
                  ├── username: String
                  ├── bio: String
                  ├── profileImgUrl: String
