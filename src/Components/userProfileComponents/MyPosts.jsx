@@ -366,18 +366,18 @@ const MyPosts = () => {
                 value={editedCaption}
                 onChange={(e) => setEditedCaption(e.target.value)}
                 className="w-full p-2 border rounded-md mb-2"
-                rows="3"
+                rows="2"
               />
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={cancelEditing}
-                  className="px-3 py-1 bg-gray-300 rounded-md"
+                  className="px-3 py-1 bg-gray-400 rounded-md font-Lexend"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={saveEdit}
-                  className="px-3 py-1 bg-blue-500 text-white rounded-md"
+                  className="px-3 py-1 bg-slate-300 rounded-md font-Lexend"
                 >
                   Save
                 </button>
