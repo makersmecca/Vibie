@@ -148,6 +148,7 @@ const NewPost = () => {
           createdAt: new Date(apwrtResponse.createdAt),
           userId: String(currentUser.email),
           likeCount: Number(0),
+          likedBy: [],
         });
 
         // Update user posts
@@ -159,6 +160,7 @@ const NewPost = () => {
             createdAt: new Date(apwrtResponse.createdAt),
             userId: String(currentUser.email),
             likeCount: Number(0),
+            likedBy: [],
           }
         );
       } catch (error) {

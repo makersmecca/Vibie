@@ -61,6 +61,10 @@ const Posts = () => {
             const postData = doc.data();
             const userProfile = await fetchUserProfile(postData.userId);
 
+            // Check if current user's email is in the likedBy array
+            const isLiked =
+              postData.likedBy?.includes(currentUser?.email) || false;
+
             return {
               id: doc.id,
               ...postData,
@@ -70,7 +74,7 @@ const Posts = () => {
                 bio: "",
                 bannerImgUrl: null,
               },
-              liked: false, // You can implement like status logic here
+              liked: isLiked,
             };
           });
 
@@ -91,61 +95,81 @@ const Posts = () => {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [currentUser]);
 
   const handleLikes = async (postId, userId) => {
     try {
-      // Find the current post first
-      const currentPost = posts.find((p) => p.id === postId);
-      if (!currentPost) return;
+      if (!currentUser?.email) return; // Ensure user is logged in
 
-      // Calculate the new like count
-      const newLikeCount =
-        (currentPost.likeCount || 0) + (currentPost.liked ? -1 : 1);
-
-      // Update posts state with optimistic update
-      setPosts((currentPosts) =>
-        currentPosts.map((post) => {
-          if (post.id === postId) {
-            return {
-              ...post,
-              liked: !post.liked,
-              likeCount: newLikeCount,
-            };
-          }
-          return post;
-        })
-      );
-
-      // Create references to both documents that need to be updated
+      // Get references to both documents
       const userPostRef = doc(db, "userPosts", userId, "posts", postId);
       const globalPostRef = doc(db, "globalPosts", postId);
 
-      // Update both documents in parallel using Promise.all
-      await Promise.all([
-        updateDoc(userPostRef, {
-          likeCount: newLikeCount,
-        }),
-        updateDoc(globalPostRef, {
-          likeCount: increment(currentPost.liked ? -1 : 1), // Set the exact new count
-        }),
+      // Get current state of both documents
+      const [userPostDoc, globalPostDoc] = await Promise.all([
+        getDoc(userPostRef),
+        getDoc(globalPostRef),
       ]);
-    } catch (error) {
-      console.error("Error updating likes:", error);
-      // Revert the optimistic update if either update fails
+
+      if (!userPostDoc.exists() || !globalPostDoc.exists()) {
+        console.error("Post not found");
+        return;
+      }
+
+      // Check if user has already liked the post
+      const userPostData = userPostDoc.data();
+      const globalPostData = globalPostDoc.data();
+      const isLiked = userPostData.likedBy?.includes(currentUser.email);
+
+      // Create batch write
+      const batch = writeBatch(db);
+
+      if (isLiked) {
+        // Remove like
+        batch.update(userPostRef, {
+          likeCount: increment(-1),
+          likedBy: userPostData.likedBy.filter(
+            (email) => email !== currentUser.email
+          ),
+        });
+
+        batch.update(globalPostRef, {
+          likeCount: increment(-1),
+          likedBy: globalPostData.likedBy.filter(
+            (email) => email !== currentUser.email
+          ),
+        });
+      } else {
+        // Add like
+        batch.update(userPostRef, {
+          likeCount: increment(1),
+          likedBy: [...(userPostData.likedBy || []), currentUser.email],
+        });
+
+        batch.update(globalPostRef, {
+          likeCount: increment(1),
+          likedBy: [...(globalPostData.likedBy || []), currentUser.email],
+        });
+      }
+
+      // Commit the batch
+      await batch.commit();
+
+      // Update local state
       setPosts((currentPosts) =>
         currentPosts.map((post) => {
           if (post.id === postId) {
-            const newLikeCount = (post.likeCount || 0) + (post.liked ? 1 : -1);
             return {
               ...post,
-              liked: !post.liked,
-              likeCount: newLikeCount,
+              liked: !isLiked,
+              likeCount: isLiked ? post.likeCount - 1 : post.likeCount + 1,
             };
           }
           return post;
         })
       );
+    } catch (error) {
+      console.error("Error updating likes:", error);
     }
   };
 

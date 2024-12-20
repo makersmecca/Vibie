@@ -83,29 +83,27 @@ const MyPosts = () => {
     setIsLoading(true);
     const fetchUserPosts = async () => {
       try {
-        // console.log(currentUser.email);
         if (!currentUser?.email) return;
 
-        // Reference to the posts subcollection
         const postsRef = collection(
           db,
           "userPosts",
           currentUser.email,
           "posts"
         );
-
-        // Create query to order posts by timestamp
         const q = query(postsRef, orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
 
-        const userPosts = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          liked: false, // Add initial liked state for each post
-        }));
+        const userPosts = querySnapshot.docs.map((doc) => {
+          const postData = doc.data();
+          return {
+            id: doc.id,
+            ...postData,
+            liked: postData.likedBy?.includes(currentUser.email) || false,
+          };
+        });
 
         setPosts(userPosts);
-        console.log(userPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
@@ -136,29 +134,11 @@ const MyPosts = () => {
 
   const handleLikes = async (postId) => {
     try {
-      // Find the current post first
+      // Find the current post
       const currentPost = posts.find((p) => p.id === postId);
       if (!currentPost) return;
 
-      // Calculate the new like count
-      const newLikeCount =
-        (currentPost.likeCount || 0) + (currentPost.liked ? -1 : 1);
-
-      // Update posts state with optimistic update
-      setPosts((currentPosts) =>
-        currentPosts.map((post) => {
-          if (post.id === postId) {
-            return {
-              ...post,
-              liked: !post.liked,
-              likeCount: newLikeCount,
-            };
-          }
-          return post;
-        })
-      );
-
-      // Create references to both documents that need to be updated
+      // Create references to both documents
       const userPostRef = doc(
         db,
         "userPosts",
@@ -168,26 +148,57 @@ const MyPosts = () => {
       );
       const globalPostRef = doc(db, "globalPosts", postId);
 
-      // Update both documents in parallel using Promise.all
-      await Promise.all([
-        updateDoc(userPostRef, {
-          likeCount: increment(currentPost.liked ? -1 : 1),
-        }),
-        updateDoc(globalPostRef, {
-          likeCount: newLikeCount, // Set the exact new count
-        }),
+      // Get the current state of both documents
+      const [userPostDoc, globalPostDoc] = await Promise.all([
+        getDoc(userPostRef),
+        getDoc(globalPostRef),
       ]);
-    } catch (error) {
-      console.error("Error updating likes:", error);
-      // Revert the optimistic update if either update fails
+
+      const userPostData = userPostDoc.data();
+      const globalPostData = globalPostDoc.data();
+
+      // Check if user has already liked the post
+      const userLikedPost = userPostData.likedBy?.includes(currentUser.email);
+
+      // Prepare the update data
+      const updateData = {
+        likeCount: userLikedPost ? increment(-1) : increment(1),
+        likedBy: userLikedPost
+          ? userPostData.likedBy.filter((email) => email !== currentUser.email)
+          : [...(userPostData.likedBy || []), currentUser.email],
+      };
+
+      // Optimistic update for UI
       setPosts((currentPosts) =>
         currentPosts.map((post) => {
           if (post.id === postId) {
-            const newLikeCount = (post.likeCount || 0) + (post.liked ? 1 : -1);
+            return {
+              ...post,
+              liked: !userLikedPost,
+              likeCount: userLikedPost
+                ? post.likeCount - 1
+                : post.likeCount + 1,
+            };
+          }
+          return post;
+        })
+      );
+
+      // Update both documents in parallel
+      await Promise.all([
+        updateDoc(userPostRef, updateData),
+        updateDoc(globalPostRef, updateData),
+      ]);
+    } catch (error) {
+      console.error("Error updating likes:", error);
+      // Revert the optimistic update if the operation fails
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post.id === postId) {
             return {
               ...post,
               liked: !post.liked,
-              likeCount: newLikeCount,
+              likeCount: post.liked ? post.likeCount - 1 : post.likeCount + 1,
             };
           }
           return post;
