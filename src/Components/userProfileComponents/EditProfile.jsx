@@ -234,7 +234,7 @@ const EditProfile = () => {
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
           <Link to="/profile">
-            <div className="absolute left-5 top-6 z-10">
+            <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -348,7 +348,7 @@ const EditProfile = () => {
           className="bg-gray-900 w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend"
           onClick={handleSave}
         >
-          Save
+          Update
         </button>
       </div>
     </div>
