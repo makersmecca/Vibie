@@ -3,7 +3,7 @@ import Posts from "../postsComponents/Posts";
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
 import { db } from "../../auth/firebaseAuth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import person from "/profile.png";
 
 const Feed = () => {
@@ -32,6 +32,16 @@ const Feed = () => {
             console.log("No such document!");
             setUsername(currentUser.displayName);
             setProfileImgUrl(person);
+            await setDoc(
+              doc(db, "users", currentUser.email),
+              {
+                username: currentUser.displayName,
+                bio: "",
+                profileImgUrl: "",
+                bannerImgUrl: "",
+              },
+              { merge: true }
+            );
           }
         }
       } catch (error) {
