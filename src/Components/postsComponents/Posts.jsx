@@ -191,7 +191,13 @@ const Posts = () => {
           key={post.id}
           className="w-[350px] rounded-2xl shadow bg-gray-200 flex flex-col py-5 mb-4"
         >
-          <Link to={`/profile/${post.userId}`}>
+          <Link
+            to={
+              post.userId === currentUser.email
+                ? "/profile"
+                : `/profile/${post.userId}`
+            }
+          >
             <div className="w-full h-16 items-center flex px-5 gap-7">
               {post.userProfile.profileImgUrl ? (
                 <img
