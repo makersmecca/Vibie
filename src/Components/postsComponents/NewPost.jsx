@@ -29,6 +29,8 @@ const NewPost = () => {
 
   const [capturedImg, setCapturedImg] = useState(null);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   //current user
   const { currentUser } = useContext(UserContext);
 
@@ -41,6 +43,7 @@ const NewPost = () => {
   const handlePostCaptionInput = (e) => {
     e.preventDefault();
     // setPostCaption(e.target.value);
+    setErrorMessage("");
     setApwrtResponse((prev) => ({
       ...prev,
       caption: e.target.value,
@@ -48,6 +51,7 @@ const NewPost = () => {
   };
 
   const handleFileChange = (event) => {
+    setErrorMessage("");
     const selectedFiles = Array.from(event.target.files);
 
     const maxFileSize = 25 * 1024 * 1024;
@@ -101,6 +105,12 @@ const NewPost = () => {
       setIsLoading(true);
       setDisplayPopup(true);
       setUploadStatus("Uploading");
+    } else if (!fileToUpload) {
+      setErrorMessage("Please select an Image");
+      return;
+    } else if (!apwrtResponse.caption.trim()) {
+      setErrorMessage("Please add a caption");
+      return;
     }
     const promise = storage.createFile(
       `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
@@ -144,6 +154,7 @@ const NewPost = () => {
       .catch((error) => {
         setIsLoading(false);
         setUploadStatus("Uh Oh! Something went wrong");
+        setUploadStatus("Uh Oh! Something went wrong");
         setTimeout(() => {
           setDisplayPopup(false);
         }, [1000]);
@@ -178,6 +189,8 @@ const NewPost = () => {
           }
         );
       } catch (error) {
+        setErrorMessage("Uh Oh! Something went wrong");
+        setUploadStatus("Uh Oh! Something went wrong");
         console.error("Error updating Firestore:", error);
         // Handle the error appropriately - maybe show a user notification
       }
@@ -254,8 +267,12 @@ const NewPost = () => {
           value={apwrtResponse.caption}
           onChange={handlePostCaptionInput}
           rows="4"
+          required
         />
       </div>
+      {errorMessage && (
+        <div className="font-Lexend text-center mt-2">{errorMessage}</div>
+      )}
       {/* upload image/video from device */}
       <div className="w-full py-5 px-7 mt-9 md:w-[800px] self-center">
         <label className="flex gap-3 items-center">
@@ -283,6 +300,7 @@ const NewPost = () => {
             onChange={handleFileChange}
             className=" hidden"
             accept=".jpg, .jpeg, .png"
+            required
           />
         </label>
       </div>
