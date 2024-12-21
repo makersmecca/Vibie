@@ -37,3 +37,5 @@
 - Create a post by uploading a photo or video and adding a caption.
 
 - View the global feed and engage with posts by liking them.
+
+<img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/footers/gray0_ctp_on_line.svg?sanitize=true"/>
