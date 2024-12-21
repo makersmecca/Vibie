@@ -153,26 +153,75 @@ const DeviceCamera = ({ onImageCapture }) => {
       </div>
 
       {openCamera && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-20">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-10">
           <div className="flex flex-col items-center gap-4">
             {/* Video Feed */}
-            <div className="w-[350px] rounded-lg overflow-hidden shadow-lg bg-gray-800">
+            <div className="relative w-[350px] rounded-lg overflow-hidden shadow-lg bg-gray-800">
+              <div
+                className="absolute z-10 top-3 right-3 cursor-pointer"
+                onClick={stopCamera}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="30"
+                  fill="white"
+                  className="bi bi-x-circle-fill opacity-80"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+                </svg>
+              </div>
               <video ref={videoRef} autoPlay playsInline />
             </div>
 
             {/* Controls */}
-            <div className="flex justify-center space-x-4">
-              <button onClick={captureImage} className="px-4 py-2 rounded-lg">
-                Capture Image
+            <div className="flex w-full items-center justify-between px-4">
+              {/* Empty div for spacing */}
+              <div className="w-[40px]"></div>
+
+              {/* Centered capture button */}
+              <button
+                onClick={captureImage}
+                className="rounded-full bg-slate-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="60"
+                  height="60"
+                  fill="white"
+                  className="bi bi-record-circle"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                  <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                </svg>
               </button>
-              {devices.length > 1 && (
-                <button onClick={switchCamera} className="px-4 py-2 rounded-lg">
-                  Switch Camera
+
+              {/* Switch camera button on the right */}
+              {devices.length > 1 ? (
+                <button
+                  onClick={switchCamera}
+                  className="bg-gray-800 rounded-full w-[40px] h-[40px] flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    fill="white"
+                    className="bi bi-arrow-clockwise"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                    />
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                  </svg>
                 </button>
+              ) : (
+                <div className="w-[40px]"></div>
               )}
-              <button onClick={stopCamera} className="px-4 py-2 rounded-lg">
-                Close Camera
-              </button>
             </div>
 
             {/* Hidden Canvas */}
