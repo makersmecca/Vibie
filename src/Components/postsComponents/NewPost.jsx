@@ -268,7 +268,7 @@ const NewPost = () => {
             type="file"
             onChange={handleFileChange}
             className=" hidden"
-            accept=".jpg, .jpeg, .png, .mp4, .mov"
+            accept=".jpg, .jpeg, .png"
           />
         </label>
       </div>
