@@ -70,6 +70,7 @@ const BackgroundImages = () => {
           <img src={bg10} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg5} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg2} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg8} className="h-[250px] w-[200px] rounded-lg mt-2" />
         </div>
       </div>
     </div>
