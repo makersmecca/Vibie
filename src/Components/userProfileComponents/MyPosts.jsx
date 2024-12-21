@@ -5,6 +5,7 @@ import { db } from "../../auth/firebaseAuth";
 import { useLocation } from "react-router-dom";
 import person from "/profile.png";
 import { Client, Storage } from "appwrite";
+import ShareButton from "../sharedComponents/ShareButton";
 import {
   collection,
   query,
@@ -17,7 +18,6 @@ import {
   deleteDoc,
   writeBatch,
 } from "firebase/firestore";
-import ShareButton from "../ShareButton";
 
 // import bg9 from "/bgImg/bg9.jpeg";
 const MyPosts = () => {

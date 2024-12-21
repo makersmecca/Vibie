@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../UserContext";
 import { db } from "../../auth/firebaseAuth";
-import { useLocation } from "react-router-dom";
-import person from "/profile.png";
+import { Link } from "react-router-dom";
 import {
   collection,
   query,
@@ -14,7 +13,7 @@ import {
   doc,
   writeBatch,
 } from "firebase/firestore";
-import ShareButton from "../ShareButton";
+import ShareButton from "../sharedComponents/ShareButton";
 
 const Posts = () => {
   const { currentUser } = useContext(UserContext);
@@ -192,25 +191,27 @@ const Posts = () => {
           key={post.id}
           className="w-[350px] rounded-2xl shadow bg-gray-200 flex flex-col py-5 mb-4"
         >
-          <div className="w-full h-16 items-center flex px-5 gap-7">
-            {post.userProfile.profileImgUrl ? (
-              <img
-                src={post.userProfile.profileImgUrl}
-                className="w-14 h-14 rounded-full object-cover"
-                alt={`${post.userProfile.username}'s profile`}
-              />
-            ) : (
-              <div className="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center">
-                {post.userProfile.username.charAt(0).toUpperCase()}
-              </div>
-            )}
+          <Link to={`/profile/${post.userId}`}>
+            <div className="w-full h-16 items-center flex px-5 gap-7">
+              {post.userProfile.profileImgUrl ? (
+                <img
+                  src={post.userProfile.profileImgUrl}
+                  className="w-14 h-14 rounded-full object-cover"
+                  alt={`${post.userProfile.username}'s profile`}
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center">
+                  {post.userProfile.username.charAt(0).toUpperCase()}
+                </div>
+              )}
 
-            <div>
-              <div className="font-Lexend font-medium text-xl">
-                {post.userProfile.username}
+              <div>
+                <div className="font-Lexend font-medium text-xl">
+                  {post.userProfile.username}
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
 
           <div className="p-5">
             <p className="mb-3 font-normal text-black">{post.caption}</p>

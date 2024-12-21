@@ -6,7 +6,8 @@ import EditProfile from "./Components/userProfileComponents/EditProfile";
 import ForgotPassword from "./Components/FogotPassword";
 import { Route, Routes } from "react-router-dom";
 import { UserProvider } from "./Components/UserContext";
-import SharedPost from "./Components/SharedPost";
+import SharedPost from "./Components/sharedComponents/SharedPost";
+import SharedProfile from "./Components/sharedComponents/SharedProfile";
 
 import "./App.css";
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/post/:postID" element={<SharedPost />} />
+        <Route path="/profile/:userID" element={<SharedProfile />} />
       </Routes>
     </UserProvider>
   );
