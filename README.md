@@ -1,6 +1,8 @@
 # Vibie
 
-##### Vibie is a dynamic social media platform designed to connect users and let them share moments from their lives! Whether you're showcasing your creativity, capturing life’s moments, or just vibing with friends, Vibie is your go-to platform. #join the vibe tribe.
+##### Vibie is a dynamic social media platform designed to connect users and let them share moments from their lives! 
+##### Whether you're showcasing your creativity, capturing life’s moments, or just vibing with friends, Vibie is your go-to platform. 
+#join the vibe tribe.
 
 ## Features
 
