@@ -19,6 +19,8 @@ const Profile = () => {
   const [profileImgUrl, setProfileImgUrl] = useState("");
   const [bannerImgUrl, setBannerImgUrl] = useState("");
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const client = new Client()
     .setEndpoint("https://cloud.appwrite.io/v1")
     .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
@@ -43,6 +45,7 @@ const Profile = () => {
             setProfileImgUrl(
               userData.profileImgUrl === "" ? person : userData.profileImgUrl
             );
+            setIsLoading(false);
             setBannerImgUrl(userData.bannerImgUrl);
           } else {
             console.log("No such document!");
@@ -103,14 +106,26 @@ const Profile = () => {
           </Link>
           <div
             className={`bg-gray-400 rounded-b-2xl ${
-              bannerImgUrl === "" ? "w-full md:w-[800px] h-[150px]" : ""
+              bannerImgUrl === ""
+                ? "w-full md:w-[800px] h-[150px] flex justify-center items-center animate-pulse"
+                : ""
             }`}
           >
-            {bannerImgUrl !== "" && (
+            {bannerImgUrl !== "" ? (
               <img
                 src={bannerImgUrl}
                 className="w-full md:w-[800px] h-[150px] rounded-b-2xl"
               />
+            ) : (
+              <svg
+                className="w-10 h-10 text-gray-200 animate-pulse"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 18"
+              >
+                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+              </svg>
             )}
           </div>
         </div>
@@ -118,10 +133,22 @@ const Profile = () => {
       {/* profile picture */}
       <div className="absolute top-[13%] md:top-[15%] left-[5%] sm:left-[10%] lg:left-[30%]">
         <div className="w-[100px] h-[100px] bg-white rounded-full flex items-center justify-center">
-          <img
-            src={profileImgUrl}
-            className="md:relative w-[94px] h-[94px] rounded-full bg-white"
-          />
+          {isLoading ? (
+            <svg
+              className="md:relative w-[94px] h-[94px] text-gray-400 animate-pulse"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
+            </svg>
+          ) : (
+            <img
+              src={profileImgUrl}
+              className="md:relative w-[94px] h-[94px] rounded-full bg-white"
+            />
+          )}
         </div>
       </div>
       {/* edit profile button */}
@@ -177,10 +204,24 @@ const Profile = () => {
       </div>
       {/* username */}
       <div className="self-center w-full md:w-[800px] mt-10 text-3xl font-semibold font-Lexend px-7">
-        {username}
+        {isLoading ? (
+          <div className="animate-pulse">
+            <div className="h-3 my-3 bg-gray-200 rounded-full w-32 mb-2"></div>
+          </div>
+        ) : (
+          <>{username}</>
+        )}
       </div>
       {/* bio */}
-      <div className="self-center w-full md:w-[800px] px-7 mt-3">{bio}</div>
+      <div className="self-center w-full md:w-[800px] px-7 mt-3">
+        {isLoading ? (
+          <div className="animate-pulse">
+            <div className="h-3 bg-gray-200 rounded-full w-[300px] mb-2"></div>
+          </div>
+        ) : (
+          <>{bio}</>
+        )}
+      </div>
       {/* user's posts */}
       <div className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
         My Posts
