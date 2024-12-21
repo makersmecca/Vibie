@@ -1,11 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 
-const DeviceCamera = () => {
+const DeviceCamera = ({ onImageCapture }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [imageFile, setImageFile] = useState(null);
   const [openCamera, setOpenCamera] = useState(false);
   const [stream, setStream] = useState(null);
+
+  const [devices, setDevices] = useState([]);
+  const [currentCamera, setCurrentCamera] = useState("user");
 
   useEffect(() => {
     return () => {
@@ -16,16 +19,55 @@ const DeviceCamera = () => {
     };
   }, [stream]);
 
-  // Start the camera
+  const getVideoDevices = async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(
+        (device) => device.kind === "videoinput"
+      );
+      setDevices(videoDevices);
+    } catch (error) {
+      console.error("Error getting video devices:", error);
+    }
+  };
+  const switchCamera = async () => {
+    if (stream) {
+      // Stop current stream
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+
+      // Toggle camera facing mode
+      setCurrentCamera((prev) => (prev === "user" ? "environment" : "user"));
+
+      // Start new stream with different camera
+      try {
+        const MediaStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: currentCamera === "user" ? "environment" : "user",
+          },
+        });
+
+        videoRef.current.srcObject = MediaStream;
+        setStream(MediaStream);
+      } catch (error) {
+        console.error("Error switching camera: ", error);
+      }
+    }
+  };
+
+  // start camera
   const startCamera = async () => {
     setOpenCamera((prev) => !prev);
     try {
       const MediaStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: {
+          facingMode: currentCamera,
+        },
       });
 
       videoRef.current.srcObject = MediaStream;
       setStream(MediaStream);
+      await getVideoDevices(); //available cameras
     } catch (error) {
       console.error("Error accessing camera: ", error);
     }
@@ -61,12 +103,17 @@ const DeviceCamera = () => {
       });
 
       setImageFile(file);
+      onImageCapture(file);
+      stopCamera();
     }, "image/png");
   };
 
   return (
-    <div className="">
-      <div onClick={openCamera ? stopCamera : startCamera} className="">
+    <>
+      <div
+        onClick={openCamera ? stopCamera : startCamera}
+        className="cursor-pointer"
+      >
         <span className="font-Lexend">
           {openCamera ? (
             <div className="flex gap-3 items-center">
@@ -106,58 +153,34 @@ const DeviceCamera = () => {
       </div>
 
       {openCamera && (
-        <div className="w-full space-y-4 mt-5">
-          {/* Video Feed */}
-          <div className="relative rounded-lg overflow-hidden shadow-lg bg-gray-800">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="w-full max-w-2xl mx-auto"
-            />
-          </div>
-
-          {/* Controls */}
-          <div className="flex justify-center space-x-4">
-            <button onClick={captureImage} className="">
-              Capture Image
-            </button>
-            <button onClick={stopCamera} className="">
-              Close Camera
-            </button>
-          </div>
-
-          {/* Hidden Canvas */}
-          <canvas ref={canvasRef} className="hidden" />
-
-          {/* Captured Image Display */}
-          {imageFile && (
-            <div className="mt-6 p-4 bg-white rounded-lg shadow-lg">
-              <h4 className="text-lg font-semibold text-gray-800 mb-4">
-                Captured Image:
-              </h4>
-              <div className="relative rounded-lg overflow-hidden">
-                <img
-                  src={URL.createObjectURL(imageFile)}
-                  alt="Captured"
-                  className="w-full max-w-2xl mx-auto"
-                />
-              </div>
-              <div className="mt-4 space-y-2 text-sm text-gray-600">
-                <p className="flex items-center">
-                  <span className="font-semibold mr-2">File Name:</span>
-                  {imageFile.name}
-                </p>
-                <p className="flex items-center">
-                  <span className="font-semibold mr-2">File Size:</span>
-                  {(imageFile.size / 1024).toFixed(2)} KB
-                </p>
-              </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-20">
+          <div className="flex flex-col items-center gap-4">
+            {/* Video Feed */}
+            <div className="w-[350px] rounded-lg overflow-hidden shadow-lg bg-gray-800">
+              <video ref={videoRef} autoPlay playsInline />
             </div>
-          )}
+
+            {/* Controls */}
+            <div className="flex justify-center space-x-4">
+              <button onClick={captureImage} className="px-4 py-2 rounded-lg">
+                Capture Image
+              </button>
+              {devices.length > 1 && (
+                <button onClick={switchCamera} className="px-4 py-2 rounded-lg">
+                  Switch Camera
+                </button>
+              )}
+              <button onClick={stopCamera} className="px-4 py-2 rounded-lg">
+                Close Camera
+              </button>
+            </div>
+
+            {/* Hidden Canvas */}
+            <canvas ref={canvasRef} className="hidden" />
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

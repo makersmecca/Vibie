@@ -27,6 +27,8 @@ const NewPost = () => {
   const [uploadStatus, setUploadStatus] = useState("");
   const [displayPopup, setDisplayPopup] = useState(false);
 
+  const [capturedImg, setCapturedImg] = useState(null);
+
   //current user
   const { currentUser } = useContext(UserContext);
 
@@ -66,7 +68,8 @@ const NewPost = () => {
       );
     }
     setFiles(validFiles);
-    // Generate preview for the first valid file
+    setCapturedImg(null);
+    //preview for the first valid file
     if (validFiles.length > 0) {
       const file = validFiles[0];
       const reader = new FileReader();
@@ -78,12 +81,23 @@ const NewPost = () => {
       setPreviewUrl(null);
     }
 
-    // setStatusMessages([]); // Clear status messages for new file selection
+    // setStatusMessages([]);
+  };
+
+  const onImageCapture = (file) => {
+    setCapturedImg(file);
+    setFiles([]);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleCreatePost = (e) => {
     e.preventDefault();
-    if (apwrtResponse.caption !== "" && files[0] !== null) {
+    const fileToUpload = capturedImg || files[0];
+    if (apwrtResponse.caption !== "" && fileToUpload) {
       setIsLoading(true);
       setDisplayPopup(true);
       setUploadStatus("Uploading");
@@ -91,7 +105,7 @@ const NewPost = () => {
     const promise = storage.createFile(
       `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
       uuidv4(),
-      files[0]
+      fileToUpload
     );
     promise
       .then((response) => {
@@ -275,7 +289,7 @@ const NewPost = () => {
 
       {/* use the device's camera to click a picture and upload that photo */}
       <div className="w-full py-5 px-7 md:w-[800px] self-center">
-        <DeviceCamera />
+        <DeviceCamera onImageCapture={onImageCapture} />
       </div>
 
       {displayPopup && (
