@@ -24,6 +24,8 @@ const PostDetails = () => {
           bio: userDoc.data().bio,
           bannerImgUrl: userDoc.data().bannerImgUrl,
         };
+      } else {
+        console.error("No such document!");
       }
       return null;
     } catch (error) {
@@ -132,19 +134,18 @@ const PostDetails = () => {
               {post.likeCount || 0}
             </span>
           </div>
-        </div>
-
-        <div className="text-sm font-Lexend text-start text-gray-500 px-5 mt-2 ms-0.5">
-          {post.createdAt?.seconds
-            ? new Date(post.createdAt.seconds * 1000).toLocaleDateString(
-                "en-US",
-                {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                }
-              )
-            : ""}
+          <div className="text-sm font-Lexend text-start text-gray-500 px-5 ms-0.5">
+            {post.createdAt?.seconds
+              ? new Date(post.createdAt.seconds * 1000).toLocaleDateString(
+                  "en-US",
+                  {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  }
+                )
+              : ""}
+          </div>
         </div>
       </div>
     </div>
