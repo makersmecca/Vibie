@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ShareButton = ({ postId }) => {
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -11,14 +11,30 @@ const ShareButton = ({ postId }) => {
   const shareUrl = `${window.location.origin}/post/${postId}`;
   const shareText = "Check out this awesome post on Vibie!";
 
-  const handleCopyLink = () => {
-    navigator.clipboard
-      .writeText(shareUrl)
-      .then(() => {
-        setMsg("Link copied to clipboard!");
-        setTimeout(() => setMsg(""), 3000);
-      })
-      .catch(() => setMsg("Failed to copy link"));
+  const [isCopying, setIsCopying] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showShareMenu && !event.target.closest(".share-menu")) {
+        setShowShareMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showShareMenu]);
+
+  const handleCopyLink = async () => {
+    setIsCopying(true);
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setMsg("Link copied to clipboard!");
+    } catch (error) {
+      setMsg("Failed to copy link");
+    } finally {
+      setIsCopying(false);
+      setTimeout(() => setMsg(""), 3000);
+    }
   };
 
   const shareToWhatsApp = () => {
@@ -45,7 +61,7 @@ const ShareButton = ({ postId }) => {
   return (
     <>
       {showShareMenu && (
-        <div className="absolute z-10 bg-white w-[310px] h-[250px] mt-0 mb-[400px] rounded-xl p-5">
+        <div className="share-menu absolute z-10 bg-white w-[310px] h-[250px] mt-0 mb-[400px] rounded-xl p-5">
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
               <div className="text-lg font-Lexend">Share via </div>
