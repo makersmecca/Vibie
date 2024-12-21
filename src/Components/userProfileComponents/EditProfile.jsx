@@ -68,20 +68,27 @@ const EditProfile = () => {
   const handleEditDP = (event) => {
     const selectedFiles = Array.from(event.target.files);
     const maxFileSize = 10 * 1024 * 1024;
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     // Validate file sizes
     const validFiles = selectedFiles.filter(
-      (file) => file.size <= maxFileSize && file.size > 0
+      (file) =>
+        file.size <= maxFileSize &&
+        file.size > 0 &&
+        allowedTypes.includes(file.type)
     );
     const invalidFiles = selectedFiles.filter(
-      (file) => file.size > maxFileSize
+      (file) =>
+        file.size > maxFileSize ||
+        file.size <= 0 ||
+        !allowedTypes.includes(file.type)
     );
 
     if (invalidFiles.length > 0) {
       alert(
-        `Some files exceeded the ${
-          maxFileSize / (1024 * 1024)
-        }MB limit and were excluded.`
+        `Please ensure:\n` +
+          `- File size is under ${maxFileSize / (1024 * 1024)}MB\n` +
+          `- File type is JPG, JPEG, or PNG`
       );
     }
 
@@ -98,20 +105,27 @@ const EditProfile = () => {
   const handleEditBanner = (event) => {
     const selectedFiles = Array.from(event.target.files);
     const maxFileSize = 15 * 1024 * 1024;
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     // Validate file sizes
     const validFiles = selectedFiles.filter(
-      (file) => file.size <= maxFileSize && file.size > 0
+      (file) =>
+        file.size <= maxFileSize &&
+        file.size > 0 &&
+        allowedTypes.includes(file.type)
     );
     const invalidFiles = selectedFiles.filter(
-      (file) => file.size > maxFileSize
+      (file) =>
+        file.size > maxFileSize ||
+        file.size <= 0 ||
+        !allowedTypes.includes(file.type)
     );
 
     if (invalidFiles.length > 0) {
       alert(
-        `Some files exceeded the ${
-          maxFileSize / (1024 * 1024)
-        }MB limit and were excluded.`
+        `Please ensure:\n` +
+          `- File size is under ${maxFileSize / (1024 * 1024)}MB\n` +
+          `- File type is JPG, JPEG, or PNG`
       );
     }
 
@@ -212,7 +226,7 @@ const EditProfile = () => {
 
   const handleUsernameInput = (e) => {
     e.preventDefault();
-    setUsername(e.target.value);
+    setUsername(e.target.value.trim());
   };
 
   const handleBioInput = (e) => {
