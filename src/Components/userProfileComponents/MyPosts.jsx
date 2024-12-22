@@ -122,15 +122,15 @@ const MyPosts = () => {
 
         // Pre-render media elements for each post
         const mediaPromises = userPosts.map(async (post) => {
-          console.log(post.mediaUrl);
+          // console.log(post.mediaUrl);
           const fileId = post.mediaUrl.includes("/preview")
             ? post.mediaUrl.split("/files/")[1].split("/preview")[0]
             : post.mediaUrl.split("/files/")[1].split("/view")[0];
 
-          console.log(fileId);
+          // console.log(fileId);
           const mimeType = await getFileType(bucketId, fileId);
 
-          console.log(mimeType);
+          // console.log(mimeType);
 
           if (mimeType.startsWith("image/")) {
             return {
