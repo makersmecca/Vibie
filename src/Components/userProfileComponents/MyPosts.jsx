@@ -114,6 +114,31 @@ const MyPosts = () => {
     fetchUserPosts();
   }, [currentUser, currentLocation]);
 
+  const getFileType = async (bucketId, fileId) => {
+    try {
+      const file = await storage.getFile(bucketId, fileId);
+      return file.mimeType; // This will return the MIME type of the file
+    } catch (error) {
+      console.error("Error getting file type:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const bucketId = `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`;
+    posts.forEach((post) => {
+      const fileId = post.mediaUrl.split("/files/")[1].split("/preview")[0];
+      console.log(fileId);
+      getFileType(bucketId, fileId)
+        .then((mimeType) => {
+          console.log(mimeType);
+        })
+        .catch((error) => {
+          console.error("Error getting file type:", error);
+        });
+    });
+  }, [posts]);
+
   // Loading state
   if (isLoading) {
     return (
@@ -273,6 +298,7 @@ const MyPosts = () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
+      //delete from Appwrite storage
       try {
         await storage.deleteFile(
           `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
@@ -281,6 +307,7 @@ const MyPosts = () => {
       } catch (storageError) {
         console.error("Error deleting file from storage:", storageError);
       }
+
       const batch = writeBatch(db);
       // Delete from userPosts
       const userPostRef = doc(
