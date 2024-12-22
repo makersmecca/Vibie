@@ -7,6 +7,7 @@ import { UserContext } from "../UserContext";
 import MyPosts from "./MyPosts";
 import person from "/profile.png";
 import { Client, Storage } from "appwrite";
+import NewPostButton from "../postsComponents/NewPostButton";
 // import Navbar from "../Navbar";
 // import bg9 from "/bgImg/bg9.jpeg";
 const Profile = () => {
@@ -223,7 +224,7 @@ const Profile = () => {
         )}
       </div>
       {/* user's posts */}
-      <div className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
+      <div className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-Lexend font-medium sticky top-0 bg-white py-4">
         My Posts
       </div>
       {/* div showing the user's posts */}
@@ -232,20 +233,7 @@ const Profile = () => {
       </div>
 
       {/* create new post button */}
-      <Link to="/newpost">
-        <div className="rounded-full h-[60px] w-[60px] fixed z-10 bottom-6 right-6">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="50"
-            height="50"
-            fill="currentColor"
-            className="bi bi-plus-circle-fill"
-            viewBox="0 0 16 16"
-          >
-            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-          </svg>
-        </div>
-      </Link>
+      <NewPostButton />
     </div>
   );
 };
