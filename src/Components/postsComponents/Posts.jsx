@@ -314,7 +314,9 @@ const Posts = () => {
           </Link>
 
           <div className="p-5">
-            <p className="mb-3 font-normal text-black">{post.caption}</p>
+            <p className="mb-3 font-normal text-black font-Lexend">
+              {post.caption}
+            </p>
           </div>
 
           {/* {post.mediaUrl && (
@@ -365,17 +367,34 @@ const Posts = () => {
             <ShareButton postId={post.id} />
           </div>
 
-          <div className="text-sm font-Lexend text-start text-gray-500 px-5 mt-2 ms-0.5">
-            {post.createdAt?.seconds
-              ? new Date(post.createdAt.seconds * 1000).toLocaleDateString(
-                  "en-US",
-                  {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  }
-                )
-              : ""}
+          <div className="text-sm font-Lexend text-start text-gray-500 ps-5 pe-6 mt-2 ms-0.5">
+            {post.createdAt?.seconds ? (
+              <div className="flex gap-3">
+                <div>
+                  {new Date(post.createdAt.seconds * 1000).toLocaleDateString(
+                    "en-US",
+                    {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}
+                  ,
+                </div>
+                <div>
+                  {new Date(post.createdAt.seconds * 1000).toLocaleTimeString(
+                    "en-US",
+                    {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    }
+                  )}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ))}
