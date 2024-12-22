@@ -252,15 +252,27 @@ const NewPost = () => {
         </div>
       </div>
       <div className="bg-gray-200 mt-10 h-auto w-[90%] md:w-[800px] rounded-2xl p-4 self-center">
-        {previewUrl && (
-          <div className="w-full flex justify-center self-center mb-10 mt-5">
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="w-[80%] h-[80%] rounded-lg"
-            />
-          </div>
-        )}
+        <div className="w-full flex justify-center self-center mb-10 mt-5">
+          {previewUrl ? (
+            previewUrl.includes("video/") ? (
+              <video
+                src={previewUrl}
+                controls
+                className="w-[80%] h-[80%] rounded-lg"
+              >
+                <source src={previewUrl} />
+              </video>
+            ) : (
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="w-[80%] h-[80%] rounded-lg"
+              />
+            )
+          ) : (
+            <></>
+          )}
+        </div>
         <textarea
           className="flex justify-center items-start h-full w-full rounded-2xl bg-gray-200 ring-none border-none px-5 py-2"
           placeholder="What's on your mind today?"
