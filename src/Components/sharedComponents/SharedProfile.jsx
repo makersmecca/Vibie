@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { db } from "../../auth/firebaseAuth";
 import { Link } from "react-router-dom";
 import { Client, Storage } from "appwrite";
+import { UserContext } from "../UserContext";
 import ShareButton from "./ShareButton";
 import person from "/profile.png";
 import {
@@ -23,6 +24,8 @@ const SharedProfile = () => {
   const [bannerImgUrl, setBannerImgUrl] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
+
+  const currentUser = useContext(UserContext);
 
   const [mediaElements, setMediaElements] = useState({});
   const client = new Client()
@@ -80,6 +83,7 @@ const SharedProfile = () => {
   }, [currentLocation]);
 
   useEffect(() => {
+    console.log(currentUser.email);
     setIsLoading(true);
     const fetchUserPosts = async () => {
       try {
@@ -164,6 +168,25 @@ const SharedProfile = () => {
       {/* profile banner */}
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
+          <Link to={currentUser.email ? "/feed" : "/"}>
+            <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                fill="white"
+                className="bi bi-arrow-left"
+                stroke="white"
+                strokeWidth="1"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                />
+              </svg>
+            </div>
+          </Link>
           <div
             className={`bg-gray-400 rounded-b-2xl ${
               bannerImgUrl === ""
