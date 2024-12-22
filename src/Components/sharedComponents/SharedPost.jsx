@@ -4,12 +4,34 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../auth/firebaseAuth";
 import { Link } from "react-router-dom";
 
+import { Client, Storage } from "appwrite";
+
 const PostDetails = () => {
   const { postID } = useParams();
   const [post, setPost] = useState(null);
   const [postUser, setPostUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userID, setUserID] = useState("");
+
+  const [content, setContent] = useState(<></>);
+
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const bucketId = `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`;
+
+  const storage = new Storage(client);
+
+  const getFileType = async (bucketId, fileId) => {
+    try {
+      const file = await storage.getFile(bucketId, fileId);
+      return file.mimeType; // This will return the MIME type of the file
+    } catch (error) {
+      console.error("Error getting file type:", error);
+      throw error;
+    }
+  };
 
   // Function to fetch user profile data using userId
   const fetchUserProfile = async (userId) => {
@@ -45,10 +67,38 @@ const PostDetails = () => {
         const docSnap = await getDoc(globalDocRef);
 
         if (docSnap.exists()) {
+          const url = docSnap.data().mediaUrl;
           setPost(docSnap.data());
           setUserID(docSnap.data().userId);
           const userProfile = await fetchUserProfile(docSnap.data().userId);
           setPostUser(userProfile);
+
+          const fileId = url.includes("/preview")
+            ? url.split("/files/")[1].split("/preview")[0]
+            : url.split("/files/")[1].split("/view")[0];
+
+          const mimeType = await getFileType(bucketId, fileId);
+          console.log(mimeType);
+          if (mimeType.includes("image/"))
+            setContent(
+              <img
+                className="rounded-xl w-[90%] max-h-[300px] self-center"
+                src={url}
+                alt=""
+              />
+            );
+          if (mimeType.includes("video/")) {
+            setContent(
+              <video
+                controls
+                className="rounded-xl w-[90%] max-h-[300px] self-center"
+                src={url}
+              >
+                <source src={url} />
+                Your browser does not support the video tag.
+              </video>
+            );
+          }
         } else {
           console.error("No such document!");
         }
@@ -150,15 +200,7 @@ const PostDetails = () => {
           <div className="p-5">
             <p className="mb-3 font-normal text-black">{post.caption}</p>
           </div>
-          <>
-            {post.mediaUrl && (
-              <img
-                className="rounded-xl w-[90%] h-[300px] self-center object-cover"
-                src={post.mediaUrl}
-                alt="Post content"
-              />
-            )}
-          </>
+          <>{post.mediaUrl && content}</>
           <div className="flex justify-between px-5 mt-5 items-center">
             <div className="flex items-center justify-between w-[60px]">
               <button disabled>
