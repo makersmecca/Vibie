@@ -99,7 +99,10 @@ const Feed = () => {
           </Link>
         </div>
       </div>
-      <div className="md:flex md:justify-start w-full md:w-[600px] px-7 py-5 mt-[15px] text-2xl font-semibold font-Lexend sticky top-0 bg-white">
+      <div
+        className="md:flex md:justify-start w-full md:w-[600px] px-7 py-5 mt-[15px] text-2xl font-semibold font-Lexend sticky top-0 bg-white cursor-pointer"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
         Feeds
       </div>
 

@@ -108,7 +108,9 @@ const Profile = () => {
           <div
             className={`bg-gray-400 rounded-b-2xl ${
               bannerImgUrl === ""
-                ? "w-full md:w-[800px] h-[150px] flex justify-center items-center animate-pulse"
+                ? `w-full md:w-[800px] h-[150px] flex justify-center items-center ${
+                    isLoading && "animate-pulse"
+                  }`
                 : ""
             }`}
           >
@@ -119,7 +121,9 @@ const Profile = () => {
               />
             ) : (
               <svg
-                className="w-10 h-10 text-gray-200 animate-pulse"
+                className={`w-10 h-10 text-gray-200 ${
+                  isLoading ? "animate-pulse" : "opacity-0"
+                }`}
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -224,7 +228,10 @@ const Profile = () => {
         )}
       </div>
       {/* user's posts */}
-      <div className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-Lexend font-medium sticky top-0 bg-white py-4">
+      <div
+        className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-Lexend font-medium sticky top-0 bg-white py-4 cursor-pointer"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
         My Posts
       </div>
       {/* div showing the user's posts */}
