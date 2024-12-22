@@ -18,6 +18,7 @@ import {
   deleteDoc,
   writeBatch,
 } from "firebase/firestore";
+import { render } from "react-dom";
 
 // import bg9 from "/bgImg/bg9.jpeg";
 const MyPosts = () => {
@@ -28,6 +29,8 @@ const MyPosts = () => {
   const client = new Client()
     .setEndpoint("https://cloud.appwrite.io/v1")
     .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const bucketId = `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`;
 
   const storage = new Storage(client);
 
@@ -43,6 +46,18 @@ const MyPosts = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [editingPost, setEditingPost] = useState(null);
   const [editedCaption, setEditedCaption] = useState("");
+
+  const [mediaElements, setMediaElements] = useState({});
+
+  const getFileType = async (bucketId, fileId) => {
+    try {
+      const file = await storage.getFile(bucketId, fileId);
+      return file.mimeType; // This will return the MIME type of the file
+    } catch (error) {
+      console.error("Error getting file type:", error);
+      throw error;
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -104,6 +119,56 @@ const MyPosts = () => {
         });
 
         setPosts(userPosts);
+
+        // Pre-render media elements for each post
+        const mediaPromises = userPosts.map(async (post) => {
+          console.log(post.mediaUrl);
+          const fileId = post.mediaUrl.includes("/preview")
+            ? post.mediaUrl.split("/files/")[1].split("/preview")[0]
+            : post.mediaUrl.split("/files/")[1].split("/view")[0];
+
+          console.log(fileId);
+          const mimeType = await getFileType(bucketId, fileId);
+
+          console.log(mimeType);
+
+          if (mimeType.startsWith("image/")) {
+            return {
+              id: post.id,
+              element: (
+                <img
+                  className="rounded-xl w-[90%] max-h-[300px] self-center"
+                  src={post.mediaUrl}
+                  alt=""
+                />
+              ),
+            };
+          }
+          if (mimeType.startsWith("video/")) {
+            return {
+              id: post.id,
+              element: (
+                <video
+                  controls
+                  className="rounded-xl w-[90%] max-h-[300px] self-center"
+                  src={post.mediaUrl}
+                >
+                  <source src={post.mediaUrl} />
+                  Your browser does not support the video tag.
+                </video>
+              ),
+            };
+          }
+        });
+
+        const resolvedMedia = await Promise.all(mediaPromises);
+        const mediaMap = {};
+        resolvedMedia.forEach((item) => {
+          if (item) {
+            mediaMap[item.id] = item.element;
+          }
+        });
+        setMediaElements(mediaMap);
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
@@ -113,31 +178,6 @@ const MyPosts = () => {
 
     fetchUserPosts();
   }, [currentUser, currentLocation]);
-
-  const getFileType = async (bucketId, fileId) => {
-    try {
-      const file = await storage.getFile(bucketId, fileId);
-      return file.mimeType; // This will return the MIME type of the file
-    } catch (error) {
-      console.error("Error getting file type:", error);
-      throw error;
-    }
-  };
-
-  useEffect(() => {
-    const bucketId = `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`;
-    posts.forEach((post) => {
-      const fileId = post.mediaUrl.split("/files/")[1].split("/preview")[0];
-      console.log(fileId);
-      getFileType(bucketId, fileId)
-        .then((mimeType) => {
-          console.log(mimeType);
-        })
-        .catch((error) => {
-          console.error("Error getting file type:", error);
-        });
-    });
-  }, [posts]);
 
   // Loading state
   if (isLoading) {
@@ -436,12 +476,12 @@ const MyPosts = () => {
           <div className="p-5">
             <p className="mb-2 font-Lexend text-md ">{post.caption}</p>
           </div> */}
-          <img
+          {/* <img
             className="rounded-xl w-[90%] max-h-[300px] self-center"
             src={post.mediaUrl}
             alt=""
-          />
-
+          /> */}
+          {mediaElements[post.id]}
           <div className="flex justify-between px-5 mt-5 items-center">
             <div className="flex items-center justify-between w-[60px]">
               {post.liked ? (
