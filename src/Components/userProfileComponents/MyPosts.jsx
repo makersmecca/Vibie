@@ -490,7 +490,7 @@ const MyPosts = () => {
                   width="20"
                   height="20"
                   fill="#ff708f"
-                  className="bi bi-heart-fill ms-1"
+                  className="bi bi-heart-fill ms-1 cursor-pointer"
                   viewBox="0 0 16 16"
                   onClick={() => handleLikes(post.id)}
                 >
@@ -505,7 +505,7 @@ const MyPosts = () => {
                   width="20"
                   height="20"
                   fill="#4b5563"
-                  className="bi bi-heart ms-1"
+                  className="bi bi-heart ms-1 cursor-pointer"
                   viewBox="0 0 16 16"
                   onClick={() => handleLikes(post.id)}
                 >

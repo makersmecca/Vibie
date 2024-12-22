@@ -1,6 +1,7 @@
 import BackgroundImages from "./BackgroundImages";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { UserContext } from "./UserContext.jsx";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -13,6 +14,7 @@ import { auth } from "../auth/firebaseAuth";
 const provider = new GoogleAuthProvider();
 
 const Authentication = () => {
+  const activeUser = useContext(UserContext);
   const location = useLocation().pathname;
   const [formInput, setFormInput] = useState({
     username: "",
@@ -30,7 +32,7 @@ const Authentication = () => {
     if (auth.currentUser !== null) {
       Navigate("/feed");
     }
-  }, [auth.currentUser]);
+  }, [auth.currentUser, activeUser]);
 
   useEffect(() => {
     if (location === "/") {
