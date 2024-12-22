@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext, useCallback } from "react";
+import { Client, Storage } from "appwrite";
 import { UserContext } from "../UserContext";
 import { db } from "../../auth/firebaseAuth";
 import { Link } from "react-router-dom";
@@ -20,6 +21,25 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [mediaElements, setMediaElements] = useState({});
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const bucketId = `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`;
+
+  const storage = new Storage(client);
+
+  const getFileType = async (bucketId, fileId) => {
+    try {
+      const file = await storage.getFile(bucketId, fileId);
+      return file.mimeType; // This will return the MIME type of the file
+    } catch (error) {
+      console.error("Error getting file type:", error);
+      throw error;
+    }
+  };
 
   // Function to fetch user profile data using userId
   const fetchUserProfile = async (userId) => {
@@ -79,6 +99,56 @@ const Posts = () => {
 
           const postsWithProfiles = await Promise.all(postsPromises);
           setPosts(postsWithProfiles);
+
+          // Pre-render media elements for each post
+          const mediaPromises = postsWithProfiles.map(async (post) => {
+            console.log(post.mediaUrl);
+            const fileId = post.mediaUrl.includes("/preview")
+              ? post.mediaUrl.split("/files/")[1].split("/preview")[0]
+              : post.mediaUrl.split("/files/")[1].split("/view")[0];
+
+            console.log(fileId);
+            const mimeType = await getFileType(bucketId, fileId);
+
+            console.log(mimeType);
+
+            if (mimeType.startsWith("image/")) {
+              return {
+                id: post.id,
+                element: (
+                  <img
+                    className="rounded-xl w-[90%] max-h-[300px] self-center"
+                    src={post.mediaUrl}
+                    alt=""
+                  />
+                ),
+              };
+            }
+            if (mimeType.startsWith("video/")) {
+              return {
+                id: post.id,
+                element: (
+                  <video
+                    controls
+                    className="rounded-xl w-[90%] max-h-[300px] self-center"
+                    src={post.mediaUrl}
+                  >
+                    <source src={post.mediaUrl} />
+                    Your browser does not support the video tag.
+                  </video>
+                ),
+              };
+            }
+          });
+
+          const resolvedMedia = await Promise.all(mediaPromises);
+          const mediaMap = {};
+          resolvedMedia.forEach((item) => {
+            if (item) {
+              mediaMap[item.id] = item.element;
+            }
+          });
+          setMediaElements(mediaMap);
           setIsLoading(false);
         } catch (error) {
           console.error("Error processing posts:", error);
@@ -247,13 +317,14 @@ const Posts = () => {
             <p className="mb-3 font-normal text-black">{post.caption}</p>
           </div>
 
-          {post.mediaUrl && (
+          {/* {post.mediaUrl && (
             <img
               className="rounded-xl w-[90%] h-[300px] self-center object-cover"
               src={post.mediaUrl}
               alt="Post content"
             />
-          )}
+          )} */}
+          {mediaElements[post.id]}
 
           <div className="flex justify-between px-5 mt-5 items-center">
             <div className="flex items-center justify-between w-[60px]">

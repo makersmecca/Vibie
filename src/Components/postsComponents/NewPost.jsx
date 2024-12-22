@@ -202,7 +202,7 @@ const NewPost = () => {
       // console.log(apwrtResponse);
       try {
         if (apwrtResponse.id !== "") {
-          const url = await storage.getFilePreview(
+          const url = await storage.getFileView(
             `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`,
             apwrtResponse.id
           );
@@ -299,7 +299,7 @@ const NewPost = () => {
             type="file"
             onChange={handleFileChange}
             className=" hidden"
-            accept=".jpg, .jpeg, .png"
+            accept=".jpg, .jpeg, .png, .mp4, .mov"
             required
           />
         </label>
