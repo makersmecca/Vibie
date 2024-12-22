@@ -520,16 +520,33 @@ const MyPosts = () => {
             <ShareButton postId={post.id} />
           </div>
           <div className="text-sm font-Lexend text-start text-gray-500 px-5 mt-2 ms-0.5">
-            {post.createdAt?.seconds
-              ? new Date(post.createdAt.seconds * 1000).toLocaleDateString(
-                  "en-US",
-                  {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  }
-                )
-              : ""}
+            {post.createdAt?.seconds ? (
+              <div className="flex gap-3">
+                <div>
+                  {new Date(post.createdAt.seconds * 1000).toLocaleDateString(
+                    "en-US",
+                    {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}
+                  ,
+                </div>
+                <div>
+                  {new Date(post.createdAt.seconds * 1000).toLocaleTimeString(
+                    "en-US",
+                    {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    }
+                  )}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       ))}
