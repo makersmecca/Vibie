@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { db } from "../../auth/firebaseAuth";
 import { Link } from "react-router-dom";
+import { Client, Storage } from "appwrite";
 import ShareButton from "./ShareButton";
 import person from "/profile.png";
 import {
@@ -22,6 +23,25 @@ const SharedProfile = () => {
   const [bannerImgUrl, setBannerImgUrl] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
+
+  const [mediaElements, setMediaElements] = useState({});
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
+
+  const bucketId = `${import.meta.env.VITE_APPWRITE_BUCKET_ID}`;
+
+  const storage = new Storage(client);
+
+  const getFileType = async (bucketId, fileId) => {
+    try {
+      const file = await storage.getFile(bucketId, fileId);
+      return file.mimeType; // This will return the MIME type of the file
+    } catch (error) {
+      console.error("Error getting file type:", error);
+      throw error;
+    }
+  };
 
   const currentLocation = useLocation();
 
@@ -79,6 +99,56 @@ const SharedProfile = () => {
         });
 
         setPosts(userPosts);
+
+        // Pre-render media elements for each post
+        const mediaPromises = userPosts.map(async (post) => {
+          // console.log(post.mediaUrl);
+          const fileId = post.mediaUrl.includes("/preview")
+            ? post.mediaUrl.split("/files/")[1].split("/preview")[0]
+            : post.mediaUrl.split("/files/")[1].split("/view")[0];
+
+          // console.log(fileId);
+          const mimeType = await getFileType(bucketId, fileId);
+
+          // console.log(mimeType);
+
+          if (mimeType.startsWith("image/")) {
+            return {
+              id: post.id,
+              element: (
+                <img
+                  className="rounded-xl w-[90%] max-h-[300px] self-center"
+                  src={post.mediaUrl}
+                  alt=""
+                />
+              ),
+            };
+          }
+          if (mimeType.startsWith("video/")) {
+            return {
+              id: post.id,
+              element: (
+                <video
+                  controls
+                  className="rounded-xl w-[90%] max-h-[300px] self-center"
+                  src={post.mediaUrl}
+                >
+                  <source src={post.mediaUrl} />
+                  Your browser does not support the video tag.
+                </video>
+              ),
+            };
+          }
+        });
+
+        const resolvedMedia = await Promise.all(mediaPromises);
+        const mediaMap = {};
+        resolvedMedia.forEach((item) => {
+          if (item) {
+            mediaMap[item.id] = item.element;
+          }
+        });
+        setMediaElements(mediaMap);
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
@@ -217,11 +287,12 @@ const SharedProfile = () => {
                   </div>
                 </div>
 
-                <img
+                {/* <img
                   className="rounded-xl w-[90%] max-h-[300px] self-center"
                   src={post.mediaUrl}
                   alt=""
-                />
+                /> */}
+                {mediaElements[post.id]}
 
                 <div className="flex justify-between px-5 mt-5 items-center">
                   <div className="flex items-center justify-between w-[60px]">
