@@ -263,6 +263,15 @@ const Posts = () => {
     [handleLikes]
   );
 
+  useEffect(() => {
+    //cleanup pending debounce
+    return () => {
+      if (debouncedHandleLikes.cancel) {
+        debouncedHandleLikes.cancel();
+      }
+    };
+  }, [debouncedHandleLikes]);
+
   if (error) {
     return <div className="text-red-500">{error}</div>;
   }

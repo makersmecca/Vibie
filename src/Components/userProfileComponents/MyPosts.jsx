@@ -18,7 +18,6 @@ import {
   deleteDoc,
   writeBatch,
 } from "firebase/firestore";
-import { render } from "react-dom";
 
 // import bg9 from "/bgImg/bg9.jpeg";
 const MyPosts = () => {
@@ -57,6 +56,17 @@ const MyPosts = () => {
       console.error("Error getting file type:", error);
       throw error;
     }
+  };
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      const context = this;
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func.apply(context, args);
+      }, delay);
+    };
   };
 
   useEffect(() => {
@@ -214,7 +224,7 @@ const MyPosts = () => {
     );
   }
 
-  const handleLikes = async (postId) => {
+  const handleLikes = debounce(async (postId) => {
     try {
       // Find the current post
       const currentPost = posts.find((p) => p.id === postId);
@@ -287,7 +297,7 @@ const MyPosts = () => {
         })
       );
     }
-  };
+  }, 300);
 
   const handleEditPost = (postId) => {
     setActiveMenu(activeMenu === postId ? null : postId);
