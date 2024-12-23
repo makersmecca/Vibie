@@ -364,6 +364,15 @@ const Authentication = () => {
               <Link to="/">Already have an account? Login.</Link>
             )}
           </span>
+          <div className="flex justify-evenly mt-5">
+            <div>©Copyright Vibie</div>
+            <div className="underline">
+              <Link to="/termsofuse">Terms of Use</Link>
+            </div>
+            <div className="underline">
+              <Link to="/privacypolicy">Privacy Policy</Link>
+            </div>
+          </div>
         </div>
       </div>
     </>

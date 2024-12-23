@@ -8,6 +8,8 @@ import { Route, Routes } from "react-router-dom";
 import { UserProvider } from "./Components/UserContext";
 import SharedPost from "./Components/sharedComponents/SharedPost";
 import SharedProfile from "./Components/sharedComponents/SharedProfile";
+import PrivacyPolicy from "./Components/PrivacyPolicy";
+import TermsOfUse from "./Components/TermsOfUse";
 
 import "./App.css";
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/post/:postID" element={<SharedPost />} />
         <Route path="/profile/:userID" element={<SharedProfile />} />
+        <Route path="/termsofuse" element={<TermsOfUse />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
       </Routes>
     </UserProvider>
   );
