@@ -254,14 +254,14 @@ const Authentication = () => {
       </div>
       {/* Authentication ui */}
       <div className="absolute inset-x-0 top-[26%] md:top-[5%] h-full flex justify-center">
-        <div className="bg-white border-black md:w-[40%] w-[90%] sm:h-[800px] lg:h-full sm:bottom-0 rounded-t-[50px] shadow-lg py-8 px-4">
+        <div className="bg-white border-black md:w-[40%] w-[90%] sm:h-[800px] h-full sm:bottom-0 rounded-t-[50px] shadow-lg py-8 px-4">
           <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-12">
             Vibie
           </span>
           <span className="flex flex-col items-center w-full mt-3 font-Hurricane text-[32px] font-medium">
             Join the #vibetribe
           </span>
-          <form className="flex flex-col w-full gap-3 mt-2 md:mt-20 items-center">
+          <form className="flex flex-col w-full gap-3 mt-2 md:mt-10 items-center">
             <div className="flex flex-col w-[90%] md:w-[70%]">
               <label htmlFor="email" className="block mb-2 text-lg font-medium">
                 Your Email
@@ -357,20 +357,22 @@ const Authentication = () => {
             </button>
           </div>
 
-          <span className="mt-2 flex flex-col items-center underline">
+          <span className="mt-4 md:mt-2 flex flex-col items-center underline">
             {location === "/" ? (
               <Link to="/signup">Don't have an account? Sign up.</Link>
             ) : (
               <Link to="/">Already have an account? Login.</Link>
             )}
           </span>
-          <div className="flex justify-evenly mt-5">
-            <div>©Copyright Vibie</div>
-            <div className="underline">
-              <Link to="/termsofuse">Terms of Use</Link>
-            </div>
-            <div className="underline">
-              <Link to="/privacypolicy">Privacy Policy</Link>
+          <div className="md:flex md:justify-evenly mt-5 md:mt-8">
+            <div className="justify-self-center">©2024 Copyright Vibie</div>
+            <div className="flex justify-evenly self-center mt-5 md:mt-0 md:gap-2">
+              <div className="underline">
+                <Link to="/termsofuse">Terms of Use</Link>
+              </div>
+              <div className="underline">
+                <Link to="/privacypolicy">Privacy Policy</Link>
+              </div>
             </div>
           </div>
         </div>
