@@ -8,8 +8,8 @@ import { Route, Routes } from "react-router-dom";
 import { UserProvider } from "./Components/UserContext";
 import SharedPost from "./Components/sharedComponents/SharedPost";
 import SharedProfile from "./Components/sharedComponents/SharedProfile";
-import PrivacyPolicy from "./Components/PrivacyPolicy";
-import TermsOfUse from "./Components/TermsOfUse";
+import PrivacyPolicy from "./Components/OAuth Consent Screen Components/PrivacyPolicy";
+import TermsOfUse from "./Components/OAuth Consent Screen Components/TermsOfUse";
 
 import "./App.css";
 function App() {
