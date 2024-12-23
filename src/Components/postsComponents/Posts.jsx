@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import { Client, Storage } from "appwrite";
 import { UserContext } from "../UserContext";
 import { db } from "../../auth/firebaseAuth";
@@ -94,6 +94,7 @@ const Posts = () => {
                 bannerImgUrl: null,
               },
               liked: isLiked,
+              likeCount: postData.likeCount || 0, // Ensure likeCount is properly initialized
             };
           });
 
@@ -166,6 +167,18 @@ const Posts = () => {
     return () => unsubscribe();
   }, [currentUser]);
 
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func.apply(null, args);
+      }, delay);
+    };
+  };
+
   const handleLikes = useCallback(
     async (postId, userId) => {
       try {
@@ -225,24 +238,29 @@ const Posts = () => {
         // Commit the batch
         await batch.commit();
 
-        // Update local state
-        setPosts((currentPosts) =>
-          currentPosts.map((post) => {
-            if (post.id === postId) {
-              return {
-                ...post,
-                liked: !isLiked,
-                likeCount: isLiked ? post.likeCount - 1 : post.likeCount + 1,
-              };
-            }
-            return post;
-          })
-        );
+        // // Update local state
+        // setPosts((currentPosts) =>
+        //   currentPosts.map((post) => {
+        //     if (post.id === postId) {
+        //       return {
+        //         ...post,
+        //         liked: !isLiked,
+        //         likeCount: isLiked ? post.likeCount - 1 : post.likeCount + 1,
+        //       };
+        //     }
+        //     return post;
+        //   })
+        // );
       } catch (error) {
         console.error("Error updating likes:", error);
       }
     },
     [currentUser]
+  );
+  // Debounced version of handleLikes using useMemo
+  const debouncedHandleLikes = useMemo(
+    () => debounce(handleLikes, 500), // 500ms delay
+    [handleLikes]
   );
 
   if (error) {
@@ -330,7 +348,9 @@ const Posts = () => {
 
           <div className="flex justify-between px-5 mt-5 items-center">
             <div className="flex items-center justify-between w-[60px]">
-              <button onClick={() => handleLikes(post.id, post.userId)}>
+              <button
+                onClick={() => debouncedHandleLikes(post.id, post.userId)}
+              >
                 {post.liked ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
