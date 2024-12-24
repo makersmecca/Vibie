@@ -181,9 +181,28 @@ const Posts = () => {
 
   const handleLikes = useCallback(
     async (postId, userId) => {
-      try {
-        if (!currentUser?.email) return; // Ensure user is logged in
+      if (!currentUser?.email) return; // Ensure user is logged in
 
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post.id === postId) {
+            const isCurrentlyLiked = post.likedBy?.includes(currentUser.email);
+            return {
+              ...post,
+              liked: !isCurrentlyLiked,
+              likeCount: isCurrentlyLiked
+                ? post.likeCount - 1
+                : post.likeCount + 1,
+              likedBy: isCurrentlyLiked
+                ? post.likedBy.filter((email) => email !== currentUser.email)
+                : [...(post.likedBy || []), currentUser.email],
+            };
+          }
+          return post;
+        })
+      );
+
+      try {
         // Get references to both documents
         const userPostRef = doc(db, "userPosts", userId, "posts", postId);
         const globalPostRef = doc(db, "globalPosts", postId);
@@ -253,6 +272,26 @@ const Posts = () => {
         // );
       } catch (error) {
         console.error("Error updating likes:", error);
+        setPosts((currentPosts) =>
+          currentPosts.map((post) => {
+            if (post.id === postId) {
+              const isCurrentlyLiked = post.likedBy?.includes(
+                currentUser.email
+              );
+              return {
+                ...post,
+                liked: isCurrentlyLiked,
+                likeCount: isCurrentlyLiked
+                  ? post.likeCount + 1
+                  : post.likeCount - 1,
+                likedBy: isCurrentlyLiked
+                  ? [...(post.likedBy || []), currentUser.email]
+                  : post.likedBy.filter((email) => email !== currentUser.email),
+              };
+            }
+            return post;
+          })
+        );
       }
     },
     [currentUser]
