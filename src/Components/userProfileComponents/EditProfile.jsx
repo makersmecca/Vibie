@@ -252,7 +252,7 @@ const EditProfile = () => {
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
           <Link to="/profile">
-            <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center">
+            <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"

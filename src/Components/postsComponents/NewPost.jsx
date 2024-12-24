@@ -232,26 +232,28 @@ const NewPost = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="py-5 px-5 left-5 top-6 flex items-center gap-5">
-        <Link to="/feed">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="black"
-            className="bi bi-arrow-left"
-            stroke="black"
-            strokeWidth="0.5px"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
-            />
-          </svg>
-        </Link>
-        <div className="text-2xl font-semibold text-black font-Lexend">
-          New Post
+      <div className="flex justify-center">
+        <div className="relative w-full md:w-[800px] px-5 md:px-0 top-6 flex items-center gap-5">
+          <Link to="/feed">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="black"
+              className="bi bi-arrow-left hover:-translate-x-1 transition-all ease-in-out"
+              stroke="black"
+              strokeWidth="0.5px"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+              />
+            </svg>
+          </Link>
+          <div className="text-2xl font-semibold text-black font-Lexend">
+            New Post
+          </div>
         </div>
       </div>
       <div className="bg-gray-200 mt-10 h-auto w-[90%] md:w-[800px] rounded-2xl p-4 self-center">
