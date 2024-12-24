@@ -39,7 +39,7 @@ const VideoComponent = ({ videoUrl }) => {
         playsInline
         muted
         loop
-        className="rounded-xl w-full self-center"
+        className="rounded-xl w-full self-center max-h-[300px]"
         src={videoUrl}
       >
         <source src={videoUrl} />
