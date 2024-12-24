@@ -126,7 +126,7 @@ const DeviceCamera = ({ onImageCapture }) => {
     <>
       <div
         onClick={openCamera ? stopCamera : startCamera}
-        className="cursor-pointer"
+        className="cursor-pointer p-2  hover:bg-slate-100 transition-all ease-in-out rounded-lg"
       >
         <span className="font-Lexend">
           {openCamera ? (

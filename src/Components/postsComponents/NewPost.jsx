@@ -31,6 +31,8 @@ const NewPost = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [isFileSelected, setIsFileSelected] = useState(false);
+
   //current user
   const { currentUser } = useContext(UserContext);
 
@@ -72,6 +74,7 @@ const NewPost = () => {
       );
     }
     setFiles(validFiles);
+    setIsFileSelected(validFiles.length > 0);
     setCapturedImg(null);
     //preview for the first valid file
     if (validFiles.length > 0) {
@@ -287,7 +290,11 @@ const NewPost = () => {
       )}
       {/* upload image/video from device */}
       <div className="w-full py-5 px-7 mt-9 md:w-[800px] self-center">
-        <label className="flex gap-3 items-center">
+        <label
+          className={`flex gap-3 items-center p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-all ease-in-out ${
+            isFileSelected ? "bg-slate-200" : ""
+          }`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -301,7 +308,21 @@ const NewPost = () => {
             <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z" />
             <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5" />
           </svg>
-          <span className="font-Lexend">Choose Files</span>
+          <span className="font-Lexend">
+            {isFileSelected ? "File Loaded" : "Choose Files"}
+          </span>
+          {isFileSelected && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-check-circle-fill"
+              viewBox="0 0 16 16"
+            >
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+            </svg>
+          )}
           {/* <span className="">
             {files.length > 0
               ? `${files.length} file(s) selected`
