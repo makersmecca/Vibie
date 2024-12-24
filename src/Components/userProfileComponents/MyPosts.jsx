@@ -331,14 +331,19 @@ const MyPosts = () => {
     if (!editingPost) return;
 
     try {
-      const postRef = doc(
+      const userPostRef = doc(
         db,
         "userPosts",
         currentUser.email,
         "posts",
         editingPost.id
       );
-      await updateDoc(postRef, {
+      const globalPostRef = doc(db, "globalPosts", editingPost.id);
+
+      await updateDoc(userPostRef, {
+        caption: editedCaption,
+      });
+      await updateDoc(globalPostRef, {
         caption: editedCaption,
       });
 
