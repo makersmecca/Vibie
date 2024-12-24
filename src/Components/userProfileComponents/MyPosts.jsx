@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import person from "/profile.png";
 import { Client, Storage } from "appwrite";
 import ShareButton from "../sharedComponents/ShareButton";
+import VideoComponent from "../VideoComponent";
 import {
   collection,
   query,
@@ -160,14 +161,17 @@ const MyPosts = () => {
             return {
               id: post.id,
               element: (
-                <video
-                  controls
-                  className="rounded-xl w-[90%] max-h-[300px] self-center"
-                  src={post.mediaUrl}
-                >
-                  <source src={post.mediaUrl} />
-                  Your browser does not support the video tag.
-                </video>
+                // <video
+                //   controls
+                //   className="rounded-xl w-[90%] max-h-[300px] self-center"
+                //   src={post.mediaUrl}
+                // >
+                //   <source src={post.mediaUrl} />
+                //   Your browser does not support the video tag.
+                // </video>
+                <div className="rounded-xl w-[90%] max-h-[300px] self-center">
+                  <VideoComponent videoUrl={post.mediaUrl} />
+                </div>
               ),
             };
           }

@@ -3,6 +3,7 @@ import { Client, Storage } from "appwrite";
 import { UserContext } from "../UserContext";
 import { db } from "../../auth/firebaseAuth";
 import { Link } from "react-router-dom";
+import VideoComponent from "../VideoComponent";
 import {
   collection,
   query,
@@ -129,14 +130,17 @@ const Posts = () => {
               return {
                 id: post.id,
                 element: (
-                  <video
-                    controls
-                    className="rounded-xl w-[90%] max-h-[300px] self-center"
-                    src={post.mediaUrl}
-                  >
-                    <source src={post.mediaUrl} />
-                    Your browser does not support the video tag.
-                  </video>
+                  // <video
+                  //   controls
+                  //   className="rounded-xl w-[90%] max-h-[300px] self-center"
+                  //   src={post.mediaUrl}
+                  // >
+                  //   <source src={post.mediaUrl} />
+                  //   Your browser does not support the video tag.
+                  // </video>
+                  <div className="rounded-xl w-[90%] max-h-[300px] self-center">
+                    <VideoComponent videoUrl={post.mediaUrl} />
+                  </div>
                 ),
               };
             }
