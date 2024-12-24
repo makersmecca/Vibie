@@ -48,6 +48,8 @@ const MyPosts = () => {
 
   const [mediaElements, setMediaElements] = useState({});
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const getFileType = async (bucketId, fileId) => {
     try {
       const file = await storage.getFile(bucketId, fileId);
@@ -329,6 +331,7 @@ const MyPosts = () => {
 
   const saveEdit = async () => {
     if (!editingPost) return;
+    setIsSaving(true);
 
     try {
       const userPostRef = doc(
@@ -359,6 +362,7 @@ const MyPosts = () => {
       setEditingPost(null);
       setEditedCaption("");
     } catch (error) {
+      setIsSaving(false);
       console.error("Error updating post:", error);
     }
   };
@@ -454,17 +458,17 @@ const MyPosts = () => {
               )}
             </div>
             {activeMenu === post.id && (
-              <div className="absolute mt-32 ms-48 flex w-[120px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+              <div className="absolute mt-32 ms-48 flex justify-center w-[120px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
                 <div className="py-1">
                   <button
                     onClick={() => startEditing(post)}
-                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    className="block w-full rounded-lg text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => deletePost(post.id)}
-                    className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                    className="block w-full rounded-lg text-left px-4 py-2 text-red-500 hover:bg-gray-100"
                   >
                     Delete Post
                   </button>
@@ -484,15 +488,17 @@ const MyPosts = () => {
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={cancelEditing}
-                  className="px-3 py-1 bg-gray-400 rounded-md font-Lexend"
+                  className="px-3 py-1 bg-gray-400 rounded-md font-Lexend hover:bg-slate-400 transition-colors ease-in-out"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={saveEdit}
-                  className="px-3 py-1 bg-slate-300 rounded-md font-Lexend"
+                  className={`px-3 py-1 bg-slate-300 rounded-md font-Lexend hover:bg-slate-400 transition-colors ease-in-out ${
+                    isSaving ? "animate-pulse" : ""
+                  }`}
                 >
-                  Save
+                  {isSaving ? "Saving.." : "Save"}
                 </button>
               </div>
             </div>
