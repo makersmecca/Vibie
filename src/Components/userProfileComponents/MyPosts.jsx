@@ -230,6 +230,20 @@ const MyPosts = () => {
       const currentPost = posts.find((p) => p.id === postId);
       if (!currentPost) return;
 
+      setPosts((currentPosts) =>
+        currentPosts.map((post) =>
+          post.id === postId
+            ? {
+                ...post,
+                liked: !post.liked,
+                likeCount: post.liked ? post.likeCount - 1 : post.likeCount + 1,
+                likedBy: post.liked
+                  ? post.likedBy.filter((email) => email !== currentUser.email)
+                  : [...(post.likedBy || []), currentUser.email],
+              }
+            : post
+        )
+      );
       // Create references to both documents
       const userPostRef = doc(
         db,
@@ -260,27 +274,27 @@ const MyPosts = () => {
           : [...(userPostData.likedBy || []), currentUser.email],
       };
 
-      // Optimistic update for UI
-      setPosts((currentPosts) =>
-        currentPosts.map((post) => {
-          if (post.id === postId) {
-            return {
-              ...post,
-              liked: !userLikedPost,
-              likeCount: userLikedPost
-                ? post.likeCount - 1
-                : post.likeCount + 1,
-            };
-          }
-          return post;
-        })
-      );
+      // // Optimistic update for UI
+      // setPosts((currentPosts) =>
+      //   currentPosts.map((post) => {
+      //     if (post.id === postId) {
+      //       return {
+      //         ...post,
+      //         liked: !userLikedPost,
+      //         likeCount: userLikedPost
+      //           ? post.likeCount - 1
+      //           : post.likeCount + 1,
+      //       };
+      //     }
+      //     return post;
+      //   })
+      // );
 
       // Update both documents in parallel
-      await Promise.all([
-        updateDoc(userPostRef, updateData),
-        updateDoc(globalPostRef, updateData),
-      ]);
+      const batch = writeBatch(db);
+      batch.update(userPostRef, updateData);
+      batch.update(globalPostRef, updateData);
+      await batch.commit();
     } catch (error) {
       console.error("Error updating likes:", error);
       // Revert the optimistic update if the operation fails
