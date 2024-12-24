@@ -6,7 +6,7 @@ const VideoComponent = ({ videoUrl }) => {
   const handleVideoInView = useCallback((isIntersecting) => {
     if (videoRef.current) {
       if (isIntersecting) {
-        // Just play without loading - this will resume from last position
+        // playVideo
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch((error) => {
@@ -14,6 +14,7 @@ const VideoComponent = ({ videoUrl }) => {
           });
         }
       } else {
+        //pauseVideo
         videoRef.current.pause();
       }
     }
@@ -23,7 +24,7 @@ const VideoComponent = ({ videoUrl }) => {
     threshold: 0.5,
   });
 
-  // Load the video once when it's mounted
+  //load video when mounted
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.load();
