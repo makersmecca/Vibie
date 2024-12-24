@@ -81,7 +81,7 @@ const ShareButton = ({ postId }) => {
             <div className="flex justify-evenly mt-2">
               <button
                 onClick={shareToWhatsApp}
-                className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg hover:scale-110"
+                className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg hover:scale-110 transition-all ease-in-out"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ const ShareButton = ({ postId }) => {
 
               <button
                 onClick={shareToTelegram}
-                className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg hover:scale-110"
+                className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg hover:scale-110 transition-all ease-in-out"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,7 @@ const ShareButton = ({ postId }) => {
 
               <button
                 onClick={shareToTwitter}
-                className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg hover:scale-110"
+                className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg hover:scale-110 transition-all ease-in-out"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +129,7 @@ const ShareButton = ({ postId }) => {
             </div>
             <button
               onClick={handleCopyLink}
-              className="flex items-center gap-3 p-2 mt-2 bg-gray-100 rounded-lg hover:scale-105"
+              className="flex items-center gap-3 p-2 mt-2 bg-gray-100 rounded-lg hover:scale-105 transition-all ease-in-out"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +155,7 @@ const ShareButton = ({ postId }) => {
 
       <button
         onClick={toggleShareMenu}
-        className="bg-slate-300 rounded-full w-[100px] py-1.5 px-1 flex items-center justify-center gap-1 hover:scale-90"
+        className="bg-slate-300 rounded-full w-[100px] py-1.5 px-1 flex items-center justify-center gap-1 hover:scale-95 transition-all ease-in-out"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
