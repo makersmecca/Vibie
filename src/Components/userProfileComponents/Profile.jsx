@@ -69,11 +69,11 @@ const Profile = () => {
   };
 
   const handleLogOut = () => {
-    console.log("Logging out");
+    // console.log("Logging out");
     auth
       .signOut()
       .then(() => {
-        console.log("User signed out successfully");
+        // console.log("User signed out successfully");
         Navigate("/");
       })
       .catch((error) => {
