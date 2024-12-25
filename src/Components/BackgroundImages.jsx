@@ -18,12 +18,14 @@ const BackgroundImages = () => {
           <img src={bg3} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg4} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg1} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg7} className="h-[250px] w-[200px] rounded-lg mt-2" />
         </div>
         <div className="hidden md:block relative -top-24">
           <img src={bg9} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg7} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg8} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg6} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg10} className="h-[250px] w-[200px] rounded-lg mt-2" />
         </div>
         {/* smallscreen images */}
         <div className="relative -top-11 -left-1 md:left-0">
@@ -31,6 +33,7 @@ const BackgroundImages = () => {
           <img src={bg2} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg7} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg10} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg2} className="h-[250px] w-[200px] rounded-lg mt-2" />
         </div>
         <div className="relative -top-48">
           <img
@@ -41,10 +44,9 @@ const BackgroundImages = () => {
             src={bg4}
             className="h-[250px] w-[300px] md:w-[200px] rounded-lg mt-2"
           />
-          <img
-            src={bg10}
-            className="block md:hidden h-[250px] w-[200px] rounded-lg mt-2"
-          />
+          <img src={bg10} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg2} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg7} className="h-[250px] w-[200px] rounded-lg mt-2" />
         </div>
         <div className="relative -top-32 -right-1 md:right-0">
           <img
@@ -57,6 +59,7 @@ const BackgroundImages = () => {
           />
           <img src={bg7} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg10} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg4} className="h-[250px] w-[200px] rounded-lg mt-2" />
         </div>
         {/* widescreen images */}
         <div className="hidden md:block relative -top-10">
@@ -64,6 +67,7 @@ const BackgroundImages = () => {
           <img src={bg4} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg9} className="h-[250px] w-[200px] rounded-lg mt-2" />
           <img src={bg10} className="h-[250px] w-[200px] rounded-lg mt-2" />
+          <img src={bg7} className="h-[250px] w-[200px] rounded-lg mt-2" />
         </div>
         <div className="hidden md:block relative -top-40">
           <img src={bg7} className="h-[250px] w-[200px] rounded-lg mt-2" />

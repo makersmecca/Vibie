@@ -23,7 +23,21 @@ const Authentication = () => {
   const [showPw, setShowPw] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [btnMsg, setBtnMsg] = useState("");
-  const [googleBtnMsg, setGoogleBtnMsg] = useState("Continue With Google");
+  const [googleBtnMsg, setGoogleBtnMsg] = useState(
+    <div className="flex items-center gap-3">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        className="bi bi-google"
+        viewBox="0 0 16 16"
+      >
+        <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
+      </svg>
+      <span>Continue With Google</span>
+    </div>
+  );
   const Navigate = useNavigate();
 
   // effect hook to redirect user to feed page if already logged in
@@ -254,7 +268,7 @@ const Authentication = () => {
       </div>
       {/* Authentication ui */}
       <div className="absolute inset-x-0 top-[26%] md:top-[5%] h-full flex justify-center">
-        <div className="bg-white border-black md:w-[40%] w-[90%] sm:h-[800px] h-full sm:bottom-0 rounded-t-[50px] shadow-lg py-8 px-4">
+        <div className="bg-white border-black md:w-[40%] w-[90%] sm:h-[800px] h-full sm:bottom-0 rounded-t-[50px] lg:rounded-b-[50px] shadow-lg py-8 px-4">
           <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-12">
             Vibie
           </span>
@@ -350,21 +364,21 @@ const Authentication = () => {
           <div className="flex flex-col items-center">
             <button
               type="button"
-              className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
+              className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white flex justify-center"
               onClick={handleGoogleSignin}
             >
               {googleBtnMsg}
             </button>
           </div>
 
-          <span className="mt-4 md:mt-2 flex flex-col items-center underline">
+          <span className="mt-5 flex flex-col items-center underline">
             {location === "/" ? (
               <Link to="/signup">Don't have an account? Sign up.</Link>
             ) : (
               <Link to="/">Already have an account? Login.</Link>
             )}
           </span>
-          <div className="md:flex md:justify-evenly mt-5 md:mt-8">
+          <div className="md:flex md:justify-evenly mt-4 md:mt-8">
             <div className="justify-self-center">©2024 Copyright Vibie</div>
             <div className="flex justify-evenly self-center mt-5 md:mt-0 md:gap-2">
               <div className="underline">
