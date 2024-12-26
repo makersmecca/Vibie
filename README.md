@@ -10,9 +10,11 @@
 
 - User Authentication: Secure user login and registration using Firebase Authentication.
 
-- Post Creation: Users can create posts by uploading photos, adding captions, and sharing them with the world.
+- Post Creation: Users can create posts by uploading photos and videos, adding captions, and sharing them with the world.
 
-- Global Feed: A continuously updating feed displaying posts from all users.
+- Share Posts: Send your posts to your friends and spread the word!
+
+- Global Feed: A continuously updating feed displaying posts from all users in real-time.
 
 - Likes: Engage with posts by liking them.
 
@@ -30,14 +32,14 @@
 
 - Styling: TailwindCSS for sleek and responsive UI.
 
-- Deployment: Hosted on Netlify for a seamless deployment experience.
+- Deployment: Hosted on Netlify.
 
 ## Usage
 
 - Sign up or log in using your email and password, or your Google account.
 
-- Create a post by uploading a photo or video and adding a caption.
+- Scroll through the global feed and discover what's happening around you.
 
-- View the global feed and engage with posts by liking them.
+- Create a post by uploading a photo or video and adding a caption.
 
 <img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/footers/gray0_ctp_on_line.svg?sanitize=true"/>
