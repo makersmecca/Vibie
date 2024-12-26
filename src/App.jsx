@@ -10,6 +10,7 @@ import SharedPost from "./Components/sharedComponents/SharedPost";
 import SharedProfile from "./Components/sharedComponents/SharedProfile";
 import PrivacyPolicy from "./Components/OAuth Consent Screen Components/PrivacyPolicy";
 import TermsOfUse from "./Components/OAuth Consent Screen Components/TermsOfUse";
+import AboutUs from "./Components/OAuth Consent Screen Components/AboutUs";
 
 import "./App.css";
 function App() {
@@ -27,6 +28,8 @@ function App() {
         <Route path="/profile/:userID" element={<SharedProfile />} />
         <Route path="/termsofuse" element={<TermsOfUse />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        <Route path="/aboutus" element={<AboutUs/>} />
+
       </Routes>
     </UserProvider>
   );
