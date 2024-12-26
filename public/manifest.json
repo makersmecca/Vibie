@@ -1,0 +1,16 @@
+{
+    "name": "Vibie",
+    "short_name": "Vibie",
+    "description": "Vibie, A dynamic social media platform designed to connect users and let them share moments from their lives! Whether you're showcasing your creativity, capturing life’s moments, or just vibing with friends, Vibie is your go-to platform. Join the #vibe-tribe.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+      {
+        "src": "Icons/pwa/16x16.png",
+        "sizes": "16x16",
+        "type": "image/png"
+      }
+    ]
+}
