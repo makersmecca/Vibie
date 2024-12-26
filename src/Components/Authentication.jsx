@@ -378,7 +378,7 @@ const Authentication = () => {
               <Link to="/">Already have an account? Login.</Link>
             )}
           </span>
-          <div className="md:flex md:justify-evenly mt-4 md:mt-8">
+          <div className="md:flex md:justify-evenly mt-4 md:mt-8 px-2">
             <div className="justify-self-center">©2024 Copyright Vibie</div>
             <div className="flex justify-evenly self-center mt-5 md:mt-0 md:gap-2">
               <div className="underline">
@@ -386,6 +386,9 @@ const Authentication = () => {
               </div>
               <div className="underline">
                 <Link to="/privacypolicy">Privacy Policy</Link>
+              </div>
+              <div className="underline">
+                <Link to="/aboutus">About Us</Link>
               </div>
             </div>
           </div>
