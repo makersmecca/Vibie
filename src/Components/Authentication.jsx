@@ -269,7 +269,7 @@ const Authentication = () => {
       {/* Authentication ui */}
       <div className="absolute inset-x-0 top-[20%] md:top-[5%] h-full flex justify-center">
         <div className="bg-white border-black md:w-[40%] w-[90%] sm:h-[800px] h-full rounded-t-[50px] lg:rounded-b-[50px] shadow-lg py-8 px-4">
-          <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-6 xl:mt-12">
+          <span className="flex flex-col items-center w-full font-Pacifico text-[50px] xl:mt-12">
             Vibie
           </span>
           <span className="flex flex-col items-center w-full mt-3 font-Hurricane text-[32px] font-medium">
