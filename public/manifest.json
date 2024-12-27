@@ -9,43 +9,49 @@
     "icons": [
       {
         "src": "Icons/icon-72x72.png",
-        "sizes": "72x72",
+        "sizes": "72x66",
         "type": "image/png"
       },
       {
         "src": "Icons/icon-96x96.png",
-        "sizes": "96x96",
+        "sizes": "96x89",
         "type": "image/png"
       },
       {
         "src": "Icons/icon-128x128.png",
-        "sizes": "128x128",
+        "sizes": "128x118",
         "type": "image/png"
       },
       {
         "src": "Icons/icon-144x144.png",
-        "sizes": "144x144",
+        "sizes": "144x133",
         "type": "image/png"
       },
       {
         "src": "Icons/icon-152x152.png",
-        "sizes": "152x152",
+        "sizes": "152x140",
         "type": "image/png"
       },
       {
         "src": "Icons/icon-192x192.png",
-        "sizes": "192x192",
+        "sizes": "192x177",
         "type": "image/png"
       },
       {
         "src": "Icons/icon-384x384.png",
-        "sizes": "384x384",
+        "sizes": "384x354",
         "type": "image/png"
       },
       {
         "src": "Icons/icon-512x512.png",
-        "sizes": "512x512",
+        "sizes": "512x472",
         "type": "image/png"
+      },
+      {
+        "src": "Icons/icon-512x512.png",
+        "sizes": "512x472",
+        "type": "image/png",
+        "purpose":"any"
       }
     ]
 }
