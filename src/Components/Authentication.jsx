@@ -272,7 +272,7 @@ const Authentication = () => {
           <span className="flex flex-col items-center w-full font-Pacifico text-[50px] xl:mt-12">
             Vibie
           </span>
-          <span className="flex flex-col items-center w-full mt-3 font-Hurricane text-[32px] font-medium">
+          <span className="flex flex-col items-center w-full mt-1 font-Hurricane text-[32px] font-medium">
             Join the #vibetribe
           </span>
           <form className="flex flex-col w-full gap-3 mt-2 md:mt-10 items-center">
@@ -349,14 +349,14 @@ const Authentication = () => {
             )}
             <button
               type="submit"
-              className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-4 text-white"
+              className="bg-slate-600 w-[90%] md:w-[70%] rounded-lg p-2 font-medium mt-3 text-white"
               onClick={handleSubmit}
             >
               {/* {location === "/signup" ? "Sign Up" : "Login"} */}
               {btnMsg}
             </button>
           </form>
-          <div className="flex flex-row items-center font-semibold mt-4">
+          <div className="flex flex-row items-center font-semibold mt-3">
             <div className="w-[30%] h-px mx-auto mt-1 me-3 bg-black border-0 rounded"></div>{" "}
             or{" "}
             <div className="w-[30%] h-px mx-auto mt-1 ms-3 bg-black border-0 rounded"></div>
@@ -378,9 +378,9 @@ const Authentication = () => {
               <Link to="/">Already have an account? Login.</Link>
             )}
           </span>
-          <div className="flex flex-col xl:flex-row items-center xl:justify-center mt-4 md:mt-8 px-2 gap-2 xl:gap-6">
+          <div className="flex flex-col xl:flex-row items-center xl:justify-center mt-5 md:mt-8 px-2 gap-1 xl:gap-6">
             <div className="">©2024 Copyright Vibie</div>
-            <div className="flex justify-evenly self-center gap-1 md:gap-2">
+            <div className="flex justify-evenly self-center gap-2 md:gap-2">
               <div className="underline">
                 <Link to="/termsofuse">Terms of Use</Link>
               </div>
