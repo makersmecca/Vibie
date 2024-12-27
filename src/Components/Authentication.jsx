@@ -267,7 +267,7 @@ const Authentication = () => {
         <BackgroundImages />
       </div>
       {/* Authentication ui */}
-      <div className="absolute inset-x-0 top-[26%] md:top-[5%] h-full flex justify-center">
+      <div className="absolute inset-x-0 top-[20%] md:top-[5%] h-full flex justify-center">
         <div className="bg-white border-black md:w-[40%] w-[90%] sm:h-[800px] h-full rounded-t-[50px] lg:rounded-b-[50px] shadow-lg py-8 px-4">
           <span className="flex flex-col items-center w-full font-Pacifico text-[50px] mt-2 md:mt-6 xl:mt-12">
             Vibie
@@ -341,7 +341,7 @@ const Authentication = () => {
             </div>
             <span>{errorMsg}</span>
             {location === "/" ? (
-              <span className="mt-4 w-[90%] md:w-[70%] underline">
+              <span className="mt-1 w-[90%] md:w-[70%] underline">
                 <Link to="/forgotpassword">Forgot Password? </Link>
               </span>
             ) : (
