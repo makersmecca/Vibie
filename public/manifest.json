@@ -1,57 +1,82 @@
 {
-    "name": "Vibie",
-    "short_name": "Vibie",
-    "description": "Vibie, A dynamic social media platform designed to connect users and let them share moments from their lives! Whether you're showcasing your creativity, capturing life’s moments, or just vibing with friends, Vibie is your go-to platform. Join the #vibe-tribe.",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
-    "icons": [
-      {
-        "src": "Icons/icon-72x72.png",
-        "sizes": "72x66",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-96x96.png",
-        "sizes": "96x89",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-128x128.png",
-        "sizes": "128x118",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-144x144.png",
-        "sizes": "144x133",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-152x152.png",
-        "sizes": "152x140",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-192x192.png",
-        "sizes": "192x177",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-384x384.png",
-        "sizes": "384x354",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-512x512.png",
-        "sizes": "512x472",
-        "type": "image/png"
-      },
-      {
-        "src": "Icons/icon-512x512.png",
-        "sizes": "512x472",
-        "type": "image/png",
-        "purpose":"any"
-      }
-    ]
+  "name": "Vibie",
+  "short_name": "Vibie",
+  "description": "Vibie, A dynamic social media platform designed to connect users and let them share moments from their lives! Whether you're showcasing your creativity, capturing life’s moments, or just vibing with friends, Vibie is your go-to platform. Join the #vibe-tribe.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "android/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "android/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-72-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-48-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
 }
