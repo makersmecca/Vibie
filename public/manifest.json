@@ -39,21 +39,6 @@
       "type": "image/png"
     },
     {
-      "src": "ios/16.png",
-      "sizes": "16x16",
-      "type": "image/png"
-    },
-    {
-      "src": "ios/32.png",
-      "sizes": "32x32",
-      "type": "image/png"
-    },
-    {
-      "src": "ios/72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
       "src": "ios/144.png",
       "sizes": "144x144",
       "type": "image/png"

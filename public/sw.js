@@ -1,4 +1,4 @@
-const OFFLINE_VER = "1.1.0";
+const OFFLINE_VER = "1.1.1";
 const CACHE_NAME = "vbe" + OFFLINE_VER;
 const OFFLINE_URL = "fallback.html";
 
@@ -19,9 +19,6 @@ const assets = [
   "ios/256.png",
   "ios/192.png",
   "ios/144.png",
-  "ios/72.png",
-  "ios/32.png",
-  "ios/16.png",
   "windows11/Square44x44Logo.altform-lightunplated_targetsize-32.png",
   "windows11/Square44x44Logo.altform-lightunplated_targetsize-44.png",
   "windows11/Square44x44Logo.altform-lightunplated_targetsize-64.png",
