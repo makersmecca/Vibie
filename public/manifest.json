@@ -1,0 +1,146 @@
+{
+  "name": "Vibie",
+  "short_name": "Vibie",
+  "description": "Vibie, A dynamic social media platform designed to connect users and let them share moments from their lives! Whether you're showcasing your creativity, capturing life’s moments, or just vibing with friends, Vibie is your go-to platform. Join the #vibe-tribe.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "android/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "android/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-72-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "android/android-launchericon-48-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "ios/1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/SplashScreen.scale-100.png",
+      "sizes": "620x300",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/SplashScreen.scale-125.png",
+      "sizes": "775x375",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/SplashScreen.scale-150.png",
+      "sizes": "930x450",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/SplashScreen.scale-200.png",
+      "sizes": "1240x600",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/SplashScreen.scale-400.png",
+      "sizes": "2480x1200",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/Square44x44Logo.altform-lightunplated_targetsize-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/Square44x44Logo.altform-lightunplated_targetsize-44.png",
+      "sizes": "44x44",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/Square44x44Logo.altform-lightunplated_targetsize-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/Square44x44Logo.altform-lightunplated_targetsize-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "windows11/Square44x44Logo.altform-lightunplated_targetsize-256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "any",
+  "categories": ["entertainment", "social media"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Vibie",
+      "short_name": "Vibie",
+      "description": "Vibie, A dynamic social media platform designed to connect users and let them share moments from their lives!",
+      "url": "/?action=start",
+      "icons": [{ "src": "ios/192.png", "sizes": "192x192" }]
+    }
+  ]
+}

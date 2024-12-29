@@ -288,6 +288,7 @@ const Authentication = () => {
                 id="email"
                 onChange={handleFormInput}
                 value={formInput.username}
+                autoComplete="email"
               />
             </div>
             <div className="flex flex-col w-[90%] md:w-[70%]">
@@ -303,6 +304,7 @@ const Authentication = () => {
                   placeholder="password"
                   className="rounded-s-lg block w-full p-2 bg-slate-100"
                   name="password"
+                  id="password"
                   onChange={handleFormInput}
                   value={formInput.password}
                 />
