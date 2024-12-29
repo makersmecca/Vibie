@@ -130,5 +130,17 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "orientation": "any",
+  "categories": ["entertainment", "social media"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Vibie",
+      "short_name": "Vibie",
+      "description": "Vibie, A dynamic social media platform designed to connect users and let them share moments from their lives!",
+      "url": "/?action=start",
+      "icons": [{ "src": "ios/192.png", "sizes": "192x192" }]
+    }
   ]
 }

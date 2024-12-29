@@ -1,4 +1,4 @@
-const OFFLINE_VER = "1.0.5";
+const OFFLINE_VER = "1.1.0";
 const CACHE_NAME = "vbe" + OFFLINE_VER;
 const OFFLINE_URL = "fallback.html";
 
