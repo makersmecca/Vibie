@@ -2,6 +2,7 @@
 
 [![CodeQL Advanced](https://github.com/makersmecca/Vibie/actions/workflows/codeql.yml/badge.svg)](https://github.com/makersmecca/Vibie/actions/workflows/codeql.yml)
 [![Node.js CI](https://github.com/makersmecca/Vibie/actions/workflows/node.js.yml/badge.svg)](https://github.com/makersmecca/Vibie/actions/workflows/node.js.yml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f2c94f76-3d2a-47b9-b437-e3a14346a71b/deploy-status)](https://app.netlify.com/sites/vibie/deploys)
 
 #### Vibie is a dynamic social media platform designed to connect users and let them share moments from their lives! 
 #### Whether you're showcasing your creativity, capturing life’s moments, or just vibing with friends, Vibie is your go-to platform. 
