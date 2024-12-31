@@ -69,7 +69,6 @@ const SharedProfile = () => {
               userData.bannerImgUrl === "" ? "" : userData.bannerImgUrl
             );
             setBio(userData.bio);
-          } else {
           }
         }
       } catch (error) {

@@ -157,7 +157,35 @@ const Posts = () => {
           setIsLoading(false);
         } catch (error) {
           console.error("Error processing posts:", error);
-          setError("Failed to load posts");
+          setError(
+            <div className="flex flex-col justify-center gap-4 mt-10">
+              <div className="text-lg font-Lexend">
+                Uh Oh! Failed to Load Posts
+              </div>
+              <button
+                onClick={() => location.reload()}
+                className="bg-black text-white font-Lexend text-lg px-3 py-2 rounded-2xl flex justify-center items-center gap-2 hover:bg-opacity-70 transition-all ease-in-out"
+              >
+                Retry
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  className="bi bi-arrow-clockwise"
+                  stroke="white"
+                  strokeWidth="1px"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                  />
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                </svg>
+              </button>
+            </div>
+          );
           setIsLoading(false);
         }
       },
