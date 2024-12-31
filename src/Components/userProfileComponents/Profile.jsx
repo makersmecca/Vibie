@@ -156,7 +156,6 @@ const Profile = () => {
           )}
         </div>
       </div>
-      {/* edit profile button */}
       <div className="flex items-center justify-end px-2 w-full md:w-[800px] mt-5 self-center gap-4">
         {/* logout button */}
         <button
@@ -190,9 +189,7 @@ const Profile = () => {
               </button>
               {/* Add more menu items as needed */}
               <button
-                onClick={() => {
-                  /* Add handler */
-                }}
+                onClick={() => {/* Add handler */}}
                 className="w-full text-left px-4 py-2 text-lg font-medium text-gray-700 hover:bg-gray-100"
                 role="menuitem"
               >
@@ -201,6 +198,7 @@ const Profile = () => {
             </div>
           </div>
         )}
+        {/* edit profile button */}
         <Link to="/editprofile">
           <button className="border-[1px] border-black rounded-2xl w-[200px] md:w-[300px] py-1 text-black font-semibold font-Lexend text-lg hover:bg-gray-100 transition-all ease-in-out">
             Edit Profile
