@@ -19,7 +19,7 @@
 - Post Creation: Users can create posts by capturing or uploading photos and videos, adding captions, and sharing them with  
   the world.
 
-- Share Posts: Share your posts to your friends or on other social media platforms and spread the word!
+- Share Posts: Share your posts with your friends or on other social media platforms and spread the word!
 
 - Global Feed: A continuously updating feed displaying posts from all users in real-time.
 
@@ -35,13 +35,13 @@
 
 - Firebase Authentication for user login.
 
-- Appwrite Storage for managing photos and videos.
-
 - Firebase Firestore for storing metadata.
 
-- Styling: TailwindCSS for sleek and responsive UI.
+- Appwrite Storage for managing photos and videos.
 
-- Deployment: Hosted on Netlify.
+- Tailwind-CSS for a responsive UI.
+
+- Deployed and hosted on Netlify.
 
 ## Usage
 
