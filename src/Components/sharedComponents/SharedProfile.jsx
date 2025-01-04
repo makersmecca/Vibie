@@ -268,7 +268,6 @@ const SharedProfile = () => {
       {isLoading ? (
         <>
           <div className="flex justify-center items-center h-40 gap-5">
-            {/* <div className="animate-spin rounded-full h-8 w-8 border-t-[2px] border-gray-900"></div> */}
             <svg
               aria-hidden="true"
               className="w-8 h-8 text-gray-200 animate-spin fill-gray-600"
@@ -311,35 +310,9 @@ const SharedProfile = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* <img
-                  className="rounded-xl w-[90%] max-h-[300px] self-center"
-                  src={post.mediaUrl}
-                  alt=""
-                /> */}
                 {mediaElements[post.id]}
 
                 <div className="flex justify-between px-5 mt-5 items-center">
-                  {/* <div className="flex items-center justify-between w-[60px]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="#ff708f"
-                      className="bi bi-heart-fill ms-1"
-                      viewBox="0 0 16 16"
-                      onClick={() => handleLikes(post.id)}
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"
-                      />
-                    </svg>
-
-                    <span className="text-lg text-gray-600 font-medium font-Lexend">
-                      {post.likeCount || 0}
-                    </span>
-                  </div> */}
                   <LikeButton
                     postId={post.id}
                     userId={post.userId}
