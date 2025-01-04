@@ -16,6 +16,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import ShareButton from "../sharedComponents/ShareButton";
+import LikeButton from "../LikeButton";
 
 const Posts = () => {
   const { currentUser } = useContext(UserContext);
@@ -199,149 +200,149 @@ const Posts = () => {
     return () => unsubscribe();
   }, [currentUser]);
 
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        func.apply(null, args);
-      }, delay);
-    };
-  };
+  // const debounce = (func, delay) => {
+  //   let timeoutId;
+  //   return (...args) => {
+  //     if (timeoutId) {
+  //       clearTimeout(timeoutId);
+  //     }
+  //     timeoutId = setTimeout(() => {
+  //       func.apply(null, args);
+  //     }, delay);
+  //   };
+  // };
 
-  const handleLikes = useCallback(
-    async (postId, userId) => {
-      if (!currentUser?.email) return; // Ensure user is logged in
+  // const handleLikes = useCallback(
+  //   async (postId, userId) => {
+  //     if (!currentUser?.email) return; // Ensure user is logged in
 
-      setPosts((currentPosts) =>
-        currentPosts.map((post) => {
-          if (post.id === postId) {
-            const isCurrentlyLiked = post.likedBy?.includes(currentUser.email);
-            return {
-              ...post,
-              liked: !isCurrentlyLiked,
-              likeCount: isCurrentlyLiked
-                ? post.likeCount - 1
-                : post.likeCount + 1,
-              likedBy: isCurrentlyLiked
-                ? post.likedBy.filter((email) => email !== currentUser.email)
-                : [...(post.likedBy || []), currentUser.email],
-            };
-          }
-          return post;
-        })
-      );
+  //     setPosts((currentPosts) =>
+  //       currentPosts.map((post) => {
+  //         if (post.id === postId) {
+  //           const isCurrentlyLiked = post.likedBy?.includes(currentUser.email);
+  //           return {
+  //             ...post,
+  //             liked: !isCurrentlyLiked,
+  //             likeCount: isCurrentlyLiked
+  //               ? post.likeCount - 1
+  //               : post.likeCount + 1,
+  //             likedBy: isCurrentlyLiked
+  //               ? post.likedBy.filter((email) => email !== currentUser.email)
+  //               : [...(post.likedBy || []), currentUser.email],
+  //           };
+  //         }
+  //         return post;
+  //       })
+  //     );
 
-      try {
-        // Get references to both documents
-        const userPostRef = doc(db, "userPosts", userId, "posts", postId);
-        const globalPostRef = doc(db, "globalPosts", postId);
+  //     try {
+  //       // Get references to both documents
+  //       const userPostRef = doc(db, "userPosts", userId, "posts", postId);
+  //       const globalPostRef = doc(db, "globalPosts", postId);
 
-        // Get current state of both documents
-        const [userPostDoc, globalPostDoc] = await Promise.all([
-          getDoc(userPostRef),
-          getDoc(globalPostRef),
-        ]);
+  //       // Get current state of both documents
+  //       const [userPostDoc, globalPostDoc] = await Promise.all([
+  //         getDoc(userPostRef),
+  //         getDoc(globalPostRef),
+  //       ]);
 
-        if (!userPostDoc.exists() || !globalPostDoc.exists()) {
-          console.error("Post not found");
-          return;
-        }
+  //       if (!userPostDoc.exists() || !globalPostDoc.exists()) {
+  //         console.error("Post not found");
+  //         return;
+  //       }
 
-        // Check if user has already liked the post
-        const userPostData = userPostDoc.data();
-        const globalPostData = globalPostDoc.data();
-        const isLiked = userPostData.likedBy?.includes(currentUser.email);
+  //       // Check if user has already liked the post
+  //       const userPostData = userPostDoc.data();
+  //       const globalPostData = globalPostDoc.data();
+  //       const isLiked = userPostData.likedBy?.includes(currentUser.email);
 
-        // Create batch write
-        const batch = writeBatch(db);
+  //       // Create batch write
+  //       const batch = writeBatch(db);
 
-        if (isLiked) {
-          // Remove like
-          batch.update(userPostRef, {
-            likeCount: increment(-1),
-            likedBy: userPostData.likedBy.filter(
-              (email) => email !== currentUser.email
-            ),
-          });
+  //       if (isLiked) {
+  //         // Remove like
+  //         batch.update(userPostRef, {
+  //           likeCount: increment(-1),
+  //           likedBy: userPostData.likedBy.filter(
+  //             (email) => email !== currentUser.email
+  //           ),
+  //         });
 
-          batch.update(globalPostRef, {
-            likeCount: increment(-1),
-            likedBy: globalPostData.likedBy.filter(
-              (email) => email !== currentUser.email
-            ),
-          });
-        } else {
-          // Add like
-          batch.update(userPostRef, {
-            likeCount: increment(1),
-            likedBy: [...(userPostData.likedBy || []), currentUser.email],
-          });
+  //         batch.update(globalPostRef, {
+  //           likeCount: increment(-1),
+  //           likedBy: globalPostData.likedBy.filter(
+  //             (email) => email !== currentUser.email
+  //           ),
+  //         });
+  //       } else {
+  //         // Add like
+  //         batch.update(userPostRef, {
+  //           likeCount: increment(1),
+  //           likedBy: [...(userPostData.likedBy || []), currentUser.email],
+  //         });
 
-          batch.update(globalPostRef, {
-            likeCount: increment(1),
-            likedBy: [...(globalPostData.likedBy || []), currentUser.email],
-          });
-        }
+  //         batch.update(globalPostRef, {
+  //           likeCount: increment(1),
+  //           likedBy: [...(globalPostData.likedBy || []), currentUser.email],
+  //         });
+  //       }
 
-        // Commit the batch
-        await batch.commit();
+  //       // Commit the batch
+  //       await batch.commit();
 
-        // // Update local state
-        // setPosts((currentPosts) =>
-        //   currentPosts.map((post) => {
-        //     if (post.id === postId) {
-        //       return {
-        //         ...post,
-        //         liked: !isLiked,
-        //         likeCount: isLiked ? post.likeCount - 1 : post.likeCount + 1,
-        //       };
-        //     }
-        //     return post;
-        //   })
-        // );
-      } catch (error) {
-        console.error("Error updating likes:", error);
-        setPosts((currentPosts) =>
-          currentPosts.map((post) => {
-            if (post.id === postId) {
-              const isCurrentlyLiked = post.likedBy?.includes(
-                currentUser.email
-              );
-              return {
-                ...post,
-                liked: isCurrentlyLiked,
-                likeCount: isCurrentlyLiked
-                  ? post.likeCount + 1
-                  : post.likeCount - 1,
-                likedBy: isCurrentlyLiked
-                  ? [...(post.likedBy || []), currentUser.email]
-                  : post.likedBy.filter((email) => email !== currentUser.email),
-              };
-            }
-            return post;
-          })
-        );
-      }
-    },
-    [currentUser]
-  );
-  // Debounced version of handleLikes using useMemo
-  const debouncedHandleLikes = useMemo(
-    () => debounce(handleLikes, 500), // 500ms delay
-    [handleLikes]
-  );
+  //       // // Update local state
+  //       // setPosts((currentPosts) =>
+  //       //   currentPosts.map((post) => {
+  //       //     if (post.id === postId) {
+  //       //       return {
+  //       //         ...post,
+  //       //         liked: !isLiked,
+  //       //         likeCount: isLiked ? post.likeCount - 1 : post.likeCount + 1,
+  //       //       };
+  //       //     }
+  //       //     return post;
+  //       //   })
+  //       // );
+  //     } catch (error) {
+  //       console.error("Error updating likes:", error);
+  //       setPosts((currentPosts) =>
+  //         currentPosts.map((post) => {
+  //           if (post.id === postId) {
+  //             const isCurrentlyLiked = post.likedBy?.includes(
+  //               currentUser.email
+  //             );
+  //             return {
+  //               ...post,
+  //               liked: isCurrentlyLiked,
+  //               likeCount: isCurrentlyLiked
+  //                 ? post.likeCount + 1
+  //                 : post.likeCount - 1,
+  //               likedBy: isCurrentlyLiked
+  //                 ? [...(post.likedBy || []), currentUser.email]
+  //                 : post.likedBy.filter((email) => email !== currentUser.email),
+  //             };
+  //           }
+  //           return post;
+  //         })
+  //       );
+  //     }
+  //   },
+  //   [currentUser]
+  // );
+  // // Debounced version of handleLikes using useMemo
+  // const debouncedHandleLikes = useMemo(
+  //   () => debounce(handleLikes, 500), // 500ms delay
+  //   [handleLikes]
+  // );
 
-  useEffect(() => {
-    //cleanup pending debounce
-    return () => {
-      if (debouncedHandleLikes.cancel) {
-        debouncedHandleLikes.cancel();
-      }
-    };
-  }, [debouncedHandleLikes]);
+  // useEffect(() => {
+  //   //cleanup pending debounce
+  //   return () => {
+  //     if (debouncedHandleLikes.cancel) {
+  //       debouncedHandleLikes.cancel();
+  //     }
+  //   };
+  // }, [debouncedHandleLikes]);
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
@@ -427,7 +428,7 @@ const Posts = () => {
           {mediaElements[post.id]}
 
           <div className="flex justify-between px-5 mt-5 items-center">
-            <div className="flex items-center justify-between w-[60px]">
+            {/* <div className="flex items-center justify-between w-[60px]">
               <button
                 onClick={() => debouncedHandleLikes(post.id, post.userId)}
               >
@@ -461,8 +462,14 @@ const Posts = () => {
               <span className="text-lg text-gray-600 font-medium font-Lexend">
                 {post.likeCount || 0}
               </span>
-            </div>
-
+            </div> */}
+            <LikeButton
+              postId={post.id}
+              userId={post.userId}
+              initialLikeCount={post.likeCount}
+              initialLikedBy={post.likedBy}
+              currentUser={currentUser}
+            />
             {/* Share button */}
             <ShareButton postId={post.id} />
           </div>
