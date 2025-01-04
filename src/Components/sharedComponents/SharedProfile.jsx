@@ -15,6 +15,7 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import LikeButton from "../LikeButton";
 
 const SharedProfile = () => {
   const [posts, setPosts] = useState([]);
@@ -25,7 +26,7 @@ const SharedProfile = () => {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
 
-  const currentUser = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const [mediaElements, setMediaElements] = useState({});
   const client = new Client()
@@ -82,7 +83,7 @@ const SharedProfile = () => {
   }, [currentLocation]);
 
   useEffect(() => {
-    console.log(currentUser.email);
+    console.log(currentUser?.email);
     setIsLoading(true);
     const fetchUserPosts = async () => {
       try {
@@ -97,7 +98,9 @@ const SharedProfile = () => {
           return {
             id: doc.id,
             ...postData,
-            liked: postData.likedBy?.includes(userID) || false,
+            userId: userID, // ensure userId is included
+            likeCount: postData.likeCount || 0,
+            likedBy: postData.likedBy || [],
           };
         });
 
@@ -160,14 +163,14 @@ const SharedProfile = () => {
     };
 
     fetchUserPosts();
-  }, [currentLocation]);
+  }, [currentLocation, currentUser]);
 
   return (
     <div className="flex flex-col">
       {/* profile banner */}
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
-          <Link to={currentUser.email ? "/feed" : "/"}>
+          <Link to={currentUser?.email ? "/feed" : "/"}>
             <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -317,7 +320,7 @@ const SharedProfile = () => {
                 {mediaElements[post.id]}
 
                 <div className="flex justify-between px-5 mt-5 items-center">
-                  <div className="flex items-center justify-between w-[60px]">
+                  {/* <div className="flex items-center justify-between w-[60px]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -336,7 +339,14 @@ const SharedProfile = () => {
                     <span className="text-lg text-gray-600 font-medium font-Lexend">
                       {post.likeCount || 0}
                     </span>
-                  </div>
+                  </div> */}
+                  <LikeButton
+                    postId={post.id}
+                    userId={post.userId}
+                    initialLikeCount={post.likeCount}
+                    initialLikedBy={post.likedBy}
+                    currentUser={currentUser}
+                  />
                   <ShareButton postId={post.id} />
                 </div>
                 <div className="text-sm font-Lexend text-start text-gray-500 px-5 mt-2 ms-0.5">
