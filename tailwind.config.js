@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
@@ -16,7 +17,7 @@ export default {
         like: {
           "0%": { transform: "scale(1)" },
           "25%": { transform: "scale(1.2)" },
-          "50%": { transform: "sacle(0.95)" },
+          "50%": { transform: "scale(0.95)" },
           "100%": { transform: "scale(1)" },
         },
       },
