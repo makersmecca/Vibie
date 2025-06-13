@@ -87,11 +87,11 @@ const Profile = () => {
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
           <Link to="/feed">
-            <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out">
+            <div className="absolute left-5 top-6 z-10 bg-gray-600 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out shadow-md shadow-black">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="20"
+                height="20"
                 fill="white"
                 className="bi bi-arrow-left"
                 stroke="white"
@@ -178,23 +178,24 @@ const Profile = () => {
         </button>
         {/* Popup Menu */}
         {popUp && (
-          <div className="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+          <div className="absolute mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black dark:ring-white ring-opacity-5 z-50">
             <div className="py-1" role="menu" aria-orientation="vertical">
               <button
                 onClick={handleLogOut}
-                className="w-full text-left text-lg px-4 py-2 font-medium text-gray-700 hover:bg-gray-100"
+                className="w-full text-left text-lg px-4 py-2 font-medium text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 role="menuitem"
               >
                 Logout
               </button>
               {/* Add more menu items as needed */}
-              <button
-                onClick={() => {/* Add handler */}}
-                className="w-full text-left px-4 py-2 text-lg font-medium text-gray-700 hover:bg-gray-100"
-                role="menuitem"
-              >
-                Settings
-              </button>
+              <Link to="/profile/settings">
+                <div
+                  className="w-full text-left px-4 py-2 text-lg font-medium text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  role="menuitem"
+                >
+                  Settings
+                </div>
+              </Link>
             </div>
           </div>
         )}
