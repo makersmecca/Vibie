@@ -171,11 +171,11 @@ const SharedProfile = () => {
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
           <Link to={currentUser?.email ? "/feed" : "/"}>
-            <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out">
+            <div className="absolute left-5 top-6 z-10 bg-gray-600 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out shadow-lg shadow-black">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="20"
+                height="20"
                 fill="white"
                 className="bi bi-arrow-left "
                 stroke="white"

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 const NewPostButton = () => {
   return (
     <Link to="/newpost">
-      <div className="flex justify-center items-center rounded-full bg-white h-[52px] w-[52px] fixed z-10 bottom-6 right-6 bg-opacity-75 hover:scale-95">
+      <div className="flex justify-center items-center rounded-full bg-white dark:bg-black dark:text-white h-[52px] w-[52px] fixed z-10 bottom-6 right-6 bg-opacity-75 hover:scale-95">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="50"
