@@ -1,5 +1,5 @@
 // import Navbar from "../Navbar";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DeviceCamera from "./DeviceCamera";
 import { Client, Storage } from "appwrite";
@@ -26,12 +26,14 @@ const NewPost = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
   const [displayPopup, setDisplayPopup] = useState(false);
-
   const [capturedImg, setCapturedImg] = useState(null);
-
   const [errorMessage, setErrorMessage] = useState("");
-
   const [isFileSelected, setIsFileSelected] = useState(false);
+  const [captionCharacterCount, setCaptionCharacterCount] = useState(
+    apwrtResponse?.caption?.length
+  );
+
+  const fileInputRef = useRef(null);
 
   //current user
   const { currentUser } = useContext(UserContext);
@@ -124,14 +126,16 @@ const NewPost = () => {
       .then((response) => {
         setIsLoading(false);
         setUploadStatus(
-          <div className="flex items-center gap-4">
-            <span>Uploaded Successfully!</span>
+          <div className="flex items-center gap-4 dark:text-white text-black">
+            <span className="dark:text-white text-black">
+              Uploaded Successfully!
+            </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="25"
               height="25"
               fill="currentColor"
-              className="bi bi-check2-circle"
+              className="bi bi-check2-circle dark:text-white text-black"
               viewBox="0 0 16 16"
             >
               <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0" />
@@ -230,18 +234,32 @@ const NewPost = () => {
     updateFireStore();
   }, [apwrtResponse]);
 
+  useEffect(() => {
+    setCaptionCharacterCount(apwrtResponse?.caption?.length);
+  }, [apwrtResponse?.caption]);
+
+  const clearPreview = () => {
+    setPreviewUrl(null);
+    setFiles([]);
+    setCapturedImg(null);
+    setIsFileSelected(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center">
-        <div className="relative w-full md:w-[800px] px-5 md:px-0 top-6 flex items-center gap-5">
+        <div className="headerDiv relative w-full md:w-[800px] px-5 md:px-0 top-6 flex items-center gap-5">
           <Link to="/feed">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
-              fill="black"
-              className="bi bi-arrow-left hover:-translate-x-1 transition-all ease-in-out"
-              stroke="black"
+              fill="currentColor"
+              className="goBack bi bi-arrow-left hover:-translate-x-1 transition-all ease-in-out text-black dark:text-white"
+              stroke="currentColor"
               strokeWidth="0.5px"
               viewBox="0 0 16 16"
             >
@@ -251,7 +269,7 @@ const NewPost = () => {
               />
             </svg>
           </Link>
-          <div className="text-2xl font-semibold text-black font-Lexend">
+          <div className="text-2xl font-semibold text-black dark:text-white font-Lexend">
             New Post
           </div>
         </div>
@@ -259,21 +277,37 @@ const NewPost = () => {
       <div className="bg-gray-200 mt-10 h-auto w-[90%] md:w-[800px] rounded-2xl p-4 self-center">
         <div className="w-full flex justify-center self-center mb-10 mt-5">
           {previewUrl ? (
-            previewUrl.includes("video/") ? (
-              <video
-                src={previewUrl}
-                controls
-                className="w-[80%] h-[80%] rounded-lg"
+            <div className="relative w-[80%] h-[80%]">
+              <button
+                onClick={clearPreview}
+                className="absolute top-2 right-2 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all"
               >
-                <source src={previewUrl} />
-              </video>
-            ) : (
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="w-[80%] h-[80%] rounded-lg"
-              />
-            )
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                </svg>
+              </button>
+              {previewUrl.includes("video/") ? (
+                <video
+                  src={previewUrl}
+                  controls
+                  className="w-full h-full rounded-lg"
+                >
+                  <source src={previewUrl} />
+                </video>
+              ) : (
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-full h-full rounded-lg object-cover"
+                />
+              )}
+            </div>
           ) : (
             <></>
           )}
@@ -284,16 +318,18 @@ const NewPost = () => {
           value={apwrtResponse.caption}
           onChange={handlePostCaptionInput}
           rows="4"
+          maxLength={50}
           required
         />
+        <div className="mt-4 flex justify-end text-black text-sm">{`${captionCharacterCount}/50 characters`}</div>
       </div>
       {errorMessage && (
         <div className="font-Lexend text-center mt-2">{errorMessage}</div>
       )}
       {/* upload image/video from device */}
-      <div className="w-full py-5 px-7 mt-9 md:w-[800px] self-center">
+      <div className="uploadFileFromDevice w-full py-5 px-7 mt-9 md:w-[800px] self-center">
         <label
-          className={`flex gap-3 items-center p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-all ease-in-out ${
+          className={`flex gap-3 items-center p-2 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-in-out ${
             isFileSelected ? "bg-slate-200" : ""
           }`}
         >
@@ -302,7 +338,7 @@ const NewPost = () => {
             width="24"
             height="24"
             fill="currentColor"
-            className="bi bi-folder-plus"
+            className="bi bi-folder-plus dark:text-white text-black"
             viewBox="0 0 16 16"
             stroke="currentColor"
             strokeWidth="0.5px"
@@ -310,7 +346,7 @@ const NewPost = () => {
             <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z" />
             <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5" />
           </svg>
-          <span className="font-Lexend">
+          <span className="font-Lexend dark:text-white text-black">
             {isFileSelected ? "File Loaded" : "Choose Files"}
           </span>
           {isFileSelected && (
@@ -319,7 +355,7 @@ const NewPost = () => {
               width="16"
               height="16"
               fill="currentColor"
-              className="bi bi-check-circle-fill"
+              className="bi bi-check-circle-fill dark:text-white text-black"
               viewBox="0 0 16 16"
             >
               <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
@@ -331,9 +367,10 @@ const NewPost = () => {
               : "No files selected"}
           </span> */}
           <input
+            ref={fileInputRef}
             type="file"
             onChange={handleFileChange}
-            className=" hidden"
+            className="hidden"
             accept=".jpg, .jpeg, .png, .mp4, .mov"
             required
           />
@@ -341,18 +378,18 @@ const NewPost = () => {
       </div>
 
       {/* use the device's camera to click a picture and upload that photo */}
-      <div className="w-full py-5 px-7 md:w-[800px] self-center">
+      <div className="useDeviceCamera w-full py-5 px-7 md:w-[800px] self-center">
         <DeviceCamera onImageCapture={onImageCapture} />
       </div>
 
       {displayPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-slate-300 w-[80%] max-w-md h-[100px] p-5 rounded-xl flex items-center justify-center">
-            <div className="flex items-center gap-2">
+          <div className="bg-slate-300 dark:text-white text-black w-[80%] max-w-md h-[100px] p-5 rounded-xl flex items-center justify-center">
+            <div className="flex items-center gap-2 dark:text-white text-black">
               <span className="font-Lexend">{uploadStatus}</span>
               {isLoading && (
                 <>
-                  <div className="animate-spin h-5 w-5 border-2 border-gray-900 rounded-full border-t-transparent"></div>
+                  <div className="animate-spin h-5 w-5 border-2 dark:text-white text-black dark:border-white border-gray-900 rounded-full border-t-transparent"></div>
                 </>
               )}
             </div>
@@ -362,7 +399,7 @@ const NewPost = () => {
       <div className="w-full flex justify-center">
         <button
           onClick={handleCreatePost}
-          className="bg-gray-900 w-[350px] md:w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend"
+          className="bg-gray-900 dark:bg-white w-[350px] md:w-[300px] text-white dark:text-black rounded-full py-1.5 fixed bottom-[20px] font-Lexend"
         >
           Create Post
         </button>
