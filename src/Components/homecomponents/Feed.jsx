@@ -57,7 +57,7 @@ const Feed = () => {
 
   return (
     <div className="flex flex-col items-center dark:bg-black">
-      <div className="pt-10 bg-white dark:bg-gray-900 md:w-[800px] w-full z-10 flex flex-col">
+      <div className="pt-10 bg-white dark:bg-black md:w-[800px] w-full z-10 flex flex-col">
         <div className="w-full sm:w-[80%] md:self-center">
           <div className="px-5 w-full flex items-center">
             <div className="flex gap-7 w-full">
@@ -110,7 +110,7 @@ const Feed = () => {
         </div>
       </div>
       <div
-        className="md:flex md:justify-start w-full md:w-[600px] px-7 py-5 mt-[15px] text-2xl font-semibold font-Lexend sticky top-0 bg-white dark:bg-black dark:text-white cursor-pointer"
+        className="md:flex md:justify-start w-full md:w-[600px] px-7 py-5 text-2xl font-semibold font-Lexend sticky top-0 bg-white dark:bg-black dark:text-white cursor-pointer"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       >
         Feeds
