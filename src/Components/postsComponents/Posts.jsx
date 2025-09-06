@@ -368,7 +368,9 @@ const Posts = () => {
             fill="currentFill"
           />
         </svg>
-        <div className="animate-pulse font-Lexend">Loading Posts...</div>
+        <div className="animate-pulse font-Lexend dark:text-white">
+          Loading Posts...
+        </div>
       </div>
     );
   }
