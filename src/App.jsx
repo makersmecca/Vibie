@@ -11,9 +11,11 @@ import SharedProfile from "./Components/sharedComponents/SharedProfile";
 import PrivacyPolicy from "./Components/OAuth Consent Screen Components/PrivacyPolicy";
 import TermsOfUse from "./Components/OAuth Consent Screen Components/TermsOfUse";
 import AboutUs from "./Components/OAuth Consent Screen Components/AboutUs";
+import ProfileSettings from "./Components/userProfileComponents/ProfileSettings";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import "./App.css";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 function App() {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -56,22 +58,27 @@ function App() {
   }, []);
 
   return (
-    <UserProvider>
-      <Routes>
-        <Route path="/" element={<Authentication />} />
-        <Route path="/signup" element={<Authentication />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/newpost" element={<NewPost />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/editprofile" element={<EditProfile />} />
-        <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/post/:postID" element={<SharedPost />} />
-        <Route path="/profile/:userID" element={<SharedProfile />} />
-        <Route path="/termsofuse" element={<TermsOfUse />} />
-        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-        <Route path="/aboutus" element={<AboutUs />} />
-      </Routes>
-    </UserProvider>
+    <ThemeProvider>
+      <Fragment className="bg-white dark:bg-black">
+        <UserProvider>
+          <Routes>
+            <Route path="/" element={<Authentication />} />
+            <Route path="/signup" element={<Authentication />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/newpost" element={<NewPost />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/settings" element={<ProfileSettings />} />
+            <Route path="/editprofile" element={<EditProfile />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/post/:postID" element={<SharedPost />} />
+            <Route path="/profile/:userID" element={<SharedProfile />} />
+            <Route path="/termsofuse" element={<TermsOfUse />} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/aboutus" element={<AboutUs />} />
+          </Routes>
+        </UserProvider>
+      </Fragment>
+    </ThemeProvider>
   );
 }
 

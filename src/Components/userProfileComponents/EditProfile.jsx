@@ -21,6 +21,7 @@ const EditProfile = () => {
   const [profileFile, setProfileFile] = useState([]);
   const [profilePreview, setProfilePreview] = useState(null);
   const [bannerPreview, setBannerPreview] = useState(null);
+  const [bioCharacterCount, setBioCharacterCount] = useState(bio.length);
 
   const [btnMsg, setBtnMsg] = useState("Update");
 
@@ -29,6 +30,10 @@ const EditProfile = () => {
     .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
 
   const storage = new Storage(client);
+
+  useEffect(() => {
+    setBioCharacterCount(bio.length);
+  }, [bio]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -247,7 +252,7 @@ const EditProfile = () => {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col dark:bg-gray-900 h-[100vh]">
       {/* profile banner */}
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
@@ -337,34 +342,38 @@ const EditProfile = () => {
       {/* user's details */}
       <div className="w-full md:w-[800px] flex flex-col self-center">
         <div className="flex flex-col mt-[100px] md:mt-[150px] self-center w-full md:w-[600px] font-Lexend font-light px-7">
-          <label htmlFor="username" className="text-xl">
+          <label htmlFor="username" className="text-xl dark:text-white">
             Username
           </label>
           <input
             id="username"
             type="text"
-            className="border-b-[1px] border-black focus:outline-none"
+            className="border-[1px] border-black focus:outline-none rounded-md p-2"
             value={username}
             onChange={handleUsernameInput}
           />
         </div>
         <div className="flex flex-col mt-[100px] self-center w-full md:w-[600px] font-Lexend font-light px-7">
-          <label htmlFor="username" className="text-xl">
+          <label htmlFor="username" className="text-xl dark:text-white">
             Bio
           </label>
           <textarea
             id="username"
             type="text"
-            className="border-b-[1px] border-black focus:outline-none"
+            className="border-[1px] border-black focus:outline-none rounded-md p-2"
             value={bio}
             onChange={handleBioInput}
-            rows="2"
+            rows="3"
+            maxLength={40}
           />
+          <div className="w-full flex justify-end pr-2 dark:text-white text-sm">
+            {`${bioCharacterCount}/40 characters`}
+          </div>
         </div>
       </div>
       <div className="w-full flex justify-center">
         <button
-          className={`bg-gray-900 w-[300px] text-white rounded-full py-1.5 fixed bottom-[20px] font-Lexend ${
+          className={`dark:bg-white bg-gray-900 w-[300px] text-white dark:text-black rounded-full py-1.5 fixed bottom-[20px] font-Lexend ${
             btnMsg === "Updating..." && "animate-pulse"
           }`}
           onClick={handleSave}

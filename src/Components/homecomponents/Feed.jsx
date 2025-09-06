@@ -56,15 +56,15 @@ const Feed = () => {
   }, [fetchUserData]);
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="pt-10 bg-white md:w-[800px] w-full z-10 flex flex-col">
+    <div className="flex flex-col items-center dark:bg-black">
+      <div className="pt-10 bg-white dark:bg-black md:w-[800px] w-full z-10 flex flex-col">
         <div className="w-full sm:w-[80%] md:self-center">
           <div className="px-5 w-full flex items-center">
             <div className="flex gap-7 w-full">
               {isLoading ? (
                 <>
                   <svg
-                    className="w-20 h-20 text-gray-400 animate-pulse"
+                    className="w-20 h-20 text-gray-400 dark:text-white animate-pulse"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -85,16 +85,16 @@ const Feed = () => {
               <div className="mt-5">
                 {isLoading ? (
                   <div className="animate-pulse">
-                    <div className="h-2.5 bg-gray-200 rounded-full  w-32 mb-2"></div>
-                    <div className="w-28 h-2 bg-gray-200 rounded-full "></div>
+                    <div className="h-2.5 bg-gray-200 dark:bg-white rounded-full  w-32 mb-2"></div>
+                    <div className="w-28 h-2 bg-gray-200 dark:bg-white rounded-full "></div>
                   </div>
                 ) : (
                   <>
                     <Link to="/profile">
-                      <div className="opacity-65 font-medium cursor-pointer">
+                      <div className="opacity-65 font-medium cursor-pointer dark:text-white dark:opacity-100">
                         Welcome Back
                       </div>
-                      <div className="font-Lexend font-medium text-xl cursor-pointer">
+                      <div className="font-Lexend font-medium text-xl cursor-pointer dark:text-white">
                         {username}
                       </div>
                     </Link>
@@ -103,14 +103,14 @@ const Feed = () => {
               </div>
             </div>
 
-            <div className="pt-3 text-xl font-Pacifico w-[100px] cursor-pointer">
+            <div className="pt-3 text-xl font-Pacifico w-[100px] cursor-pointer dark:text-white">
               <Link to="/">Vibie</Link>
             </div>
           </div>
         </div>
       </div>
       <div
-        className="md:flex md:justify-start w-full md:w-[600px] px-7 py-5 mt-[15px] text-2xl font-semibold font-Lexend sticky top-0 bg-white cursor-pointer"
+        className="md:flex md:justify-start w-full md:w-[600px] px-7 py-5 text-2xl font-semibold font-Lexend sticky top-0 bg-white dark:bg-black dark:text-white cursor-pointer"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       >
         Feeds

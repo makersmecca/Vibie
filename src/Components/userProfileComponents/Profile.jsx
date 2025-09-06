@@ -29,6 +29,22 @@ const Profile = () => {
   const storage = new Storage(client);
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popUp && !event.target.closest(".popupMenu")) {
+        setPopUp(false);
+      }
+    };
+
+    if (popUp) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [popUp]);
+
+  useEffect(() => {
     const fetchUserData = async () => {
       try {
         if (currentUser?.email) {
@@ -64,7 +80,8 @@ const Profile = () => {
     fetchUserData();
   }, [currentUser]);
 
-  const handlePopup = () => {
+  const handlePopup = (e) => {
+    e.stopPropagation();
     setPopUp((prev) => !prev);
   };
 
@@ -87,11 +104,11 @@ const Profile = () => {
       <div className="flex justify-center">
         <div className="relative w-full md:w-[800px]">
           <Link to="/feed">
-            <div className="absolute left-5 top-6 z-10 bg-gray-700 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out">
+            <div className="absolute left-5 top-6 z-10 bg-gray-600 bg-opacity-70 rounded-full w-[35px] h-[35px] flex justify-center items-center hover:-translate-x-1 transition-all ease-in-out shadow-md shadow-black">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="20"
+                height="20"
                 fill="white"
                 className="bi bi-arrow-left"
                 stroke="white"
@@ -159,17 +176,17 @@ const Profile = () => {
       <div className="flex items-center justify-end px-2 w-full md:w-[800px] mt-5 self-center gap-4">
         {/* logout button */}
         <button
-          className={`${
+          className={`settingsButton ${
             popUp ? "rotate-45" : "rotate-0"
           } transition-all ease-in-out`}
           onClick={handlePopup}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="25"
-            height="25"
+            width="30"
+            height="30"
             fill="currentColor"
-            className="bi bi-gear"
+            className="bi bi-gear text-black dark:text-white"
             viewBox="0 0 16 16"
           >
             <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
@@ -178,35 +195,36 @@ const Profile = () => {
         </button>
         {/* Popup Menu */}
         {popUp && (
-          <div className="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+          <div className="popupMenu absolute mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black dark:ring-white ring-opacity-5 z-50">
             <div className="py-1" role="menu" aria-orientation="vertical">
               <button
                 onClick={handleLogOut}
-                className="w-full text-left text-lg px-4 py-2 font-medium text-gray-700 hover:bg-gray-100"
+                className="w-full text-left text-lg px-4 py-2 font-medium text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
                 role="menuitem"
               >
                 Logout
               </button>
               {/* Add more menu items as needed */}
-              <button
-                onClick={() => {/* Add handler */}}
-                className="w-full text-left px-4 py-2 text-lg font-medium text-gray-700 hover:bg-gray-100"
-                role="menuitem"
-              >
-                Settings
-              </button>
+              <Link to="/profile/settings">
+                <div
+                  className="w-full text-left px-4 py-2 text-lg font-medium text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                  role="menuitem"
+                >
+                  Settings
+                </div>
+              </Link>
             </div>
           </div>
         )}
         {/* edit profile button */}
         <Link to="/editprofile">
-          <button className="border-[1px] border-black rounded-2xl w-[200px] md:w-[300px] py-1 text-black font-semibold font-Lexend text-lg hover:bg-gray-100 transition-all ease-in-out">
+          <button className="editProfileButton border-[1px] dark:border-white border-black rounded-2xl w-[200px] md:w-[300px] py-1 dark:text-white text-black font-semibold font-Lexend text-lg hover:bg-gray-100 dark:hover:text-black transition-all ease-in-out">
             Edit Profile
           </button>
         </Link>
       </div>
       {/* username */}
-      <div className="self-center w-full md:w-[800px] mt-10 text-3xl font-semibold font-Lexend px-7">
+      <div className="userName self-center w-full md:w-[800px] mt-10 text-3xl font-semibold font-Lexend px-7 text-black dark:text-white">
         {isLoading ? (
           <div className="animate-pulse">
             <div className="h-3 my-3 bg-gray-200 rounded-full w-32 mb-2"></div>
@@ -216,7 +234,7 @@ const Profile = () => {
         )}
       </div>
       {/* bio */}
-      <div className="self-center w-full md:w-[800px] px-7 mt-3">
+      <div className="userBio self-center w-full md:w-[800px] px-7 mt-3 text-black dark:text-white">
         {isLoading ? (
           <div className="animate-pulse">
             <div className="h-3 bg-gray-200 rounded-full w-[300px] mb-2"></div>
@@ -227,7 +245,7 @@ const Profile = () => {
       </div>
       {/* user's posts */}
       <div
-        className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-Lexend font-medium sticky top-0 bg-white py-4 cursor-pointer"
+        className="myPosts self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-Lexend font-medium sticky top-0 bg-white dark:bg-black text-black dark:text-white py-4 cursor-pointer"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       >
         My Posts
