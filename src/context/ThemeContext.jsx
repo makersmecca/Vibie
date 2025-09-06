@@ -9,6 +9,15 @@ export const ThemeProvider = ({ children }) => {
     return savedTheme ? JSON.parse(savedTheme) : false;
   });
 
+  // Update meta tags for PWA
+  const themeColor = isDarkMode ? "#000000" : "#ffffff";
+  document
+    .querySelector('meta[name="theme-color"]')
+    .setAttribute("content", themeColor);
+  document
+    .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
+    .setAttribute("content", themeColor);
+
   useEffect(() => {
     localStorage.setItem("isDarkmode", JSON.stringify(isDarkMode));
     //data-theme attribute to the document root
@@ -23,6 +32,15 @@ export const ThemeProvider = ({ children }) => {
       document.documentElement.classList.remove("dark");
       document.body.style.backgroundColor = "#fff";
     }
+
+    // Update meta tags for PWA
+    const themeColor = isDarkMode ? "#000000" : "#ffffff";
+    document
+      .querySelector('meta[name="theme-color"]')
+      .setAttribute("content", themeColor);
+    document
+      .querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
+      .setAttribute("content", themeColor);
   }, [isDarkMode]);
 
   const toggleTheme = () => {
