@@ -126,17 +126,17 @@ const DeviceCamera = ({ onImageCapture }) => {
     <>
       <div
         onClick={openCamera ? stopCamera : startCamera}
-        className="cursor-pointer p-2  hover:bg-slate-100 transition-all ease-in-out rounded-lg"
+        className="cursor-pointer p-2  hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-in-out rounded-lg"
       >
         <span className="font-Lexend">
           {openCamera ? (
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-3 items-center dark:text-white text-black">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
                 fill="currentColor"
-                className="bi bi-x-lg"
+                className="bi bi-x-lg dark:text-white text-black"
                 stroke="currentColor"
                 strokeWidth="0.5px"
                 viewBox="0 0 16 16"
@@ -146,13 +146,13 @@ const DeviceCamera = ({ onImageCapture }) => {
               Close Camera
             </div>
           ) : (
-            <div className="flex gap-3">
+            <div className="flex gap-3 dark:text-white text-black">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
                 fill="currentColor"
-                className="bi bi-camera"
+                className="bi bi-camera dark:text-white text-black"
                 stroke="currentColor"
                 strokeWidth="0.5px"
                 viewBox="0 0 16 16"
@@ -189,7 +189,7 @@ const DeviceCamera = ({ onImageCapture }) => {
               <div className="animate-pulse text-slate-100">Loading Camera</div>
             </div>
           )}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 dark:bg-gray-900 pb-5 rounded-b-lg">
             {/* Video Feed */}
             <div className="relative w-[350px] rounded-lg overflow-hidden shadow-lg bg-gray-800">
               <div
