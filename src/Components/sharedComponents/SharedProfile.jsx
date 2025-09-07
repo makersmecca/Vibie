@@ -83,7 +83,6 @@ const SharedProfile = () => {
   }, [currentLocation]);
 
   useEffect(() => {
-    console.log(currentUser?.email);
     setIsLoading(true);
     const fetchUserPosts = async () => {
       try {
@@ -242,7 +241,7 @@ const SharedProfile = () => {
       </div>
 
       {/* username */}
-      <div className="self-center w-full md:w-[800px] mt-[90px] text-3xl font-semibold font-Lexend px-7">
+      <div className="publicUserName self-center w-full md:w-[800px] mt-[90px] text-3xl font-semibold font-Lexend px-7 dark:text-white text-black">
         {isLoading ? (
           <div className="animate-pulse">
             <div className="h-3 my-3 bg-gray-200 rounded-full w-32 mb-2"></div>
@@ -252,7 +251,7 @@ const SharedProfile = () => {
         )}
       </div>
       {/* bio */}
-      <div className="self-center w-full md:w-[800px] px-7 mt-3">
+      <div className="publicUserBio self-center w-full md:w-[800px] px-7 mt-3 dark:text-white text-black">
         {isLoading ? (
           <div className="animate-pulse">
             <div className="h-3 bg-gray-200 rounded-full w-[300px] mb-2"></div>
@@ -262,7 +261,10 @@ const SharedProfile = () => {
         )}
       </div>
       {/* user's posts */}
-      <div className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white py-4">
+      <div
+        className="self-center w-full md:w-[800px] mx-2 px-7 text-xl md:text-2xl font-medium sticky top-0 bg-white dark:bg-black text-black dark:text-white py-4"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
         Posts
       </div>
       {isLoading ? (
