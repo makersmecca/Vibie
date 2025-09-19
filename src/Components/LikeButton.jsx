@@ -1,6 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { doc, writeBatch, getDoc, increment } from "firebase/firestore";
-// import { db } from "../../firebase/config"; // adjust path as needed
 import { db } from "../auth/firebaseAuth";
 import { Link } from "react-router-dom";
 
@@ -15,115 +14,86 @@ const LikeButton = ({
   const [isLiked, setIsLiked] = useState(
     initialLikedBy?.includes(currentUser?.email) || false
   );
-
   const [displayPopup, setDisplayPopup] = useState(false);
+  const pendingLikeState = useRef(null);
 
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        func.apply(null, args);
-      }, delay);
-    };
-  };
-
-  const handleLike = async () => {
+  const updateDatabase = async (shouldLike) => {
     try {
-      // Get references to both documents
       const userPostRef = doc(db, "userPosts", userId, "posts", postId);
       const globalPostRef = doc(db, "globalPosts", postId);
 
-      // Get current state of both documents
       const [userPostDoc, globalPostDoc] = await Promise.all([
         getDoc(userPostRef),
         getDoc(globalPostRef),
       ]);
 
       if (!userPostDoc.exists() || !globalPostDoc.exists()) {
-        console.error("Post not found");
-        return;
+        throw new Error("Post not found");
       }
 
       const userPostData = userPostDoc.data();
       const globalPostData = globalPostDoc.data();
-      const currentlyLiked = userPostData.likedBy?.includes(currentUser.email);
-
-      // Create batch write
       const batch = writeBatch(db);
 
-      if (currentlyLiked) {
-        // Remove like
+      if (shouldLike) {
+        batch.update(userPostRef, {
+          likeCount: increment(1),
+          likedBy: [...(userPostData.likedBy || []), currentUser.email],
+        });
+        batch.update(globalPostRef, {
+          likeCount: increment(1),
+          likedBy: [...(globalPostData.likedBy || []), currentUser.email],
+        });
+      } else {
         batch.update(userPostRef, {
           likeCount: increment(-1),
           likedBy: userPostData.likedBy.filter(
             (email) => email !== currentUser.email
           ),
         });
-
         batch.update(globalPostRef, {
           likeCount: increment(-1),
           likedBy: globalPostData.likedBy.filter(
             (email) => email !== currentUser.email
           ),
         });
-      } else {
-        // Add like
-        batch.update(userPostRef, {
-          likeCount: increment(1),
-          likedBy: [...(userPostData.likedBy || []), currentUser.email],
-        });
-
-        batch.update(globalPostRef, {
-          likeCount: increment(1),
-          likedBy: [...(globalPostData.likedBy || []), currentUser.email],
-        });
       }
 
-      // Commit the batch
       await batch.commit();
-
-      // Update local state
-      setIsLiked(!currentlyLiked);
-      setLikeCount((prev) => (currentlyLiked ? prev - 1 : prev + 1));
     } catch (error) {
-      if (
-        error.message.includes(
-          "Cannot read properties of null (reading 'email')"
-        )
-      ) {
-        console.log("User is not logged in");
-        setDisplayPopup(true);
-      }
-      // Revert local state on error
-      setIsLiked(initialLikedBy?.includes(currentUser?.email) || false);
-      setLikeCount(initialLikeCount || 0);
+      console.error("Error updating like:", error);
     }
   };
 
-  // Debounced version of handleLike
-  const debouncedHandleLike = useMemo(
-    () => debounce(handleLike, 500),
-    [handleLike]
-  );
-
-  useEffect(() => {
-    return () => {
-      if (debouncedHandleLike.cancel) {
-        debouncedHandleLike.cancel();
-      }
+  const debouncedUpdateDatabase = useMemo(() => {
+    let timeoutId;
+    return (shouldLike) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => updateDatabase(shouldLike), 400);
     };
-  }, [debouncedHandleLike]);
+  }, [updateDatabase]);
+
+  const handleLike = () => {
+    if (!currentUser?.email) {
+      setDisplayPopup(true);
+      return;
+    }
+
+    // Optimistic update - update UI immediately
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+    setLikeCount((prev) => (newLikedState ? prev + 1 : prev - 1));
+
+    // Store the final state for debounced database update
+    pendingLikeState.current = newLikedState;
+    debouncedUpdateDatabase(newLikedState);
+  };
 
   return (
     <>
       {displayPopup && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-          {/* popup box */}
           <div className="relative bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-            {/* close button */}
             <div
               onClick={() => setDisplayPopup(false)}
               className="absolute top-[-10px] right-[-10px] bg-gray-900 text-white rounded-full h-[30px] w-[30px] flex justify-center items-center cursor-pointer hover:scale-95"
@@ -133,7 +103,6 @@ const LikeButton = ({
             <div className="font-Lexend text-xl">
               Uh Oh, You're not logged in!
             </div>
-
             <div className="text-lg mt-2 font-Lexend">
               Please Login to continue.
             </div>
@@ -143,7 +112,6 @@ const LikeButton = ({
                   Log In
                 </button>
               </Link>
-
               <div className="mt-5 font-Lexend">
                 Do not have an account?{" "}
                 <Link to="/signup" className="underline">
@@ -156,7 +124,7 @@ const LikeButton = ({
       )}
       <div className="flex items-center justify-between w-[60px]">
         <button
-          onClick={debouncedHandleLike}
+          onClick={handleLike}
           aria-label={isLiked ? "Unlike post" : "Like post"}
         >
           {isLiked ? (
