@@ -16,6 +16,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import LikeButton from "../LikeButton";
+import { decodeUserHash } from "../../utils/userHash";
 
 const SharedProfile = () => {
   const [posts, setPosts] = useState([]);
@@ -25,10 +26,11 @@ const SharedProfile = () => {
   const [bannerImgUrl, setBannerImgUrl] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
+  const [mediaElements, setMediaElements] = useState({});
+  const [sharedUserId, setSharedUserId] = useState("");
 
   const { currentUser } = useContext(UserContext);
 
-  const [mediaElements, setMediaElements] = useState({});
   const client = new Client()
     .setEndpoint("https://cloud.appwrite.io/v1")
     .setProject(`${import.meta.env.VITE_APPWRITE_PROJECT_ID}`);
@@ -50,14 +52,23 @@ const SharedProfile = () => {
   const currentLocation = useLocation();
 
   const { userID } = useParams();
-  //   console.log(userID);
+
+  useEffect(() => {
+    const decodeUserId = async () => {
+      const email = await decodeUserHash(userID);
+      console.log("Decoded email:", email);
+      setSharedUserId(email);
+    };
+    decodeUserId();
+  }, [userID]);
 
   useEffect(() => {
     setIsLoading(true);
     const fetchUserData = async () => {
       try {
-        if (userID) {
-          const userDocRef = doc(db, "users", userID);
+        if (sharedUserId) {
+          console.log("Fetching data for user:", sharedUserId);
+          const userDocRef = doc(db, "users", sharedUserId);
           const userDoc = await getDoc(userDocRef);
 
           if (userDoc.exists()) {
@@ -86,9 +97,9 @@ const SharedProfile = () => {
     setIsLoading(true);
     const fetchUserPosts = async () => {
       try {
-        if (!userID) return;
+        if (!sharedUserId) return;
 
-        const postsRef = collection(db, "userPosts", userID, "posts");
+        const postsRef = collection(db, "userPosts", sharedUserId, "posts");
         const q = query(postsRef, orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
 
@@ -97,7 +108,7 @@ const SharedProfile = () => {
           return {
             id: doc.id,
             ...postData,
-            userId: userID, // ensure userId is included
+            userId: sharedUserId, // ensure userId is included
             likeCount: postData.likeCount || 0,
             likedBy: postData.likedBy || [],
           };
