@@ -56,7 +56,6 @@ const SharedProfile = () => {
   useEffect(() => {
     const decodeUserId = async () => {
       const email = await decodeUserHash(userID);
-      console.log("Decoded email:", email);
       setSharedUserId(email);
     };
     decodeUserId();
@@ -67,7 +66,6 @@ const SharedProfile = () => {
     const fetchUserData = async () => {
       try {
         if (sharedUserId) {
-          console.log("Fetching data for user:", sharedUserId);
           const userDocRef = doc(db, "users", sharedUserId);
           const userDoc = await getDoc(userDocRef);
 
@@ -91,7 +89,7 @@ const SharedProfile = () => {
     };
 
     fetchUserData();
-  }, [currentLocation]);
+  }, [currentLocation, userID, sharedUserId]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -118,16 +116,10 @@ const SharedProfile = () => {
 
         // Pre-render media elements for each post
         const mediaPromises = userPosts.map(async (post) => {
-          // console.log(post.mediaUrl);
           const fileId = post.mediaUrl.includes("/preview")
             ? post.mediaUrl.split("/files/")[1].split("/preview")[0]
             : post.mediaUrl.split("/files/")[1].split("/view")[0];
-
-          // console.log(fileId);
           const mimeType = await getFileType(bucketId, fileId);
-
-          // console.log(mimeType);
-
           if (mimeType.startsWith("image/")) {
             return {
               id: post.id,
@@ -173,7 +165,7 @@ const SharedProfile = () => {
     };
 
     fetchUserPosts();
-  }, [currentLocation, currentUser]);
+  }, [currentLocation, currentUser, userID, sharedUserId]);
 
   return (
     <div className="flex flex-col">
