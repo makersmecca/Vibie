@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 import ShareButton from "../sharedComponents/ShareButton";
 import LikeButton from "../LikeButton";
+import { generateUserHash } from "../../utils/userHash";
 
 const Posts = () => {
   const { currentUser } = useContext(UserContext);
@@ -390,7 +391,7 @@ const Posts = () => {
             to={
               post.userId === currentUser.email
                 ? "/profile"
-                : `/profile/${post.userId}`
+                : `/profile/${generateUserHash(post.userId)}`
             }
           >
             <div className="w-full h-16 items-center flex px-5 gap-7">
