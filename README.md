@@ -51,4 +51,4 @@
 
 - Create a post by clicking a photo in-app or uploading a photo or video and adding a caption.
 
-<img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/footers/gray0_ctp_on_line.svg?sanitize=true"/>
+<img src="https://github.com/makersmecca/DiscordFileStore/blob/filestore/src/footercat.svg"/>
